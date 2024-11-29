@@ -6,26 +6,54 @@ public class Card : MonoBehaviour
     private Tween _hoverTween;
     private Tween _scaleTween;
     private Tween _dragTween;
+    private Tween _idleTween;
+    private Tween _shadowMoveTween;
     private Vector3 _originalScale;
+    private Vector3 _shadowOriginalScale;
+    private Vector3 _shadowOriginalLocalPosition;
+    private Vector3 _hoverScale;
     private Vector3 _offset;
     private Camera _mainCamera;
     private bool _isDragging = false;
     private bool _isHovered = false;
     private bool _justPutDown = false;
+    public GameObject Shadow;
 
     [Header("Hover Effect Settings")]
-    public float hoverRotationAngle = 5f;
+    public float hoverRotationAngleMin = -5f;
+    public float hoverRotationAngleMax = 5f;
     public float hoverDuration = 0.2f;
     public float hoverScaleMultiplier = 1.1f;
     public float scaleDuration = 0.3f;
 
     [Header("Drag Effect Settings")]
     public float dragMoveDuration = 0.05f;
+    public float shadowOffsetY = -0.05f;
+    public float shadowOffsetXFactor = 0.1f;
+
+    [Header("Idle Movement Settings")]
+    public float idleRotationAngleMin = -1f;
+    public float idleRotationAngleMax = 1f;
+    public float idleTiltAngle = 1f;
+    public float idleMovementDuration = 2f;
 
     private void Start()
     {
         _originalScale = transform.localScale;
+        _shadowOriginalScale = Shadow != null ? Shadow.transform.localScale : Vector3.one;
+        _shadowOriginalLocalPosition = Shadow != null ? Shadow.transform.localPosition : Vector3.zero;
+        _hoverScale = _originalScale * 1.05f; // Define a slightly larger scale for hover effect
         _mainCamera = Camera.main;
+        StartIdleMovement();
+        _originalScale = transform.localScale;
+        _shadowOriginalScale = Shadow != null ? Shadow.transform.localScale : Vector3.one;
+        _shadowOriginalLocalPosition = Shadow != null ? Shadow.transform.localPosition : Vector3.zero;
+        _mainCamera = Camera.main;
+        StartIdleMovement();
+        _originalScale = transform.localScale;
+        _shadowOriginalScale = Shadow != null ? Shadow.transform.localScale : Vector3.one;
+        _mainCamera = Camera.main;
+        StartIdleMovement();
     }
 
     private void OnMouseDown()
@@ -33,6 +61,9 @@ public class Card : MonoBehaviour
         _offset = transform.position - GetMouseWorldPosition();
         _isDragging = true;
         _dragTween?.Kill();
+        _idleTween?.Kill();
+        _scaleTween?.Kill();
+        transform.DOScale(_originalScale * hoverScaleMultiplier, scaleDuration).SetEase(Ease.OutSine); // Apply larger scale while dragging
     }
 
     private void OnMouseDrag()
@@ -40,12 +71,29 @@ public class Card : MonoBehaviour
         Vector3 targetPosition = GetMouseWorldPosition() + _offset;
         targetPosition.z = transform.position.z;
         _dragTween = transform.DOMove(targetPosition, dragMoveDuration).SetEase(Ease.Linear);
+
+        if (Shadow != null)
+        {
+            Vector3 shadowTargetPosition = targetPosition;
+            shadowTargetPosition.y += shadowOffsetY;
+            shadowTargetPosition.x = targetPosition.x + _shadowOriginalLocalPosition.x ;
+            shadowTargetPosition.z = 1;
+            _shadowMoveTween = Shadow.transform.DOMove(shadowTargetPosition, dragMoveDuration).SetEase(Ease.Linear);
+        }
     }
 
     private void OnMouseUp()
     {
+        // Move shadow back to original local position
+        if (Shadow != null)
+        {
+            _shadowMoveTween?.Kill();
+            _shadowMoveTween = Shadow.transform.DOLocalMove(_shadowOriginalLocalPosition, dragMoveDuration).SetEase(Ease.OutSine);
+        }
+        transform.DOScale(_hoverScale, scaleDuration).SetEase(Ease.OutSine); // Revert to hover scale when released
         _isDragging = false;
         _justPutDown = true;
+        StartIdleMovement();
     }
 
     private void OnMouseOver()
@@ -71,7 +119,7 @@ public class Card : MonoBehaviour
     {
         if (_hoverTween == null || !_hoverTween.IsPlaying() && (_scaleTween == null || !_scaleTween.IsPlaying()))
         {
-            _hoverTween = transform.DOLocalRotate(new Vector3(0, 0, hoverRotationAngle), hoverDuration)
+            _hoverTween = transform.DOLocalRotate(new Vector3(0, 0, Random.Range(hoverRotationAngleMin, hoverRotationAngleMax)), hoverDuration)
                 .SetLoops(2, LoopType.Yoyo)
                 .SetEase(Ease.InOutSine)
                 .OnComplete(() => StartScaleEffect());
@@ -82,7 +130,7 @@ public class Card : MonoBehaviour
     {
         KillTweens();
         transform.rotation = Quaternion.identity;
-        _scaleTween = transform.DOScale(_originalScale * hoverScaleMultiplier, scaleDuration)
+        _scaleTween = transform.DOScale(_hoverScale, scaleDuration) // Apply smaller hover scale
             .SetEase(Ease.OutSine)
             .OnStart(() => _hoverTween = null);
     }
@@ -92,6 +140,14 @@ public class Card : MonoBehaviour
         KillTweens();
         transform.rotation = Quaternion.identity;
         transform.localScale = _originalScale;
+        StartIdleMovement();
+    }
+
+    private void StartIdleMovement()
+    {
+        _idleTween = transform.DOLocalRotate(new Vector3(idleTiltAngle, idleTiltAngle, Random.Range(idleRotationAngleMin, idleRotationAngleMax)), idleMovementDuration)
+            .SetLoops(-1, LoopType.Yoyo)
+            .SetEase(Ease.InOutSine);
     }
 
     private void KillTweens()
@@ -99,6 +155,8 @@ public class Card : MonoBehaviour
         _hoverTween?.Kill();
         _scaleTween?.Kill();
         _dragTween?.Kill();
+        _idleTween?.Kill();
+        _shadowMoveTween?.Kill();
     }
 
     private Vector3 GetMouseWorldPosition()
