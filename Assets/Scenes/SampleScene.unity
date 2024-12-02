@@ -264,16 +264,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Shadow: {fileID: 310695081}
-  hoverRotationAngleMin: -5
-  hoverRotationAngleMax: 5
+  hoverRotationAngleMin: -6
+  hoverRotationAngleMax: 6
   hoverDuration: 0.1
-  hoverScaleMultiplier: 1.2
-  scaleDuration: 0.3
+  scaleDuration: 0.1
   dragMoveDuration: 0.05
   shadowOffsetY: -0.2
   shadowOffsetXFactor: 0.8
-  idleRotationAngleMin: -1
-  idleRotationAngleMax: 1
+  idleRotationAngleMin: -2
+  idleRotationAngleMax: 2
   idleTiltAngle: 1
   idleMovementDuration: 1
 --- !u!4 &427024463
@@ -284,7 +283,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 427024460}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.52, y: 0, z: 0}
+  m_LocalPosition: {x: 1.78, y: -0, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -603,7 +602,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1564296246}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.05, y: 0, z: 0}
+  m_LocalPosition: {x: -1.87, y: 0, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -651,16 +650,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Shadow: {fileID: 1895735693}
-  hoverRotationAngleMin: -5
-  hoverRotationAngleMax: 5
+  hoverRotationAngleMin: -6
+  hoverRotationAngleMax: 6
   hoverDuration: 0.1
-  hoverScaleMultiplier: 1.2
-  scaleDuration: 0.3
+  scaleDuration: 0.1
   dragMoveDuration: 0.05
   shadowOffsetY: -0.2
   shadowOffsetXFactor: 0.8
-  idleRotationAngleMin: -1
-  idleRotationAngleMax: 1
+  idleRotationAngleMin: -2
+  idleRotationAngleMax: 2
   idleTiltAngle: 1
   idleMovementDuration: 1
 --- !u!1 &1679514205
@@ -736,7 +734,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 723aa0d2a34568b4fb662ce5f3860e56, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8831ea8bdc05cb44eb52bbc165298848, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
