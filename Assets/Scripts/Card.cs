@@ -35,10 +35,16 @@ public class Card : MonoBehaviour
     public float idleTiltAngle = 1f;
     public float idleMovementDuration = 2f;
 
+    public bool IsDragging => _isDragging;
+    private bool _isInPlayArea = false;
+    private Vector3 _originalPosition;
+    private PlayArea _currentPlayArea;
+
     private void Start()
     {
         InitializeCard();
         StartIdleMovement();
+        _originalPosition = transform.position;
     }
 
     private void InitializeCard()
@@ -78,24 +84,44 @@ public class Card : MonoBehaviour
     {
         _isDragging = false;
         _hoverTween?.Kill();
-        if (Shadow != null)
-        {
-            _shadowMoveTween?.Kill();
-            _shadowMoveTween = Shadow.transform.DOLocalMove(_shadowOriginalLocalPosition, dragMoveDuration).SetEase(Ease.OutSine);
-        }
-        if (_isHovered)
-        {
-            Debug.Log("is hovered on onMouseUp");
-            transform.DOScale(_hoverScale, scaleDuration).SetEase(Ease.OutSine)
-                .OnComplete(() => CheckDragOrMousePos());
-        }
-    }
 
-    private void CheckDragOrMousePos()
-    {
-        if (!_isDragging)
+        if (_currentPlayArea != null && _currentPlayArea.IsPointInPlayArea(transform.position))
         {
-            CheckMousePos();
+            // Snap to the play area's designated position
+            Vector3 snapPosition = _currentPlayArea.GetSnapPosition();
+            transform.DOMove(snapPosition, dragMoveDuration).SetEase(Ease.OutSine).OnComplete(() =>
+            {
+                _isInPlayArea = true;
+                if (Shadow != null)
+                {
+                    _shadowMoveTween?.Kill();
+                    _shadowMoveTween = Shadow.transform.DOLocalMove(_shadowOriginalLocalPosition, dragMoveDuration).SetEase(Ease.OutSine);
+                }
+            });
+        }
+        else
+        {
+            // Return to original position if not in play area
+            if (Shadow != null)
+            {
+                _shadowMoveTween?.Kill();
+                _shadowMoveTween = Shadow.transform.DOLocalMove(_shadowOriginalLocalPosition, dragMoveDuration).SetEase(Ease.OutSine);
+            }
+
+            transform.DOMove(_originalPosition, dragMoveDuration).SetEase(Ease.OutSine).OnComplete(() =>
+            {
+                _isInPlayArea = false;
+                if (_isHovered)
+                {
+                    transform.DOScale(_hoverScale, scaleDuration).SetEase(Ease.OutSine);
+                }
+                else
+                {
+                    transform.DOScale(_originalScale, scaleDuration).SetEase(Ease.OutSine);
+                    _idleTween?.Kill();
+                    StartIdleMovement();
+                }
+            });
         }
     }
 
@@ -165,7 +191,6 @@ public class Card : MonoBehaviour
         _idleTween = transform.DOLocalRotate(new Vector3(idleTiltAngle, idleTiltAngle, Random.Range(idleRotationAngleMin, idleRotationAngleMax)), idleMovementDuration)
             .SetLoops(-1, LoopType.Yoyo)
             .SetEase(Ease.InOutSine);
-
     }
 
     private void StopIdleMovement()
@@ -187,5 +212,21 @@ public class Card : MonoBehaviour
         Vector3 mousePosition = Input.mousePosition;
         mousePosition.z = Mathf.Abs(_mainCamera.transform.position.z - transform.position.z);
         return _mainCamera.ScreenToWorldPoint(mousePosition);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.TryGetComponent(out PlayArea playArea))
+        {
+            _currentPlayArea = playArea;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.TryGetComponent(out PlayArea playArea) && _currentPlayArea == playArea)
+        {
+            _currentPlayArea = null;
+        }
     }
 }
