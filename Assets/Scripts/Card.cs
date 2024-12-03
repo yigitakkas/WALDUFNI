@@ -60,7 +60,6 @@ public class Card : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        transform.rotation = Quaternion.identity;
         Vector3 targetPosition = GetMouseWorldPosition() + _offset;
         targetPosition.z = transform.position.z;
         transform.position = targetPosition;
@@ -92,7 +91,6 @@ public class Card : MonoBehaviour
         }
     }
 
-
     private void CheckDragOrMousePos()
     {
         if (!_isDragging)
@@ -109,7 +107,6 @@ public class Card : MonoBehaviour
             StartHoverEffect();
         }
     }
-
 
     private void OnMouseExit()
     {
@@ -134,15 +131,7 @@ public class Card : MonoBehaviour
 
     private bool CheckHoverConditions()
     {
-        if (_hoverTween == null || !_hoverTween.IsPlaying() && (_scaleTween == null || !_scaleTween.IsPlaying()))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
+        return _hoverTween == null || (!_hoverTween.IsPlaying() && (_scaleTween == null || !_scaleTween.IsPlaying()));
     }
 
     private void StartScaleEffect()
@@ -176,7 +165,9 @@ public class Card : MonoBehaviour
         _idleTween = transform.DOLocalRotate(new Vector3(idleTiltAngle, idleTiltAngle, Random.Range(idleRotationAngleMin, idleRotationAngleMax)), idleMovementDuration)
             .SetLoops(-1, LoopType.Yoyo)
             .SetEase(Ease.InOutSine);
+
     }
+
     private void StopIdleMovement()
     {
         _idleTween?.Kill();
