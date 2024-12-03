@@ -6,7 +6,6 @@ public class Card : MonoBehaviour
 {
     private Tween _hoverTween;
     private Tween _scaleTween;
-    private Tween _dragTween;
     private Tween _idleTween;
     private Tween _shadowMoveTween;
     private Vector3 _originalScale;
@@ -61,42 +60,42 @@ public class Card : MonoBehaviour
 
     private void OnMouseDrag()
     {
+        transform.rotation = Quaternion.identity;
         Vector3 targetPosition = GetMouseWorldPosition() + _offset;
         targetPosition.z = transform.position.z;
-        if(_dragTween == null || !_dragTween.IsPlaying())
-        {
-            _dragTween = transform.DOMove(targetPosition, dragMoveDuration).SetEase(Ease.Linear);
-        }
+        transform.position = targetPosition;
 
-        if (Shadow != null && (_shadowMoveTween == null || !_shadowMoveTween.IsPlaying()))
+        if (Shadow != null)
         {
             Vector3 shadowTargetPosition = targetPosition;
+            shadowTargetPosition.x += (transform.position.x > 0 ? 1 : -1) * shadowOffsetXFactor;
             shadowTargetPosition.y += shadowOffsetY;
-            shadowTargetPosition.x = targetPosition.x + _shadowOriginalLocalPosition.x ;
-            shadowTargetPosition.z = 1;
-            _shadowMoveTween = Shadow.transform.DOMove(shadowTargetPosition, dragMoveDuration).SetEase(Ease.Linear);
+            shadowTargetPosition.z = transform.position.z + 0.1f;
+            Shadow.transform.position = shadowTargetPosition;
         }
     }
 
     private void OnMouseUp()
     {
+        _isDragging = false;
+        _hoverTween?.Kill();
         if (Shadow != null)
         {
             _shadowMoveTween?.Kill();
             _shadowMoveTween = Shadow.transform.DOLocalMove(_shadowOriginalLocalPosition, dragMoveDuration).SetEase(Ease.OutSine);
         }
-        _isDragging = false;
-        StartIdleMovement();
-        if(_isHovered)
+        if (_isHovered)
         {
+            Debug.Log("is hovered on onMouseUp");
             transform.DOScale(_hoverScale, scaleDuration).SetEase(Ease.OutSine)
                 .OnComplete(() => CheckDragOrMousePos());
         }
     }
 
+
     private void CheckDragOrMousePos()
     {
-        if(!_isDragging)
+        if (!_isDragging)
         {
             CheckMousePos();
         }
@@ -111,11 +110,12 @@ public class Card : MonoBehaviour
         }
     }
 
+
     private void OnMouseExit()
     {
-        _isHovered = false;
         if (!_isDragging)
         {
+            _isHovered = false;
             StopHoverEffect();
         }
     }
@@ -134,10 +134,11 @@ public class Card : MonoBehaviour
 
     private bool CheckHoverConditions()
     {
-        if(_hoverTween == null || !_hoverTween.IsPlaying() && (_scaleTween == null || !_scaleTween.IsPlaying()))
+        if (_hoverTween == null || !_hoverTween.IsPlaying() && (_scaleTween == null || !_scaleTween.IsPlaying()))
         {
             return true;
-        } else
+        }
+        else
         {
             return false;
         }
@@ -186,7 +187,6 @@ public class Card : MonoBehaviour
     {
         _hoverTween?.Kill();
         _scaleTween?.Kill();
-        _dragTween?.Kill();
         _idleTween?.Kill();
         _shadowMoveTween?.Kill();
     }

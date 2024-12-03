@@ -270,7 +270,7 @@ MonoBehaviour:
   scaleDuration: 0.1
   dragMoveDuration: 0.05
   shadowOffsetY: -0.2
-  shadowOffsetXFactor: 0.8
+  shadowOffsetXFactor: 0.1
   idleRotationAngleMin: -2
   idleRotationAngleMax: 2
   idleTiltAngle: 1
@@ -656,7 +656,7 @@ MonoBehaviour:
   scaleDuration: 0.1
   dragMoveDuration: 0.05
   shadowOffsetY: -0.2
-  shadowOffsetXFactor: 0.8
+  shadowOffsetXFactor: 0.1
   idleRotationAngleMin: -2
   idleRotationAngleMax: 2
   idleTiltAngle: 1
@@ -734,7 +734,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 8831ea8bdc05cb44eb52bbc165298848, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fbd0a25c3f098814e9037bc8279c8c18, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
