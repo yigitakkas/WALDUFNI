@@ -1,9 +1,12 @@
 using UnityEngine;
 using DG.Tweening;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Card : MonoBehaviour
 {
+    public ICardAbility CardAbility { get; private set; }
+
     private Tween _hoverTween;
     private Tween _scaleTween;
     private Tween _idleTween;
@@ -45,6 +48,15 @@ public class Card : MonoBehaviour
         InitializeCard();
         StartIdleMovement();
         _originalPosition = transform.position;
+    }
+    public void SetAbility(ICardAbility ability)
+    {
+        CardAbility = ability;
+    }
+
+    public void ActivateAbility()
+    {
+        CardAbility?.ApplyEffect();
     }
 
     private void InitializeCard()
