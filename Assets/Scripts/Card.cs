@@ -43,7 +43,7 @@ public class Card : MonoBehaviour
     private Vector3 _originalPosition;
     private PlayArea _currentPlayArea;
     private PlayArea _placedArea;
-    private bool _placedOnArea=false;
+    private bool _placedOnArea = false;
 
     private void Start()
     {
@@ -73,22 +73,7 @@ public class Card : MonoBehaviour
 
     private void OnMouseDown()
     {
-        foreach (Transform child in transform)
-        {
-            SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
-            if (spriteRenderer)
-            {
-                spriteRenderer.sortingOrder+=2;
-            }
-            else
-            {
-                Canvas canvas = child.GetComponent<Canvas>();
-                if (canvas)
-                {
-                    canvas.sortingOrder+=2;
-                }
-            }
-        }
+        AdjustChildSortingOrder(2);
         _offset = transform.position - GetMouseWorldPosition();
         _isDragging = true;
         KillTweens();
@@ -97,6 +82,8 @@ public class Card : MonoBehaviour
 
     private void OnMouseDrag()
     {
+        if (!_isDragging) return;
+
         Vector3 targetPosition = GetMouseWorldPosition() + _offset;
         targetPosition.z = transform.position.z;
         transform.position = targetPosition;
@@ -113,79 +100,104 @@ public class Card : MonoBehaviour
 
     private void OnMouseUp()
     {
-        foreach (Transform child in transform)
-        {
-            SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
-            if(spriteRenderer)
-            {
-                spriteRenderer.sortingOrder-=2;
-            } else
-            {
-                Canvas canvas = child.GetComponent<Canvas>();
-                if(canvas)
-                {
-                    canvas.sortingOrder-=2;
-                }
-            }
-        }
+        AdjustChildSortingOrder(-2);
         _isDragging = false;
-        _hoverTween?.Kill();
+        KillAndNullifyTween(ref _hoverTween);
 
-        if (_currentPlayArea != null && _currentPlayArea.IsPointInPlayArea(transform.position))
+        if (IsCardOnPlayArea())
         {
-            Vector3 snapPosition = Vector3.zero;
-            if(_placedOnArea && (_placedArea == _currentPlayArea))
-            {
-                snapPosition = _placedArea.GetCardPosition(this);
-
-            } else
-            {
-                if(_placedArea != null && _placedArea != _currentPlayArea)
-                {
-                    _placedArea.RemoveCard(this);
-                }
-                snapPosition = _currentPlayArea.GetSnapPosition(this);
-                _currentPlayArea.PlaceCard(this);
-                _placedArea = _currentPlayArea;
-                _placedOnArea = true;
-            }
-            transform.DOMove(snapPosition, dragMoveDuration).SetEase(Ease.OutSine).OnComplete(() =>
-            {
-                if (Shadow != null)
-                {
-                    _shadowMoveTween?.Kill();
-                    _shadowMoveTween = Shadow.transform.DOLocalMove(_shadowOriginalLocalPosition, dragMoveDuration).SetEase(Ease.OutSine);
-                }
-            });
+            HandlePlayAreaPlacement();
         }
         else
         {
-            if(_placedOnArea)
-            {
-                _placedArea.RemoveCard(this);
-                _placedArea = null;
-            }
-            _placedOnArea = false;
-            if (Shadow != null)
-            {
-                _shadowMoveTween?.Kill();
-                _shadowMoveTween = Shadow.transform.DOLocalMove(_shadowOriginalLocalPosition, dragMoveDuration).SetEase(Ease.OutSine);
-            }
-
-            transform.DOMove(_originalPosition, dragMoveDuration).SetEase(Ease.OutSine).OnComplete(() =>
-            {
-                if (_isHovered)
-                {
-                    transform.DOScale(_hoverScale, scaleDuration).SetEase(Ease.OutSine);
-                }
-                else
-                {
-                    transform.DOScale(_originalScale, scaleDuration).SetEase(Ease.OutSine);
-                    _idleTween?.Kill();
-                    StartIdleMovement();
-                }
-            });
+            ResetCardToOriginalPosition();
         }
+    }
+    private void AdjustChildSortingOrder(int orderOffset)
+    {
+        foreach (Transform child in transform)
+        {
+            SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
+            if (spriteRenderer)
+            {
+                spriteRenderer.sortingOrder += orderOffset;
+            }
+            else
+            {
+                Canvas canvas = child.GetComponent<Canvas>();
+                if (canvas)
+                {
+                    canvas.sortingOrder += orderOffset;
+                }
+            }
+        }
+    }
+
+    private bool IsCardOnPlayArea()
+    {
+        return _currentPlayArea != null && _currentPlayArea.IsPointInPlayArea(transform.position);
+    }
+
+    private void HandlePlayAreaPlacement()
+    {
+        Vector3 snapPosition = CalculateSnapPosition();
+        MoveCardToPosition(snapPosition, dragMoveDuration, ResetShadowPosition);
+    }
+
+    private Vector3 CalculateSnapPosition()
+    {
+        if (_placedOnArea && (_placedArea == _currentPlayArea))
+        {
+            return _placedArea.GetCardPosition(this);
+        }
+
+        if (_placedArea != null && _placedArea != _currentPlayArea)
+        {
+            _placedArea.RemoveCard(this);
+        }
+        _currentPlayArea.PlaceCard(this);
+        _placedArea = _currentPlayArea;
+        _placedOnArea = true;
+
+        return _currentPlayArea.GetSnapPosition(this);
+    }
+
+    private void MoveCardToPosition(Vector3 position, float duration, TweenCallback onComplete)
+    {
+        transform.DOMove(position, duration).SetEase(Ease.OutSine).OnComplete(onComplete);
+    }
+
+    private void ResetShadowPosition()
+    {
+        if (Shadow != null)
+        {
+            KillAndNullifyTween(ref _shadowMoveTween);
+            _shadowMoveTween = Shadow.transform.DOLocalMove(_shadowOriginalLocalPosition, dragMoveDuration).SetEase(Ease.OutSine);
+        }
+    }
+
+    private void ResetCardToOriginalPosition()
+    {
+        if (_placedOnArea)
+        {
+            _placedArea.RemoveCard(this);
+            _placedArea = null;
+        }
+        _placedOnArea = false;
+
+        transform.DOMove(_originalPosition, dragMoveDuration).SetEase(Ease.OutSine).OnComplete(() =>
+        {
+            if (_isHovered)
+            {
+                transform.DOScale(_hoverScale, scaleDuration).SetEase(Ease.OutSine);
+            }
+            else
+            {
+                transform.DOScale(_originalScale, scaleDuration).SetEase(Ease.OutSine);
+                KillAndNullifyTween(ref _idleTween);
+                StartIdleMovement();
+            }
+        });
     }
 
     private void OnMouseOver()
@@ -258,16 +270,21 @@ public class Card : MonoBehaviour
 
     private void StopIdleMovement()
     {
-        _idleTween?.Kill();
-        _idleTween = null;
+        KillAndNullifyTween(ref _idleTween);
     }
 
     private void KillTweens()
     {
-        _hoverTween?.Kill();
-        _scaleTween?.Kill();
-        _idleTween?.Kill();
-        _shadowMoveTween?.Kill();
+        KillAndNullifyTween(ref _hoverTween);
+        KillAndNullifyTween(ref _scaleTween);
+        KillAndNullifyTween(ref _idleTween);
+        KillAndNullifyTween(ref _shadowMoveTween);
+    }
+
+    private void KillAndNullifyTween(ref Tween tween)
+    {
+        tween.Kill();
+        tween = null;
     }
 
     private Vector3 GetMouseWorldPosition()
