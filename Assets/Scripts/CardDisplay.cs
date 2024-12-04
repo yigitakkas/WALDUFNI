@@ -10,9 +10,9 @@ public class CardDisplay : MonoBehaviour
     public int Energy;
     public int Power;
 
-    private Transform _cardNameObject;
-    private Transform _powerObject;
-    private Transform _energyObject;
+    private GameObject _cardNameObject;
+    private GameObject _powerObject;
+    private GameObject _energyObject;
 
     [Header("UI References")]
     private TextMeshProUGUI _cardNameText;
@@ -21,9 +21,9 @@ public class CardDisplay : MonoBehaviour
 
     private void Start()
     {
-        _cardNameObject = transform.Find("CharacterNameText");
-        _powerObject = transform.Find("DamageText");
-        _energyObject = transform.Find("EnergyText");
+        _cardNameObject = transform.Find("Canvas/CharacterNameText").gameObject;
+        _powerObject = transform.Find("Canvas/Damage/DamageText").gameObject;
+        _energyObject = transform.Find("Canvas/Energy/EnergyText").gameObject;
         if(_cardNameObject != null && _powerObject != null && _energyObject != null)
         {
             _cardNameText = _cardNameObject.GetComponent<TextMeshProUGUI>();

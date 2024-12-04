@@ -20,6 +20,7 @@ public class Card : MonoBehaviour
     private bool _isDragging = false;
     private bool _isHovered = false;
     public GameObject Shadow;
+    private Collider2D _collider;
 
     [Header("Hover Effect Settings")]
     public float hoverRotationAngleMin = -5f;
@@ -41,6 +42,8 @@ public class Card : MonoBehaviour
     public bool IsDragging => _isDragging;
     private Vector3 _originalPosition;
     private PlayArea _currentPlayArea;
+    private PlayArea _placedArea;
+    private bool _placedOnArea=false;
 
     private void Start()
     {
@@ -65,6 +68,7 @@ public class Card : MonoBehaviour
         _hoverScale = _originalScale * 1.05f;
         _movingScale = _originalScale * 1.05f * 1.10f;
         _mainCamera = Camera.main;
+        _collider = GetComponent<BoxCollider2D>();
     }
 
     private void OnMouseDown()
@@ -129,7 +133,22 @@ public class Card : MonoBehaviour
 
         if (_currentPlayArea != null && _currentPlayArea.IsPointInPlayArea(transform.position))
         {
-            Vector3 snapPosition = _currentPlayArea.GetSnapPosition();
+            Vector3 snapPosition = Vector3.zero;
+            if(_placedOnArea && (_placedArea == _currentPlayArea))
+            {
+                snapPosition = _placedArea.GetCardPosition(this);
+
+            } else
+            {
+                if(_placedArea != null && _placedArea != _currentPlayArea)
+                {
+                    _placedArea.RemoveCard(this);
+                }
+                snapPosition = _currentPlayArea.GetSnapPosition(this);
+                _currentPlayArea.PlaceCard(this);
+                _placedArea = _currentPlayArea;
+                _placedOnArea = true;
+            }
             transform.DOMove(snapPosition, dragMoveDuration).SetEase(Ease.OutSine).OnComplete(() =>
             {
                 if (Shadow != null)
@@ -141,6 +160,12 @@ public class Card : MonoBehaviour
         }
         else
         {
+            if(_placedOnArea)
+            {
+                _placedArea.RemoveCard(this);
+                _placedArea = null;
+            }
+            _placedOnArea = false;
             if (Shadow != null)
             {
                 _shadowMoveTween?.Kill();

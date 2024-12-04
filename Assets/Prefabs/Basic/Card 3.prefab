@@ -443,7 +443,6 @@ GameObject:
   - component: {fileID: 4584201866526794034}
   - component: {fileID: 2645225972781723531}
   - component: {fileID: 4584201866526794033}
-  - component: {fileID: 1466573564}
   - component: {fileID: -2085813665370632350}
   m_Layer: 0
   m_Name: Card 3
@@ -536,21 +535,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.0272005, y: 1.3412414}
   m_EdgeRadius: 0
---- !u!114 &1466573564
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4584201866526794032}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d91cf7a7dea7414dba00a9031656fe5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CharacterName: 
-  Energy: 0
-  Power: 0
 --- !u!50 &-2085813665370632350
 Rigidbody2D:
   serializedVersion: 4
