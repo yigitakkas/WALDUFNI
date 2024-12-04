@@ -3,7 +3,7 @@ using DG.Tweening;
 
 public class PlayArea : MonoBehaviour
 {
-    public Transform snapPoint;
+    public Transform SnapPoint;
 
     public bool IsPointInPlayArea(Vector3 point)
     {
@@ -13,6 +13,6 @@ public class PlayArea : MonoBehaviour
 
     public Vector3 GetSnapPosition()
     {
-        return snapPoint != null ? snapPoint.position : transform.position;
+        return SnapPoint != null ? SnapPoint.position : transform.position;
     }
 }

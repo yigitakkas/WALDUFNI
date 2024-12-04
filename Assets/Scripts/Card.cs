@@ -39,7 +39,6 @@ public class Card : MonoBehaviour
     public float idleMovementDuration = 2f;
 
     public bool IsDragging => _isDragging;
-    private bool _isInPlayArea = false;
     private Vector3 _originalPosition;
     private PlayArea _currentPlayArea;
 
@@ -70,6 +69,22 @@ public class Card : MonoBehaviour
 
     private void OnMouseDown()
     {
+        foreach (Transform child in transform)
+        {
+            SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
+            if (spriteRenderer)
+            {
+                spriteRenderer.sortingOrder+=2;
+            }
+            else
+            {
+                Canvas canvas = child.GetComponent<Canvas>();
+                if (canvas)
+                {
+                    canvas.sortingOrder+=2;
+                }
+            }
+        }
         _offset = transform.position - GetMouseWorldPosition();
         _isDragging = true;
         KillTweens();
@@ -94,16 +109,29 @@ public class Card : MonoBehaviour
 
     private void OnMouseUp()
     {
+        foreach (Transform child in transform)
+        {
+            SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
+            if(spriteRenderer)
+            {
+                spriteRenderer.sortingOrder-=2;
+            } else
+            {
+                Canvas canvas = child.GetComponent<Canvas>();
+                if(canvas)
+                {
+                    canvas.sortingOrder-=2;
+                }
+            }
+        }
         _isDragging = false;
         _hoverTween?.Kill();
 
         if (_currentPlayArea != null && _currentPlayArea.IsPointInPlayArea(transform.position))
         {
-            // Snap to the play area's designated position
             Vector3 snapPosition = _currentPlayArea.GetSnapPosition();
             transform.DOMove(snapPosition, dragMoveDuration).SetEase(Ease.OutSine).OnComplete(() =>
             {
-                _isInPlayArea = true;
                 if (Shadow != null)
                 {
                     _shadowMoveTween?.Kill();
@@ -113,7 +141,6 @@ public class Card : MonoBehaviour
         }
         else
         {
-            // Return to original position if not in play area
             if (Shadow != null)
             {
                 _shadowMoveTween?.Kill();
@@ -122,7 +149,6 @@ public class Card : MonoBehaviour
 
             transform.DOMove(_originalPosition, dragMoveDuration).SetEase(Ease.OutSine).OnComplete(() =>
             {
-                _isInPlayArea = false;
                 if (_isHovered)
                 {
                     transform.DOScale(_hoverScale, scaleDuration).SetEase(Ease.OutSine);

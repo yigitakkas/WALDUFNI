@@ -854,12 +854,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d91cf7a7dea7414dba00a9031656fe5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardName: CARD 14
-  energy: 5
-  power: 9
-  cardNameText: {fileID: 1961998889735169762}
-  powerText: {fileID: 1961998888382404821}
-  energyText: {fileID: 1961998889419546323}
+  CharacterName: CARD 14
+  Energy: 5
+  Power: 9
 --- !u!61 &1961998889533089683
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -894,7 +891,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1961998889533089682}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -906,7 +903,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!1 &1961998889735169764
 GameObject:
   m_ObjectHideFlags: 0
