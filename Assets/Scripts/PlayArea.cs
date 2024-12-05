@@ -6,6 +6,7 @@ public class PlayArea : MonoBehaviour
     [SerializeField]
     private List<SnapPoint> _snapPoints = new List<SnapPoint>();
     private List<Card> _placedCards = new List<Card>();
+    public int Index;
 
     private void Start()
     {
@@ -105,6 +106,42 @@ public class PlayArea : MonoBehaviour
         return Vector3.zero;
     }
 
+    public int PlacedAmount()
+    {
+        return _placedCards.Count;
+    }
+
+    public void PlaceCardsIntoList(List<Card> cards)
+    {
+        foreach(Card card in _placedCards)
+        {
+            cards.Add(card);
+        }
+    }
+
+    public int PlacedCardsPower()
+    {
+        int sum = 0;
+        foreach (Card card in _placedCards)
+        {
+            sum += card.GetComponent<CardDisplay>().Power;
+        }
+        return sum;
+    }
+
+    public bool CheckSnapPointsAvailability()
+    {
+        int occupiedAmount = 0;
+        foreach(SnapPoint snapPoint in _snapPoints)
+        {
+            if (snapPoint.Occupied)
+                occupiedAmount++;
+        }
+        if (occupiedAmount == 3)
+            return false;
+        else
+            return true;
+    }
 
     [System.Serializable]
     private class SnapPoint

@@ -44,6 +44,9 @@ public class Card : MonoBehaviour
     private PlayArea _currentPlayArea;
     private PlayArea _placedArea;
     private bool _placedOnArea = false;
+    private PlayArea _placedOpponentArea;
+    public PlayArea PlacedOpponentArea => _placedOpponentArea;
+    public PlayArea PlacedArea => _placedArea;
 
     private void Start()
     {
@@ -71,10 +74,11 @@ public class Card : MonoBehaviour
         _collider = GetComponent<BoxCollider2D>();
     }
 
-    public void DestroyCollider()
+    public void DestroyCollider(PlayArea area)
     {
         BoxCollider2D newCollider = GetComponent<BoxCollider2D>();
         newCollider.enabled = false;
+        _placedOpponentArea = area;
     }
 
     private void OnMouseDown()

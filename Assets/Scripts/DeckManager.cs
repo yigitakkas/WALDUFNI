@@ -23,7 +23,7 @@ public class DeckManager : MonoBehaviour
         {
             _playerDeck.Add(cardPrefab);
         }
-        Opponent.Instance.AssignDeck(_playerDeck);
+        Opponent.Instance.AssignDeck(new List<GameObject>(_playerDeck));
     }
 
     private void SpawnRandomCards()
