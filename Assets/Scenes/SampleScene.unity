@@ -1203,7 +1203,7 @@ GameObject:
   - component: {fileID: 647410041}
   - component: {fileID: 647410040}
   m_Layer: 7
-  m_Name: PlayArea2
+  m_Name: PlayerArea2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1982,7 +1982,7 @@ GameObject:
   - component: {fileID: 1305186572}
   - component: {fileID: 1305186571}
   m_Layer: 7
-  m_Name: PlayArea3
+  m_Name: PlayerArea3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2258,7 +2258,7 @@ GameObject:
   - component: {fileID: 1394582756}
   - component: {fileID: 1394582757}
   m_Layer: 7
-  m_Name: PlayArea1
+  m_Name: PlayerArea1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3034,10 +3034,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c01421a2afdcad547b3c16f03d86efb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayAreas:
-  - {fileID: 1394582757}
-  - {fileID: 647410040}
-  - {fileID: 1305186571}
+  _playerPlayAreas: []
   _opponentPlayAreas: []
   PlayerScoreText: {fileID: 862569710}
   OpponentScoreText: {fileID: 304661233}

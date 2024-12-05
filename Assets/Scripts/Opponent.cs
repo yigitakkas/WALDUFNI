@@ -5,10 +5,8 @@ using UnityEngine;
 public class Opponent : MonoBehaviour
 {
     public static Opponent Instance;
+
     private List<GameObject> _opponentDeck = new List<GameObject>();
-    private PlayArea _opponentFirstArea;
-    private PlayArea _opponentSecondArea;
-    private PlayArea _opponentThirdArea;
     private List<PlayArea> _opponentAreas = new List<PlayArea>();
     private PlayArea _placedArea;
 
@@ -17,15 +15,22 @@ public class Opponent : MonoBehaviour
         Instance = this;
         FindAreas();
     }
+    private void OnEnable()
+    {
+        RoundManager.OnRoundStarted += PlayHand;
+    }
+
+    private void OnDisable()
+    {
+        RoundManager.OnRoundStarted -= PlayHand;
+    }
+
 
     private void FindAreas()
     {
-        _opponentFirstArea = transform.Find("OpponentArea1").GetComponent<PlayArea>();
-        _opponentSecondArea = transform.Find("OpponentArea2").GetComponent<PlayArea>();
-        _opponentThirdArea = transform.Find("OpponentArea3").GetComponent<PlayArea>();
-        _opponentAreas.Add(_opponentFirstArea);
-        _opponentAreas.Add(_opponentSecondArea);
-        _opponentAreas.Add(_opponentThirdArea);
+        _opponentAreas.Add(transform.Find("OpponentArea1").GetComponent<PlayArea>());
+        _opponentAreas.Add(transform.Find("OpponentArea2").GetComponent<PlayArea>());
+        _opponentAreas.Add(transform.Find("OpponentArea3").GetComponent<PlayArea>());
     }
     public void AssignDeck(List<GameObject> deck)
     {

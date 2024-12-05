@@ -2,45 +2,65 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class RoundManager : MonoBehaviour
 {
+    public static event Action OnRoundStarted;
+
     [SerializeField]
-    public List<PlayArea> PlayAreas = new List<PlayArea>();
+    private List<PlayArea> _playerPlayAreas = new List<PlayArea>();
     private int _placedCardsAmount = 0;
 
     [SerializeField]
     private List<PlayArea> _opponentPlayAreas = new List<PlayArea>();
 
-    private int _playerScore=0;
-    private int _opponentScore=0;
+    private int _playerScore = 0;
+    private int _opponentScore = 0;
 
     public TMP_Text PlayerScoreText;
     public TMP_Text OpponentScoreText;
 
-
     private void Start()
     {
+        FindAreas();
         _opponentPlayAreas = Opponent.Instance.ReturnOpponentAreas();
+    }
+    private void FindAreas()
+    {
+        _playerPlayAreas.Add(transform.Find("PlayerArea1").GetComponent<PlayArea>());
+        _playerPlayAreas.Add(transform.Find("PlayerArea2").GetComponent<PlayArea>());
+        _playerPlayAreas.Add(transform.Find("PlayerArea3").GetComponent<PlayArea>());
     }
     public void StartRound()
     {
-        foreach(PlayArea area in PlayAreas)
+        foreach (PlayArea area in _playerPlayAreas)
         {
             _placedCardsAmount += area.PlacedAmount();
         }
         if (_placedCardsAmount > 0)
         {
-            Opponent.Instance.PlayHand();
-        } else
+            OnRoundStarted?.Invoke();
+            ScoreManager.CalculatePower(_playerPlayAreas, _opponentPlayAreas, ref _playerScore, ref _opponentScore);
+            UpdateScoreUI();
+        }
+        else
         {
             Debug.LogError("No cards placed on any area");
         }
-        CalculatePower();
         _placedCardsAmount = 0;
     }
 
-    private void CalculatePower()
+    private void UpdateScoreUI()
+    {
+        PlayerScoreText.text = $"PLAYER: {_playerScore}";
+        OpponentScoreText.text = $"OPP: {_opponentScore}";
+    }
+}
+
+public static class ScoreManager
+{
+    public static void CalculatePower(List<PlayArea> playerAreas, List<PlayArea> opponentAreas, ref int playerScore, ref int opponentScore)
     {
         int playerFirstZone = 0;
         int playerSecondZone = 0;
@@ -49,9 +69,9 @@ public class RoundManager : MonoBehaviour
         int opponentSecondZone = 0;
         int opponentThirdZone = 0;
 
-        foreach (PlayArea area in PlayAreas)
+        foreach (PlayArea area in playerAreas)
         {
-            if(area.Index==1 && area.PlacedAmount() != 0)
+            if (area.Index == 1 && area.PlacedAmount() != 0)
             {
                 playerFirstZone += area.PlacedCardsPower();
             }
@@ -64,7 +84,7 @@ public class RoundManager : MonoBehaviour
                 playerThirdZone += area.PlacedCardsPower();
             }
         }
-        foreach (PlayArea area in _opponentPlayAreas)
+        foreach (PlayArea area in opponentAreas)
         {
             if (area.Index == 1 && area.PlacedAmount() != 0)
             {
@@ -80,23 +100,15 @@ public class RoundManager : MonoBehaviour
             }
         }
         Debug.Log($"playerFirstZone: {playerFirstZone}, playerSecondZone: {playerSecondZone}, playerThirdZone: {playerThirdZone}, " +
-              $"opponentFirstZone: {opponentFirstZone}, opponentSecondZone: {opponentSecondZone}, opponentThirdZone: {opponentThirdZone}");
+                  $"opponentFirstZone: {opponentFirstZone}, opponentSecondZone: {opponentSecondZone}, opponentThirdZone: {opponentThirdZone}");
 
-        _playerScore += (playerFirstZone > opponentFirstZone) ? 1 : 0;
-        _opponentScore += (playerFirstZone < opponentFirstZone) ? 1 : 0;
+        playerScore += (playerFirstZone > opponentFirstZone) ? 1 : 0;
+        opponentScore += (playerFirstZone < opponentFirstZone) ? 1 : 0;
 
-        _playerScore += (playerSecondZone > opponentSecondZone) ? 1 : 0;
-        _opponentScore += (playerSecondZone < opponentSecondZone) ? 1 : 0;
+        playerScore += (playerSecondZone > opponentSecondZone) ? 1 : 0;
+        opponentScore += (playerSecondZone < opponentSecondZone) ? 1 : 0;
 
-        _playerScore += (playerThirdZone > opponentThirdZone) ? 1 : 0;
-        _opponentScore += (playerThirdZone < opponentThirdZone) ? 1 : 0;
-
-        UpdateScoreUI();
-    }
-
-    private void UpdateScoreUI()
-    {
-        PlayerScoreText.text = $"PLAYER: {_playerScore}";
-        OpponentScoreText.text = $"OPP: {_opponentScore}";
+        playerScore += (playerThirdZone > opponentThirdZone) ? 1 : 0;
+        opponentScore += (playerThirdZone < opponentThirdZone) ? 1 : 0;
     }
 }
