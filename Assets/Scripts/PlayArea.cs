@@ -88,10 +88,8 @@ public class PlayArea : MonoBehaviour
         if (card != null && targetSnapPoint != null)
         {
             card.transform.position = targetSnapPoint.Transform.position;
-
             targetSnapPoint.AssignedCard = card;
             targetSnapPoint.Occupied = true;
-
         }
     }
 

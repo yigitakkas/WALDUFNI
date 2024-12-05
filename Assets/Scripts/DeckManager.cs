@@ -9,7 +9,7 @@ public class DeckManager : MonoBehaviour
     [Header("Spawn Points")]
     public List<Transform> SpawnPoints;
 
-    private List<GameObject> _deck = new List<GameObject>();
+    private List<GameObject> _playerDeck = new List<GameObject>();
 
     void Start()
     {
@@ -21,8 +21,9 @@ public class DeckManager : MonoBehaviour
     {
         foreach (GameObject cardPrefab in CardPrefabs)
         {
-            _deck.Add(cardPrefab);
+            _playerDeck.Add(cardPrefab);
         }
+        Opponent.Instance.AssignDeck(_playerDeck);
     }
 
     private void SpawnRandomCards()
@@ -35,18 +36,18 @@ public class DeckManager : MonoBehaviour
 
         for (int i = 0; i < 3; i++)
         {
-            if (_deck.Count == 0)
+            if (_playerDeck.Count == 0)
             {
                 Debug.LogError("Deste bitti! Daha fazla kart yok.");
                 break;
             }
 
-            int randomIndex = Random.Range(0, _deck.Count);
-            GameObject randomCard = _deck[randomIndex];
+            int randomIndex = Random.Range(0, _playerDeck.Count);
+            GameObject randomCard = _playerDeck[randomIndex];
 
             Instantiate(randomCard, SpawnPoints[i].position, Quaternion.identity);
 
-            _deck.RemoveAt(randomIndex);
+            _playerDeck.RemoveAt(randomIndex);
         }
     }
 }

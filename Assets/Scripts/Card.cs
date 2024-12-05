@@ -71,6 +71,12 @@ public class Card : MonoBehaviour
         _collider = GetComponent<BoxCollider2D>();
     }
 
+    public void DestroyCollider()
+    {
+        BoxCollider2D newCollider = GetComponent<BoxCollider2D>();
+        newCollider.enabled = false;
+    }
+
     private void OnMouseDown()
     {
         AdjustChildSortingOrder(2);
