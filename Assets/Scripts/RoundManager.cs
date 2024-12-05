@@ -6,7 +6,12 @@ using System;
 
 public class RoundManager : MonoBehaviour
 {
+    public static RoundManager Instance;
+
     public static event Action OnRoundStarted;
+    public static event Action OnRoundEnded;
+
+    public int CurrentRound { get; private set; }
 
     [SerializeField]
     private List<PlayArea> _playerPlayAreas = new List<PlayArea>();
@@ -21,10 +26,19 @@ public class RoundManager : MonoBehaviour
     public TMP_Text PlayerScoreText;
     public TMP_Text OpponentScoreText;
 
+    private void Awake()
+    {
+        Instance = this;
+        SetRound(1);
+    }
     private void Start()
     {
         FindAreas();
         _opponentPlayAreas = Opponent.Instance.ReturnOpponentAreas();
+    }
+    public void SetRound(int round)
+    {
+        CurrentRound = round;
     }
     private void FindAreas()
     {
@@ -43,6 +57,8 @@ public class RoundManager : MonoBehaviour
             OnRoundStarted?.Invoke();
             ScoreManager.CalculatePower(_playerPlayAreas, _opponentPlayAreas, ref _playerScore, ref _opponentScore);
             UpdateScoreUI();
+            CurrentRound++;
+            OnRoundEnded?.Invoke();
         }
         else
         {

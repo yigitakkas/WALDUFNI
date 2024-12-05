@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Card : MonoBehaviour
 {
     public ICardAbility CardAbility { get; private set; }
+    public CardClass CardClassType;
 
     private Tween _hoverTween;
     private Tween _scaleTween;
@@ -318,5 +319,11 @@ public class Card : MonoBehaviour
         {
             _currentPlayArea = null;
         }
+    }
+    public enum CardClass
+    {
+        Basic,
+        Power,
+        Special
     }
 }
