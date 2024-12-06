@@ -183,6 +183,7 @@ public class DeckManager : MonoBehaviour
 
     private void ArrangeCards()
     {
+        Debug.Log("Cards Arranged");
         int cardCount = _spawnedCards.Count;
         if (cardCount == 0)
             return;
@@ -193,7 +194,8 @@ public class DeckManager : MonoBehaviour
         for (int i = 0; i < cardCount; i++)
         {
             Vector3 targetPosition = new Vector3(transform.position.x + (i * spacing) - centerOffset, transform.position.y, transform.position.z);
-            _spawnedCards[i].transform.DOMove(targetPosition, 0.5f); // DOTween ile hareket
+            _spawnedCards[i].GetComponent<Card>().SetOriginalPosition(targetPosition);
+            _spawnedCards[i].transform.DOMove(targetPosition, 0.5f);
         }
     }
 

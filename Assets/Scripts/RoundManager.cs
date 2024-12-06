@@ -41,6 +41,7 @@ public class RoundManager : MonoBehaviour
     private void Start()
     {
         _opponentPlayAreas = OpponentManager.Instance.ReturnOpponentAreas();
+        ScoreManager.Instance.CalculatePower(_playerPlayAreas, _opponentPlayAreas, ref _playerScore, ref _opponentScore);
     }
     public void SetRound(int round)
     {

@@ -52,7 +52,6 @@ public class Card : MonoBehaviour
     {
         InitializeCard();
         StartIdleMovement();
-        _originalPosition = transform.position;
     }
     public void SetAbility(ICardAbility ability)
     {

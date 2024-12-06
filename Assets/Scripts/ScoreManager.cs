@@ -6,8 +6,12 @@ using TMPro;
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance;
-    public TMP_Text PlayerScoreText;
-    public TMP_Text OpponentScoreText;
+    public TMP_Text AreaOnePlayerScore;
+    public TMP_Text AreaTwoPlayerScore;
+    public TMP_Text AreaThreePlayerScore;
+    public TMP_Text AreaOneOpponentScore;
+    public TMP_Text AreaTwoOpponentScore;
+    public TMP_Text AreaThreeOpponentScore;
 
     private void Awake()
     {
@@ -52,8 +56,6 @@ public class ScoreManager : MonoBehaviour
                 opponentThirdZone += area.PlacedCardsPower();
             }
         }
-        Debug.Log($"playerFirstZone: {playerFirstZone}, playerSecondZone: {playerSecondZone}, playerThirdZone: {playerThirdZone}, " +
-                  $"opponentFirstZone: {opponentFirstZone}, opponentSecondZone: {opponentSecondZone}, opponentThirdZone: {opponentThirdZone}");
 
         playerScore += (playerFirstZone > opponentFirstZone) ? 1 : 0;
         opponentScore += (playerFirstZone < opponentFirstZone) ? 1 : 0;
@@ -64,9 +66,36 @@ public class ScoreManager : MonoBehaviour
         playerScore += (playerThirdZone > opponentThirdZone) ? 1 : 0;
         opponentScore += (playerThirdZone < opponentThirdZone) ? 1 : 0;
 
+        AreaOnePlayerScore.text = playerFirstZone.ToString();
+        AreaTwoPlayerScore.text = playerSecondZone.ToString();
+        AreaThreePlayerScore.text = playerThirdZone.ToString();
 
-        PlayerScoreText.text = $"PLAYER: {playerScore}";
-        OpponentScoreText.text = $"OPP: {opponentScore}";
+        AreaOneOpponentScore.text = opponentFirstZone.ToString();
+        AreaTwoOpponentScore.text = opponentSecondZone.ToString();
+        AreaThreeOpponentScore.text = opponentThirdZone.ToString();
+
+        CompareAndSetTextColor(AreaOnePlayerScore, AreaOneOpponentScore, playerFirstZone, opponentFirstZone);
+        CompareAndSetTextColor(AreaTwoPlayerScore, AreaTwoOpponentScore, playerSecondZone, opponentSecondZone);
+        CompareAndSetTextColor(AreaThreePlayerScore, AreaThreeOpponentScore, playerThirdZone, opponentThirdZone);
+    }
+
+    private void CompareAndSetTextColor(TMP_Text playerText, TMP_Text opponentText, int playerScore, int opponentScore)
+    {
+        if (playerScore > opponentScore)
+        {
+            playerText.color = Color.green; // Player önde
+            opponentText.color = Color.red; // Opponent geride
+        }
+        else if (playerScore < opponentScore)
+        {
+            playerText.color = Color.red; // Player geride
+            opponentText.color = Color.green; // Opponent önde
+        }
+        else
+        {
+            playerText.color = Color.yellow; // Eþit durumda sarý
+            opponentText.color = Color.yellow; // Eþit durumda sarý
+        }
     }
 }
 
