@@ -66,9 +66,9 @@ public class RoundManager : MonoBehaviour
         {
             OnRoundStarted?.Invoke();
 
-            ScoreManager.CalculatePower(_playerPlayAreas, _opponentPlayAreas, ref _playerScore, ref _opponentScore);
-            UpdateScoreUI();
+            ScoreManager.Instance.CalculatePower(_playerPlayAreas, _opponentPlayAreas, ref _playerScore, ref _opponentScore);
             CurrentRound++;
+
             OnRoundEnded?.Invoke();
         }
         else
@@ -78,9 +78,4 @@ public class RoundManager : MonoBehaviour
         _placedCardsAmount = 0;
     }
 
-    private void UpdateScoreUI()
-    {
-        PlayerScoreText.text = $"PLAYER: {_playerScore}";
-        OpponentScoreText.text = $"OPP: {_opponentScore}";
-    }
 }

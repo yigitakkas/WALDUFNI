@@ -3,11 +3,9 @@ using UnityEngine;
 
 public class DeckManager : MonoBehaviour
 {
+    public static DeckManager Instance;
     [Header("Card Prefabs")]
     public List<GameObject> CardPrefabs;
-
-    [Header("Spawn Points")]
-    public List<Transform> SpawnPoints;
 
     [SerializeField]
     private List<GameObject> _playerDeck = new List<GameObject>();
@@ -18,6 +16,12 @@ public class DeckManager : MonoBehaviour
     [SerializeField]
     private List<GameObject> _specialCards = new List<GameObject>();
 
+    private List<GameObject> _spawnedCards = new List<GameObject>();
+
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void OnEnable()
     {
         RoundManager.OnRoundEnded += SpawnRandomCards;
@@ -27,6 +31,7 @@ public class DeckManager : MonoBehaviour
     {
         RoundManager.OnRoundEnded -= SpawnRandomCards;
     }
+
     void Start()
     {
         CreateDeck();
@@ -56,11 +61,13 @@ public class DeckManager : MonoBehaviour
 
     private void SpawnRandomCards()
     {
-        if (!ValidateSpawnPoints() || !ValidateDeckCount())
+        if (!ValidateDeckCount())
             return;
 
+        RemovePlayedCards();
+
         int currentRound = RoundManager.Instance.CurrentRound;
-        Debug.Log(currentRound);
+
         switch (currentRound)
         {
             case 1:
@@ -79,6 +86,27 @@ public class DeckManager : MonoBehaviour
                 Debug.LogWarning("Geçersiz round numarasý!");
                 break;
         }
+
+        ArrangeCards(); // Spawnlanan kartlarý sýralama
+    }
+
+    private void RemovePlayedCards()
+    {
+        List<GameObject> cardsToRemove = new List<GameObject>(); // Kaldýrýlacak kartlarý geçici olarak tutar
+
+        foreach (GameObject card in _spawnedCards)
+        {
+            if (card.GetComponent<Card>().PlacedArea != null)
+            {
+                cardsToRemove.Add(card); // Kaldýrýlacak kartlarý listeye ekle
+            }
+        }
+
+        // Döngü tamamlandýktan sonra listedeki kartlarý asýl listeden kaldýr
+        foreach (GameObject card in cardsToRemove)
+        {
+            _spawnedCards.Remove(card);
+        }
     }
 
     private void RoundOne()
@@ -88,19 +116,19 @@ public class DeckManager : MonoBehaviour
         float randomValue = Random.value * 100;
         if (randomValue < 30) // %30: 3 Basic Cards
         {
-            for (int i = 0; i < 3; i++) 
+            for (int i = 0; i < 3; i++)
                 AddCardToSpawn(_basicCards, ref spawnIndex);
         }
         else if (randomValue < 70) // %40: 2 Basic, 1 Power
         {
-            for (int i = 0; i < 2; i++) 
+            for (int i = 0; i < 2; i++)
                 AddCardToSpawn(_basicCards, ref spawnIndex);
             AddCardToSpawn(_powerCards, ref spawnIndex);
         }
         else if (randomValue < 90) // %20: 1 Basic, 2 Power
         {
             AddCardToSpawn(_basicCards, ref spawnIndex);
-            for (int i = 0; i < 2; i++) 
+            for (int i = 0; i < 2; i++)
                 AddCardToSpawn(_powerCards, ref spawnIndex);
         }
         else if (randomValue < 99) // %9: 1 Basic, 1 Power, 1 Special
@@ -112,7 +140,7 @@ public class DeckManager : MonoBehaviour
         else // %1: 1 Basic, 2 Special
         {
             AddCardToSpawn(_basicCards, ref spawnIndex);
-            for (int i = 0; i < 2; i++) 
+            for (int i = 0; i < 2; i++)
                 AddCardToSpawn(_specialCards, ref spawnIndex);
         }
     }
@@ -120,7 +148,7 @@ public class DeckManager : MonoBehaviour
     private void SpawnSingleCard(int basicChance, int powerChance)
     {
         float randomValue = Random.value * 100;
-        int spawnIndex = 0; 
+        int spawnIndex = 0;
 
         if (randomValue < basicChance && _basicCards.Count > 0)
         {
@@ -138,26 +166,43 @@ public class DeckManager : MonoBehaviour
 
     private void AddCardToSpawn(List<GameObject> cardList, ref int spawnIndex)
     {
-        if (cardList.Count == 0 || spawnIndex >= SpawnPoints.Count) 
+        if (cardList.Count == 0)
             return;
 
         int randomIndex = Random.Range(0, cardList.Count);
         GameObject randomCard = cardList[randomIndex];
-
-        Instantiate(randomCard, SpawnPoints[spawnIndex].position, Quaternion.identity);
+        GameObject spawnedCard = Instantiate(randomCard, transform.position, Quaternion.identity);
+        spawnedCard.transform.SetParent(transform);
+        _spawnedCards.Add(spawnedCard); // Spawnlanan kartý listeye ekle
         cardList.RemoveAt(randomIndex);
 
         spawnIndex++;
     }
 
-    private bool ValidateSpawnPoints()
+    private void ArrangeCards()
     {
-        if (SpawnPoints.Count < 3)
+        int cardCount = _spawnedCards.Count;
+        if (cardCount == 0)
+            return;
+
+        float spacing = 2.0f; // Kartlar arasýndaki temel mesafe
+        float centerOffset = (cardCount - 1) * spacing / 2.0f;
+
+        for (int i = 0; i < cardCount; i++)
         {
-            Debug.LogError("Yeterli spawn noktasý yok! En az 3 tane gerekli.");
-            return false;
+            Vector3 targetPosition = new Vector3(transform.position.x + (i * spacing) - centerOffset, transform.position.y, transform.position.z);
+            _spawnedCards[i].transform.position = targetPosition;
+            _spawnedCards[i].GetComponent<Card>().SetOriginalPosition(targetPosition);
         }
-        return true;
+    }
+    public void PlayCard(GameObject card)
+    {
+        if (_spawnedCards.Contains(card))
+        {
+            _spawnedCards.Remove(card); // Listeden kaldýr
+            //Destroy(card); // Sahneden kaldýr
+            ArrangeCards(); // Eldeki kartlarý yeniden düzenle
+        }
     }
 
     private bool ValidateDeckCount()

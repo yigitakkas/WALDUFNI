@@ -1,10 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
-public static class ScoreManager
+public class ScoreManager : MonoBehaviour
 {
-    public static void CalculatePower(List<PlayArea> playerAreas, List<PlayArea> opponentAreas, ref int playerScore, ref int opponentScore)
+    public static ScoreManager Instance;
+    public TMP_Text PlayerScoreText;
+    public TMP_Text OpponentScoreText;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+    public void CalculatePower(List<PlayArea> playerAreas, List<PlayArea> opponentAreas, ref int playerScore, ref int opponentScore)
     {
         int playerFirstZone = 0;
         int playerSecondZone = 0;
@@ -54,6 +63,10 @@ public static class ScoreManager
 
         playerScore += (playerThirdZone > opponentThirdZone) ? 1 : 0;
         opponentScore += (playerThirdZone < opponentThirdZone) ? 1 : 0;
+
+
+        PlayerScoreText.text = $"PLAYER: {playerScore}";
+        OpponentScoreText.text = $"OPP: {opponentScore}";
     }
 }
 
