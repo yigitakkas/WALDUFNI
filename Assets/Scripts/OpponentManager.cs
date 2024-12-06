@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class OpponentManager : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class OpponentManager : MonoBehaviour
     private List<GameObject> _opponentDeck = new List<GameObject>();
     private List<PlayArea> _opponentAreas = new List<PlayArea>();
     private PlayArea _placedArea;
+    public Transform SpawnPosition;
 
     [SerializeField]
     private List<GameObject> _opponentHand = new List<GameObject>();
@@ -29,10 +31,12 @@ public class OpponentManager : MonoBehaviour
         Instance = this;
         FindAreas();
     }
+
     void Start()
     {
         DrawOpponentCards();
     }
+
     private void OnEnable()
     {
         RoundManager.OnRoundEnded += DrawOpponentCards;
@@ -44,6 +48,7 @@ public class OpponentManager : MonoBehaviour
         RoundManager.OnRoundEnded -= DrawOpponentCards;
         RoundManager.OnRoundStarted -= PlayOpponentCard;
     }
+
     private void FindAreas()
     {
         PlayArea[] areas = GetComponentsInChildren<PlayArea>();
@@ -62,6 +67,7 @@ public class OpponentManager : MonoBehaviour
             DefineCardClasses(card);
         }
     }
+
     private void DefineCardClasses(GameObject card)
     {
         Card.CardClass cardClass = card.GetComponent<Card>().CardClassType;
@@ -72,6 +78,7 @@ public class OpponentManager : MonoBehaviour
         else if (cardClass == Card.CardClass.Special)
             _specialCards.Add(card);
     }
+
     public void DrawOpponentCards()
     {
         int currentRound = RoundManager.Instance.CurrentRound;
@@ -123,6 +130,7 @@ public class OpponentManager : MonoBehaviour
             }
         }
     }
+
     private void AddCardToOpponentHand(List<GameObject> cardList)
     {
         if (cardList.Count == 0) return;
@@ -148,6 +156,7 @@ public class OpponentManager : MonoBehaviour
             AddCardToOpponentHand(_specialCards);
         }
     }
+
     public void PlayOpponentCard()
     {
         if (_opponentHand.Count > 0)
@@ -166,22 +175,22 @@ public class OpponentManager : MonoBehaviour
 
     private void PlayCardToOpponentArea(GameObject card)
     {
-        GameObject newCardObject = Instantiate(card, transform.position, Quaternion.identity);
+        GameObject newCardObject = Instantiate(card, SpawnPosition.position, Quaternion.identity);
         Card newCard = newCardObject.GetComponent<Card>();
 
-        newCardObject.transform.position = GetRandomTargetPosition(newCard);
+        Vector3 targetPosition = GetRandomTargetPosition(newCard);
+        newCardObject.transform.DOMove(targetPosition, 0.5f); // Yumuþak geçiþ
+
         _placedArea.PlaceCard(newCard);
         newCard?.DestroyCollider(_placedArea);
     }
-
-
 
     private Vector3 GetRandomTargetPosition(Card card)
     {
         List<PlayArea> availableOpponentAreas = new List<PlayArea>();
         foreach (PlayArea area in _opponentAreas)
         {
-            if(area.CheckSnapPointsAvailability())
+            if (area.CheckSnapPointsAvailability())
             {
                 availableOpponentAreas.Add(area);
             }
@@ -199,6 +208,7 @@ public class OpponentManager : MonoBehaviour
             return Vector3.zero;
         }
     }
+
     private Vector3 CheckSnapPoints(PlayArea area, Card card)
     {
         return area.GetSnapPosition(card);

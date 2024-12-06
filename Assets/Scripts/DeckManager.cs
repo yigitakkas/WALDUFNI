@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class DeckManager : MonoBehaviour
 {
     public static DeckManager Instance;
     [Header("Card Prefabs")]
     public List<GameObject> CardPrefabs;
+    public Transform SpawnPosition;
 
     [SerializeField]
     private List<GameObject> _playerDeck = new List<GameObject>();
@@ -171,7 +173,7 @@ public class DeckManager : MonoBehaviour
 
         int randomIndex = Random.Range(0, cardList.Count);
         GameObject randomCard = cardList[randomIndex];
-        GameObject spawnedCard = Instantiate(randomCard, transform.position, Quaternion.identity);
+        GameObject spawnedCard = Instantiate(randomCard, SpawnPosition.position, Quaternion.identity);
         spawnedCard.transform.SetParent(transform);
         _spawnedCards.Add(spawnedCard); // Spawnlanan kartý listeye ekle
         cardList.RemoveAt(randomIndex);
@@ -191,17 +193,7 @@ public class DeckManager : MonoBehaviour
         for (int i = 0; i < cardCount; i++)
         {
             Vector3 targetPosition = new Vector3(transform.position.x + (i * spacing) - centerOffset, transform.position.y, transform.position.z);
-            _spawnedCards[i].transform.position = targetPosition;
-            _spawnedCards[i].GetComponent<Card>().SetOriginalPosition(targetPosition);
-        }
-    }
-    public void PlayCard(GameObject card)
-    {
-        if (_spawnedCards.Contains(card))
-        {
-            _spawnedCards.Remove(card); // Listeden kaldýr
-            //Destroy(card); // Sahneden kaldýr
-            ArrangeCards(); // Eldeki kartlarý yeniden düzenle
+            _spawnedCards[i].transform.DOMove(targetPosition, 0.5f); // DOTween ile hareket
         }
     }
 
