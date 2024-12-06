@@ -48,6 +48,12 @@ public class Card : MonoBehaviour
     private PlayArea _placedOpponentArea;
     public PlayArea PlacedOpponentArea => _placedOpponentArea;
     public PlayArea PlacedArea => _placedArea;
+    private bool _played=false;
+    public bool Played
+    {
+        get { return _played; }
+        set { _played = value; }
+    }
     private void Start()
     {
         InitializeCard();
@@ -73,10 +79,8 @@ public class Card : MonoBehaviour
         _collider = GetComponent<BoxCollider2D>();
     }
 
-    public void DestroyCollider(PlayArea area)
+    public void SetOpponentArea(PlayArea area)
     {
-        BoxCollider2D newCollider = GetComponent<BoxCollider2D>();
-        newCollider.enabled = false;
         _placedOpponentArea = area;
     }
 
@@ -87,6 +91,7 @@ public class Card : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (Played) return;
         AdjustChildSortingOrder(2);
         _offset = transform.position - GetMouseWorldPosition();
         _isDragging = true;
@@ -96,7 +101,7 @@ public class Card : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        if (!_isDragging) return;
+        if (!_isDragging || Played) return;
 
         Vector3 targetPosition = GetMouseWorldPosition() + _offset;
         targetPosition.z = transform.position.z;
@@ -114,6 +119,7 @@ public class Card : MonoBehaviour
 
     private void OnMouseUp()
     {
+        if (Played) return;
         AdjustChildSortingOrder(-2);
         _isDragging = false;
         KillAndNullifyTween(ref _hoverTween);

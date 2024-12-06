@@ -179,10 +179,11 @@ public class OpponentManager : MonoBehaviour
         Card newCard = newCardObject.GetComponent<Card>();
 
         Vector3 targetPosition = GetRandomTargetPosition(newCard);
-        newCardObject.transform.DOMove(targetPosition, 0.5f); // Yumuþak geçiþ
+        newCardObject.transform.DOMove(targetPosition, 0.5f);
 
         _placedArea.PlaceCard(newCard);
-        newCard?.DestroyCollider(_placedArea);
+        newCard.Played = true;
+        newCard.SetOpponentArea(_placedArea);
     }
 
     private Vector3 GetRandomTargetPosition(Card card)

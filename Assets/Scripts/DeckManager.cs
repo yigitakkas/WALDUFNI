@@ -94,19 +94,19 @@ public class DeckManager : MonoBehaviour
 
     private void RemovePlayedCards()
     {
-        List<GameObject> cardsToRemove = new List<GameObject>(); // Kaldýrýlacak kartlarý geçici olarak tutar
+        List<GameObject> cardsToRemove = new List<GameObject>(); 
 
         foreach (GameObject card in _spawnedCards)
         {
             if (card.GetComponent<Card>().PlacedArea != null)
             {
-                cardsToRemove.Add(card); // Kaldýrýlacak kartlarý listeye ekle
+                cardsToRemove.Add(card);
             }
         }
 
-        // Döngü tamamlandýktan sonra listedeki kartlarý asýl listeden kaldýr
         foreach (GameObject card in cardsToRemove)
         {
+            card.GetComponent<Card>().Played = true;
             _spawnedCards.Remove(card);
         }
     }
@@ -175,7 +175,7 @@ public class DeckManager : MonoBehaviour
         GameObject randomCard = cardList[randomIndex];
         GameObject spawnedCard = Instantiate(randomCard, SpawnPosition.position, Quaternion.identity);
         spawnedCard.transform.SetParent(transform);
-        _spawnedCards.Add(spawnedCard); // Spawnlanan kartý listeye ekle
+        _spawnedCards.Add(spawnedCard);
         cardList.RemoveAt(randomIndex);
 
         spawnIndex++;
@@ -183,12 +183,11 @@ public class DeckManager : MonoBehaviour
 
     private void ArrangeCards()
     {
-        Debug.Log("Cards Arranged");
         int cardCount = _spawnedCards.Count;
         if (cardCount == 0)
             return;
 
-        float spacing = 2.0f; // Kartlar arasýndaki temel mesafe
+        float spacing = 2.0f;
         float centerOffset = (cardCount - 1) * spacing / 2.0f;
 
         for (int i = 0; i < cardCount; i++)

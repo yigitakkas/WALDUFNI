@@ -13,8 +13,6 @@ public class PowerBoostAbility : ICardAbility
 
     public void ApplyEffect()
     {
-        // Power Boost logic, such as increasing the power of the card or other conditions.
         Debug.Log("Power boosted by" + _boostAmount);
-
     }
 }

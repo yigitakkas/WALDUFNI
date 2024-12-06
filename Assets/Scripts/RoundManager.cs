@@ -51,7 +51,7 @@ public class RoundManager : MonoBehaviour
     {
         foreach (PlayArea area in GetComponentsInChildren<PlayArea>())
         {
-            if (area.CompareTag("PlayerArea")) // Alanlarý bir tag ile filtreleyebilirsiniz
+            if (area.CompareTag("PlayerArea"))
             {
                 _playerPlayAreas.Add(area);
             }

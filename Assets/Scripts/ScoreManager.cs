@@ -83,18 +83,18 @@ public class ScoreManager : MonoBehaviour
     {
         if (playerScore > opponentScore)
         {
-            playerText.color = Color.green; // Player önde
-            opponentText.color = Color.red; // Opponent geride
+            playerText.color = Color.green; 
+            opponentText.color = Color.red;
         }
         else if (playerScore < opponentScore)
         {
-            playerText.color = Color.red; // Player geride
-            opponentText.color = Color.green; // Opponent önde
+            playerText.color = Color.red;
+            opponentText.color = Color.green;
         }
         else
         {
-            playerText.color = Color.yellow; // Eþit durumda sarý
-            opponentText.color = Color.yellow; // Eþit durumda sarý
+            playerText.color = Color.yellow;
+            opponentText.color = Color.yellow;
         }
     }
 }
