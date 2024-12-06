@@ -40,7 +40,7 @@ public class DeckManager : MonoBehaviour
             _playerDeck.Add(cardPrefab);
             DefineCardClasses(cardPrefab);
         }
-        Opponent.Instance.AssignDeck(new List<GameObject>(_playerDeck));
+        OpponentManager.Instance.AssignDeck(new List<GameObject>(_playerDeck));
     }
 
     private void DefineCardClasses(GameObject cardPrefab)
@@ -56,16 +56,8 @@ public class DeckManager : MonoBehaviour
 
     private void SpawnRandomCards()
     {
-        if (SpawnPoints.Count < 3)
-        {
-            Debug.LogError("Yeterli spawn noktasý yok! En az 3 tane gerekli.");
+        if (!ValidateSpawnPoints() || !ValidateDeckCount())
             return;
-        }
-        if (_playerDeck.Count == 0)
-        {
-            Debug.LogError("Deste bitti! Daha fazla kart yok.");
-            return;
-        }
 
         int currentRound = RoundManager.Instance.CurrentRound;
         Debug.Log(currentRound);
@@ -158,4 +150,23 @@ public class DeckManager : MonoBehaviour
         spawnIndex++;
     }
 
+    private bool ValidateSpawnPoints()
+    {
+        if (SpawnPoints.Count < 3)
+        {
+            Debug.LogError("Yeterli spawn noktasý yok! En az 3 tane gerekli.");
+            return false;
+        }
+        return true;
+    }
+
+    private bool ValidateDeckCount()
+    {
+        if (_playerDeck.Count == 0)
+        {
+            Debug.LogError("Deste bitti! Daha fazla kart yok.");
+            return false;
+        }
+        return true;
+    }
 }

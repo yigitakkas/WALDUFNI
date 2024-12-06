@@ -28,13 +28,19 @@ public class RoundManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
         SetRound(1);
+        FindAreas();
     }
+
     private void Start()
     {
-        FindAreas();
-        _opponentPlayAreas = Opponent.Instance.ReturnOpponentAreas();
+        _opponentPlayAreas = OpponentManager.Instance.ReturnOpponentAreas();
     }
     public void SetRound(int round)
     {
@@ -42,9 +48,13 @@ public class RoundManager : MonoBehaviour
     }
     private void FindAreas()
     {
-        _playerPlayAreas.Add(transform.Find("PlayerArea1").GetComponent<PlayArea>());
-        _playerPlayAreas.Add(transform.Find("PlayerArea2").GetComponent<PlayArea>());
-        _playerPlayAreas.Add(transform.Find("PlayerArea3").GetComponent<PlayArea>());
+        foreach (PlayArea area in GetComponentsInChildren<PlayArea>())
+        {
+            if (area.CompareTag("PlayerArea")) // Alanlarý bir tag ile filtreleyebilirsiniz
+            {
+                _playerPlayAreas.Add(area);
+            }
+        }
     }
     public void StartRound()
     {
@@ -55,6 +65,7 @@ public class RoundManager : MonoBehaviour
         if (_placedCardsAmount > 0)
         {
             OnRoundStarted?.Invoke();
+
             ScoreManager.CalculatePower(_playerPlayAreas, _opponentPlayAreas, ref _playerScore, ref _opponentScore);
             UpdateScoreUI();
             CurrentRound++;
@@ -71,60 +82,5 @@ public class RoundManager : MonoBehaviour
     {
         PlayerScoreText.text = $"PLAYER: {_playerScore}";
         OpponentScoreText.text = $"OPP: {_opponentScore}";
-    }
-}
-
-public static class ScoreManager
-{
-    public static void CalculatePower(List<PlayArea> playerAreas, List<PlayArea> opponentAreas, ref int playerScore, ref int opponentScore)
-    {
-        int playerFirstZone = 0;
-        int playerSecondZone = 0;
-        int playerThirdZone = 0;
-        int opponentFirstZone = 0;
-        int opponentSecondZone = 0;
-        int opponentThirdZone = 0;
-
-        foreach (PlayArea area in playerAreas)
-        {
-            if (area.Index == 1 && area.PlacedAmount() != 0)
-            {
-                playerFirstZone += area.PlacedCardsPower();
-            }
-            if (area.Index == 2 && area.PlacedAmount() != 0)
-            {
-                playerSecondZone += area.PlacedCardsPower();
-            }
-            if (area.Index == 3 && area.PlacedAmount() != 0)
-            {
-                playerThirdZone += area.PlacedCardsPower();
-            }
-        }
-        foreach (PlayArea area in opponentAreas)
-        {
-            if (area.Index == 1 && area.PlacedAmount() != 0)
-            {
-                opponentFirstZone += area.PlacedCardsPower();
-            }
-            if (area.Index == 2 && area.PlacedAmount() != 0)
-            {
-                opponentSecondZone += area.PlacedCardsPower();
-            }
-            if (area.Index == 3 && area.PlacedAmount() != 0)
-            {
-                opponentThirdZone += area.PlacedCardsPower();
-            }
-        }
-        Debug.Log($"playerFirstZone: {playerFirstZone}, playerSecondZone: {playerSecondZone}, playerThirdZone: {playerThirdZone}, " +
-                  $"opponentFirstZone: {opponentFirstZone}, opponentSecondZone: {opponentSecondZone}, opponentThirdZone: {opponentThirdZone}");
-
-        playerScore += (playerFirstZone > opponentFirstZone) ? 1 : 0;
-        opponentScore += (playerFirstZone < opponentFirstZone) ? 1 : 0;
-
-        playerScore += (playerSecondZone > opponentSecondZone) ? 1 : 0;
-        opponentScore += (playerSecondZone < opponentSecondZone) ? 1 : 0;
-
-        playerScore += (playerThirdZone > opponentThirdZone) ? 1 : 0;
-        opponentScore += (playerThirdZone < opponentThirdZone) ? 1 : 0;
     }
 }

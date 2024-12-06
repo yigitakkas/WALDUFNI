@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Opponent : MonoBehaviour
+public class OpponentManager : MonoBehaviour
 {
-    public static Opponent Instance;
+    public static OpponentManager Instance;
 
     private List<GameObject> _opponentDeck = new List<GameObject>();
     private List<PlayArea> _opponentAreas = new List<PlayArea>();
@@ -21,6 +21,11 @@ public class Opponent : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
         FindAreas();
     }
@@ -41,10 +46,14 @@ public class Opponent : MonoBehaviour
     }
     private void FindAreas()
     {
-        _opponentAreas.Add(transform.Find("OpponentArea1").GetComponent<PlayArea>());
-        _opponentAreas.Add(transform.Find("OpponentArea2").GetComponent<PlayArea>());
-        _opponentAreas.Add(transform.Find("OpponentArea3").GetComponent<PlayArea>());
+        PlayArea[] areas = GetComponentsInChildren<PlayArea>();
+        foreach (PlayArea area in areas)
+        {
+            if (area.CompareTag("OpponentArea"))
+                _opponentAreas.Add(area);
+        }
     }
+
     public void AssignDeck(List<GameObject> deck)
     {
         _opponentDeck = deck;
@@ -146,9 +155,15 @@ public class Opponent : MonoBehaviour
             GameObject cardToPlay = _opponentHand[Random.Range(0, _opponentHand.Count)];
             _opponentHand.Remove(cardToPlay);
 
+            Debug.Log("OpponentManager oynadý: " + cardToPlay.name);
             PlayCardToOpponentArea(cardToPlay);
         }
+        else
+        {
+            Debug.LogWarning("OpponentManager'ýn elinde kart kalmadý!");
+        }
     }
+
     private void PlayCardToOpponentArea(GameObject card)
     {
         GameObject newCardObject = Instantiate(card, transform.position, Quaternion.identity);
@@ -179,7 +194,10 @@ public class Opponent : MonoBehaviour
             return CheckSnapPoints(randomArea, card);
         }
         else
+        {
+            Debug.LogWarning("Hiçbir opponent alaný uygun deðil!");
             return Vector3.zero;
+        }
     }
     private Vector3 CheckSnapPoints(PlayArea area, Card card)
     {

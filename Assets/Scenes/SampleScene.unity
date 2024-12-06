@@ -1204,7 +1204,7 @@ GameObject:
   - component: {fileID: 647410040}
   m_Layer: 7
   m_Name: PlayerArea2
-  m_TagString: Untagged
+  m_TagString: PlayerArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1669,7 +1669,7 @@ GameObject:
   - component: {fileID: 1183657502}
   m_Layer: 7
   m_Name: OpponentArea3
-  m_TagString: Untagged
+  m_TagString: OpponentArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1830,7 +1830,7 @@ GameObject:
   - component: {fileID: 1209387144}
   m_Layer: 7
   m_Name: OpponentArea1
-  m_TagString: Untagged
+  m_TagString: OpponentArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1983,7 +1983,7 @@ GameObject:
   - component: {fileID: 1305186571}
   m_Layer: 7
   m_Name: PlayerArea3
-  m_TagString: Untagged
+  m_TagString: PlayerArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2259,7 +2259,7 @@ GameObject:
   - component: {fileID: 1394582757}
   m_Layer: 7
   m_Name: PlayerArea1
-  m_TagString: Untagged
+  m_TagString: PlayerArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2390,6 +2390,10 @@ MonoBehaviour:
   - {fileID: 71814409}
   - {fileID: 106849628}
   - {fileID: 276012017}
+  _playerDeck: []
+  _basicCards: []
+  _powerCards: []
+  _specialCards: []
 --- !u!1 &1473039237
 GameObject:
   m_ObjectHideFlags: 0
@@ -2923,7 +2927,7 @@ GameObject:
   - component: {fileID: 1863313947}
   m_Layer: 7
   m_Name: OpponentArea2
-  m_TagString: Untagged
+  m_TagString: OpponentArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3279,6 +3283,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 370317cde08793d40a8372f9db804357, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _opponentHand: []
+  _basicCards: []
+  _powerCards: []
+  _specialCards: []
 --- !u!4 &1943000775
 Transform:
   m_ObjectHideFlags: 0

@@ -482,6 +482,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0aa1ffb01bb604e48bda25d4b4896e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CardClassType: 0
   Shadow: {fileID: 4584201866425144789}
   hoverRotationAngleMin: -6
   hoverRotationAngleMax: 6
