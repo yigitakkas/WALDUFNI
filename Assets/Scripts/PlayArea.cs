@@ -7,7 +7,26 @@ public class PlayArea : MonoBehaviour
     private List<SnapPoint> _snapPoints = new List<SnapPoint>();
     private List<Card> _placedCards = new List<Card>();
     public int Index;
+    [SerializeField]
+    private bool _playedHereThisRound=false;
+    public bool PlayedHereThisRound
+    {
+        get => _playedHereThisRound;
+        private set => _playedHereThisRound = value;
+    }
+    private void OnEnable()
+    {
+        RoundManager.OnRoundEnded += ResetPlayedHere;
+    }
 
+    private void OnDisable()
+    {
+        RoundManager.OnRoundEnded -= ResetPlayedHere;
+    }
+    private void ResetPlayedHere()
+    {
+        _playedHereThisRound = false;
+    }
     private void Start()
     {
         FillSnapPoints();
@@ -51,11 +70,13 @@ public class PlayArea : MonoBehaviour
     public void PlaceCard(Card card)
     {
         _placedCards.Add(card);
+        _playedHereThisRound = true;
     }
 
     public void RemoveCard(Card card)
     {
         _placedCards.Remove(card);
+        _playedHereThisRound = false;
         foreach(SnapPoint snapPoint in _snapPoints)
         {
             if(snapPoint.AssignedCard == card)

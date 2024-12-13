@@ -84,6 +84,11 @@ public class Card : MonoBehaviour
         _placedOpponentArea = area;
     }
 
+    public void SetPlayerArea(PlayArea area)
+    {
+        _placedArea = area;
+    }
+
     public void SetOriginalPosition(Vector3 position)
     {
         _originalPosition = position;

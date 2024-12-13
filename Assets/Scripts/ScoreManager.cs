@@ -17,7 +17,7 @@ public class ScoreManager : MonoBehaviour
     {
         Instance = this;
     }
-    public void CalculatePower(List<PlayArea> playerAreas, List<PlayArea> opponentAreas, ref int playerScore, ref int opponentScore)
+    public void CalculatePower(List<PlayArea> playerAreas, List<PlayArea> opponentAreas)
     {
         int playerFirstZone = 0;
         int playerSecondZone = 0;
@@ -56,15 +56,6 @@ public class ScoreManager : MonoBehaviour
                 opponentThirdZone += area.PlacedCardsPower();
             }
         }
-
-        playerScore += (playerFirstZone > opponentFirstZone) ? 1 : 0;
-        opponentScore += (playerFirstZone < opponentFirstZone) ? 1 : 0;
-
-        playerScore += (playerSecondZone > opponentSecondZone) ? 1 : 0;
-        opponentScore += (playerSecondZone < opponentSecondZone) ? 1 : 0;
-
-        playerScore += (playerThirdZone > opponentThirdZone) ? 1 : 0;
-        opponentScore += (playerThirdZone < opponentThirdZone) ? 1 : 0;
 
         AreaOnePlayerScore.text = playerFirstZone.ToString();
         AreaTwoPlayerScore.text = playerSecondZone.ToString();

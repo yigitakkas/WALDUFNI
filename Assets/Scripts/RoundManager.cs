@@ -12,19 +12,24 @@ public class RoundManager : MonoBehaviour
     public static event Action OnRoundEnded;
 
     public int CurrentRound { get; private set; }
-
-    [SerializeField]
-    private List<PlayArea> _playerPlayAreas = new List<PlayArea>();
     private int _placedCardsAmount = 0;
 
     [SerializeField]
+    private List<PlayArea> _playerPlayAreas = new List<PlayArea>();
+    public List<PlayArea> PlayerPlayAreas
+    {
+        get => _playerPlayAreas; 
+        private set => _playerPlayAreas = value; 
+    }
+
+
+    [SerializeField]
     private List<PlayArea> _opponentPlayAreas = new List<PlayArea>();
-
-    private int _playerScore = 0;
-    private int _opponentScore = 0;
-
-    public TMP_Text PlayerScoreText;
-    public TMP_Text OpponentScoreText;
+    public List<PlayArea> OpponentPlayAreas
+    {
+        get => _opponentPlayAreas;
+        private set => _opponentPlayAreas = value;
+    }
 
     private void Awake()
     {
@@ -41,7 +46,7 @@ public class RoundManager : MonoBehaviour
     private void Start()
     {
         _opponentPlayAreas = OpponentManager.Instance.ReturnOpponentAreas();
-        ScoreManager.Instance.CalculatePower(_playerPlayAreas, _opponentPlayAreas, ref _playerScore, ref _opponentScore);
+        ScoreManager.Instance.CalculatePower(_playerPlayAreas, _opponentPlayAreas);
     }
     public void SetRound(int round)
     {
@@ -67,10 +72,11 @@ public class RoundManager : MonoBehaviour
         {
             OnRoundStarted?.Invoke();
 
-            ScoreManager.Instance.CalculatePower(_playerPlayAreas, _opponentPlayAreas, ref _playerScore, ref _opponentScore);
-            CurrentRound++;
+            BattlegroundManager.Instance.ApplyBattlegroundEffects();
+            ScoreManager.Instance.CalculatePower(_playerPlayAreas, _opponentPlayAreas);
 
             OnRoundEnded?.Invoke();
+            CurrentRound++;
         }
         else
         {

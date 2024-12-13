@@ -2,26 +2,55 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 
 public class BattlegroundManager : MonoBehaviour
 {
+    public static BattlegroundManager Instance;
+
     public Sprite BeastLairSprite;
     public Sprite TheApexZoneSprite;
     public Sprite FieldOfGrowthSprite;
     public Sprite ForgeOfMightSprite;
     public Sprite ControlZoneSprite;
+
     [SerializeField]
     private List<Battleground> _battlegrounds = new List<Battleground>();
+
     private Dictionary<BattlegroundEffect, Sprite> _effectSpriteDictionary;
     private Dictionary<BattlegroundEffect, string> _effectDescriptionDictionary;
+    private List<BattlegroundEffect> _usedEffects = new List<BattlegroundEffect>();
+
+    private void OnEnable()
+    {
+        RoundManager.OnRoundEnded += ActivateNewBattleground;
+    }
+
+    private void OnDisable()
+    {
+        RoundManager.OnRoundEnded -= ActivateNewBattleground;
+    }
     private void Awake()
     {
+        Instance = this;
         InitializeDictionaries();
         FindBattlegrounds();
         UnlockBattleground(0);
     }
-
+    private void ActivateNewBattleground()
+    {
+        int round = RoundManager.Instance.CurrentRound;
+        if(round == 2)
+        {
+            UnlockBattleground(1);
+        } 
+        else if(round == 3)
+        {
+            UnlockBattleground(2);
+        }
+    }
     private void InitializeDictionaries()
     {
         _effectSpriteDictionary = new Dictionary<BattlegroundEffect, Sprite>
@@ -35,11 +64,11 @@ public class BattlegroundManager : MonoBehaviour
 
         _effectDescriptionDictionary = new Dictionary<BattlegroundEffect, string>
         {
-        { BattlegroundEffect.BeastLair, "Get a 10-Power monster card if you play a card here this turn." },
-        { BattlegroundEffect.TheApexZone, "The strongest card(s) in this area gains +3 power." },
-        { BattlegroundEffect.FieldOfGrowth, "All cards gain +1 Power in this magical zone." },
-        { BattlegroundEffect.ForgeOfMight, "Each card played here gains +2 Power." },
-        { BattlegroundEffect.ControlZone, "Player with most cards here gains +100 Power." }
+            { BattlegroundEffect.BeastLair, "Get a 10-Power monster card if you play a card here this turn." },
+            { BattlegroundEffect.TheApexZone, "The strongest card(s) in this area gains +3 power." },
+            { BattlegroundEffect.FieldOfGrowth, "All cards gain +1 Power in this magical zone." },
+            { BattlegroundEffect.ForgeOfMight, "Each card played here gains +2 Power." },
+            { BattlegroundEffect.ControlZone, "Player with most cards here gains +100 Power." }
         };
     }
 
@@ -64,11 +93,24 @@ public class BattlegroundManager : MonoBehaviour
 
     private BattlegroundEffect GetRandomBattlegroundEffect()
     {
-        BattlegroundEffect[] effects = (BattlegroundEffect[])System.Enum.GetValues(typeof(BattlegroundEffect));
-
-        int randomIndex = UnityEngine.Random.Range(1, effects.Length); // 1'den baþlar çünkü 0 = None
-
-        return effects[randomIndex];
+        BattlegroundEffect[] effects = (BattlegroundEffect[])Enum.GetValues(typeof(BattlegroundEffect));
+        List<BattlegroundEffect> availableEffects = new List<BattlegroundEffect>();
+        foreach (BattlegroundEffect effect in effects)
+        {
+            if (effect != BattlegroundEffect.None && !_usedEffects.Contains(effect))
+            {
+                availableEffects.Add(effect);
+            }
+        }
+        if (availableEffects.Count == 0)
+        {
+            Debug.LogWarning("Tüm BattlegroundEffect'ler kullanýldý.");
+            return BattlegroundEffect.None;
+        }
+        int randomIndex = UnityEngine.Random.Range(0, availableEffects.Count);
+        BattlegroundEffect selectedEffect = availableEffects[randomIndex];
+        _usedEffects.Add(selectedEffect);
+        return selectedEffect;
     }
 
     public Sprite GetSpriteForEffect(BattlegroundEffect effect)
@@ -95,16 +137,25 @@ public class BattlegroundManager : MonoBehaviour
     public static string FormatEnumName(BattlegroundEffect effect)
     {
         string name = effect.ToString();
-        return System.Text.RegularExpressions.Regex.Replace(name, "([a-z])([A-Z])", "$1 $2").ToUpper();
+        return Regex.Replace(name, "([a-z])([A-Z])", "$1 $2").ToUpper(CultureInfo.InvariantCulture);
+    }
+
+    public void ApplyBattlegroundEffects()
+    {
+        int round = RoundManager.Instance.CurrentRound;
+        foreach(Battleground battleground in _battlegrounds)
+        {
+            battleground.ApplyEffect();
+        }
     }
 }
 
 public enum BattlegroundEffect
 {
     None,
-    BeastLair,   // Adds 10 Power monster cards for both players
-    TheApexZone,     // Strongest card in this area gains +3 Power
-    FieldOfGrowth,   // All cards in this area receive +1 Power
-    ForgeOfMight,   // Adds +2 Power to any card played in this area
-    ControlZone  // Player with the most cards here gains +100 power
+    BeastLair,     // Get a 10-Power monster card if you play a card here this turn.
+    TheApexZone,   // The strongest card(s) in this area gains +3 power.
+    FieldOfGrowth, // All cards gain +1 Power in this magical zone.
+    ForgeOfMight,  // Each card played here gains +2 Power.
+    ControlZone    // Player with most cards here gains +100 Power.
 }

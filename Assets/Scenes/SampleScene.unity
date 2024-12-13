@@ -864,6 +864,9 @@ MonoBehaviour:
   BgImage: {fileID: 1445937049}
   Description: {fileID: 919214999}
   Name: {fileID: 1120712533}
+  Index: 3
+  MonsterCard: {fileID: 1892766445716119499, guid: 9acee84340ad6fe4aa8c730c8dcad837, type: 3}
+  _monsterCardSpawnPoint: {fileID: 0}
 --- !u!1 &385959516
 GameObject:
   m_ObjectHideFlags: 0
@@ -1677,6 +1680,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _snapPoints: []
   Index: 2
+  _playedHereThisRound: 0
 --- !u!61 &647410041
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2797,6 +2801,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _snapPoints: []
   Index: 3
+  _playedHereThisRound: 0
 --- !u!61 &1183657503
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2958,6 +2963,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _snapPoints: []
   Index: 1
+  _playedHereThisRound: 0
 --- !u!61 &1209387145
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3111,6 +3117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _snapPoints: []
   Index: 3
+  _playedHereThisRound: 0
 --- !u!61 &1305186572
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3339,6 +3346,9 @@ MonoBehaviour:
   BgImage: {fileID: 1682203128}
   Description: {fileID: 1001334749}
   Name: {fileID: 616307246}
+  Index: 2
+  MonsterCard: {fileID: 1892766445716119499, guid: 9acee84340ad6fe4aa8c730c8dcad837, type: 3}
+  _monsterCardSpawnPoint: {fileID: 0}
 --- !u!1 &1394582754
 GameObject:
   m_ObjectHideFlags: 0
@@ -3416,6 +3426,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _snapPoints: []
   Index: 1
+  _playedHereThisRound: 0
 --- !u!1 &1414638443
 GameObject:
   m_ObjectHideFlags: 0
@@ -4480,6 +4491,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _snapPoints: []
   Index: 2
+  _playedHereThisRound: 0
 --- !u!61 &1863313948
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4574,8 +4586,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerPlayAreas: []
   _opponentPlayAreas: []
-  PlayerScoreText: {fileID: 0}
-  OpponentScoreText: {fileID: 0}
 --- !u!1 &1900105506
 GameObject:
   m_ObjectHideFlags: 0
@@ -5275,6 +5285,9 @@ MonoBehaviour:
   BgImage: {fileID: 1900105508}
   Description: {fileID: 897119514}
   Name: {fileID: 1718579361}
+  Index: 1
+  MonsterCard: {fileID: 1892766445716119499, guid: 9acee84340ad6fe4aa8c730c8dcad837, type: 3}
+  _monsterCardSpawnPoint: {fileID: 0}
 --- !u!1 &2050284424
 GameObject:
   m_ObjectHideFlags: 0
