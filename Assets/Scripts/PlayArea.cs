@@ -14,6 +14,8 @@ public class PlayArea : MonoBehaviour
         get => _playedHereThisRound;
         private set => _playedHereThisRound = value;
     }
+    [SerializeField]
+    private int _playedAmountThisRound = 0;
     private void OnEnable()
     {
         RoundManager.OnRoundEnded += ResetPlayedHere;
@@ -26,6 +28,7 @@ public class PlayArea : MonoBehaviour
     private void ResetPlayedHere()
     {
         _playedHereThisRound = false;
+        _playedAmountThisRound = 0;
     }
     private void Start()
     {
@@ -71,12 +74,17 @@ public class PlayArea : MonoBehaviour
     {
         _placedCards.Add(card);
         _playedHereThisRound = true;
+        _playedAmountThisRound++;
     }
 
     public void RemoveCard(Card card)
     {
         _placedCards.Remove(card);
-        _playedHereThisRound = false;
+        _playedAmountThisRound--;
+        if(_playedAmountThisRound==0)
+        {
+            _playedHereThisRound = false;
+        }
         foreach(SnapPoint snapPoint in _snapPoints)
         {
             if(snapPoint.AssignedCard == card)

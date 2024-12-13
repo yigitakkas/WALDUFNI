@@ -83,7 +83,8 @@ public class BattlegroundManager : MonoBehaviour
     }
     private void UnlockBattleground(int index)
     {
-        BattlegroundEffect randomEffect = GetRandomBattlegroundEffect();
+        //BattlegroundEffect randomEffect = GetRandomBattlegroundEffect();
+        BattlegroundEffect randomEffect = BattlegroundEffect.BeastLair;
         Sprite sprite = GetSpriteForEffect(randomEffect);
         string description = GetStringForEffect(randomEffect);
         string name = FormatEnumName(randomEffect);
