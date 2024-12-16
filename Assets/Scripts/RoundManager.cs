@@ -11,6 +11,8 @@ public class RoundManager : MonoBehaviour
     public static event Action OnRoundStarted;
     public static event Action OnRoundEnded;
 
+    private int MaxRound = 5;
+
     public int CurrentRound { get; private set; }
     private int _placedCardsAmount = 0;
 
@@ -75,8 +77,8 @@ public class RoundManager : MonoBehaviour
             BattlegroundManager.Instance.ApplyBattlegroundEffects();
             ScoreManager.Instance.CalculatePower(_playerPlayAreas, _opponentPlayAreas);
 
-            OnRoundEnded?.Invoke();
             CurrentRound++;
+            OnRoundEnded?.Invoke();
         }
         else
         {
@@ -85,4 +87,15 @@ public class RoundManager : MonoBehaviour
         _placedCardsAmount = 0;
     }
 
+    public PlayArea GetAreaWithIndex(int index, bool player)
+    {
+        if(player)
+        {
+            return PlayerPlayAreas[index-1];
+        }
+        else
+        {
+            return OpponentPlayAreas[index-1];
+        }
+    }
 }

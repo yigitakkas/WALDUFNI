@@ -6,15 +6,45 @@ using DG.Tweening;
 
 public class Battleground : MonoBehaviour
 {
+    private static readonly Dictionary<BattlegroundEffect, IBattlegroundEffect> EffectDictionary =
+    new Dictionary<BattlegroundEffect, IBattlegroundEffect>
+    {
+        { BattlegroundEffect.BeastLair, new BeastLairEffect() },
+        { BattlegroundEffect.TheApexZone, new ApexZoneEffect() }
+        /*{ BattlegroundEffect.FieldOfGrowth, new FieldOfGrowthEffect() },
+        { BattlegroundEffect.ForgeOfMight, new ForgeOfMightEffect() },
+        { BattlegroundEffect.ControlZone, new ControlZoneEffect() }*/
+    };
+
+
     public SpriteRenderer BgImage;
-    private bool _activated=false;
-    private BattlegroundEffect _battlegroundEffect;
     public TMP_Text Description;
     public TMP_Text Name;
     public int Index;
-    public GameObject MonsterCard;
+
     [SerializeField]
+    private BattlegroundEffect _battlegroundEffect;
+
+    private bool _activated = false;
+
+    public BattlegroundEffect BattlegroundEffect
+    {
+        get => _battlegroundEffect;
+        private set => _battlegroundEffect = value;
+    }
     private Transform _monsterCardSpawnPoint;
+    public Transform MonsterCardSpawnPoint
+    {
+        get => _monsterCardSpawnPoint;
+        private set => _monsterCardSpawnPoint = value;
+    }
+    public GameObject MonsterCard;
+
+
+    public HashSet<Card> AllCards = new HashSet<Card>();
+    public List<Card> AllCardsList = new List<Card>();
+
+
     private void Start()
     {
         _monsterCardSpawnPoint = DeckManager.Instance.SpawnPosition.transform;
@@ -23,7 +53,7 @@ public class Battleground : MonoBehaviour
     {
         BgImage.enabled = true;
         BgImage.sprite = sprite;
-        _battlegroundEffect = battlegroundEffect;
+        BattlegroundEffect = battlegroundEffect;
         _activated = true;
 
         Name.text = name;
@@ -34,91 +64,24 @@ public class Battleground : MonoBehaviour
 
     public void ApplyEffect()
     {
-        int round = RoundManager.Instance.CurrentRound;
-        if (_activated && round == Index)
+        if (!_activated) return;
+
+        if (EffectDictionary.TryGetValue(_battlegroundEffect, out IBattlegroundEffect effect))
         {
-            switch (_battlegroundEffect)
-            {
-                case BattlegroundEffect.None:
-                    Debug.Log("No effect applied.");
-                    break;
-
-                case BattlegroundEffect.BeastLair:
-                    ApplyBeastLairEffect();
-                    break;
-
-                case BattlegroundEffect.TheApexZone:
-                    ApplyTheApexZoneEffect();
-                    break;
-
-                case BattlegroundEffect.FieldOfGrowth:
-                    ApplyFieldOfGrowthEffect();
-                    break;
-
-                case BattlegroundEffect.ForgeOfMight:
-                    ApplyForgeOfMightEffect();
-                    break;
-
-                case BattlegroundEffect.ControlZone:
-                    ApplyControlZoneEffect();
-                    break;
-                default:
-                    Debug.LogError("Unknown BattlegroundEffect!");
-                    break;
-            }
+            effect.ApplyEffect(this);
         }
     }
 
-    private void ApplyBeastLairEffect()
-    {
-        foreach(PlayArea playArea in RoundManager.Instance.PlayerPlayAreas)
-        {
-            if(playArea.Index == Index && playArea.PlayedHereThisRound && playArea.CheckSnapPointsAvailability())
-            {
-                Debug.Log("Indexler ayný ve Played Here");
-                GameObject spawnedCardObject = Instantiate(MonsterCard, _monsterCardSpawnPoint.position, Quaternion.identity);
-                spawnedCardObject.transform.SetParent(playArea.transform);
-                Card spawnedCard = spawnedCardObject.GetComponent<Card>();
-
-                Vector3 targetPosition = playArea.GetSnapPosition(spawnedCard);
-                spawnedCardObject.transform.DOMove(targetPosition, 0.5f);
-                playArea.PlaceCard(spawnedCard);
-                spawnedCard.Played = true;
-                spawnedCard.SetPlayerArea(playArea);
-            }
-        }
-        foreach (PlayArea playArea in RoundManager.Instance.OpponentPlayAreas)
-        {
-            if (playArea.Index == Index && playArea.PlayedHereThisRound)
-            {
-                Debug.Log("Indexler ayný ve Played Here // Opponent");
-                GameObject spawnedCardObject = Instantiate(MonsterCard, _monsterCardSpawnPoint.position, Quaternion.identity);
-                spawnedCardObject.transform.SetParent(playArea.transform);
-                Card spawnedCard = spawnedCardObject.GetComponent<Card>();
-
-                Vector3 targetPosition = playArea.GetSnapPosition(spawnedCard);
-                spawnedCardObject.transform.DOMove(targetPosition, 0.5f);
-                playArea.PlaceCard(spawnedCard);
-                spawnedCard.Played = true;
-                spawnedCard.SetOpponentArea(playArea);
-            }
-        }
-    }
-
-    private void ApplyTheApexZoneEffect()
-    {
-
-    }
     private void ApplyFieldOfGrowthEffect()
     {
-
+        //her tur eklenen kart(lar)a +1 power verecek, Daha önce power alan kart tekrar +1 almayacak.
     }
     private void ApplyForgeOfMightEffect()
     {
-
+        //her tur eklenen kart(lar)a +2 power verecek, Daha önce power alan kart tekrar +1 almayacak.
     }
     private void ApplyControlZoneEffect()
     {
-
+        //her tur tüm kartlarý kontrol edip en fazla kartý olan tarafýn skoruna +100 ekleyecek. +100 tek bir tarafa olmalý ve tek bir defa eklenmeli, eþitse iki tarafa da eklenmeli
     }
 }

@@ -19,6 +19,8 @@ public class CardDisplay : MonoBehaviour
     private TextMeshProUGUI _powerText;
     private TextMeshProUGUI _energyText;
 
+    private Color _originalColor;
+
     private void Start()
     {
         _cardNameObject = transform.Find("Canvas/CharacterNameText").gameObject;
@@ -29,6 +31,7 @@ public class CardDisplay : MonoBehaviour
             _cardNameText = _cardNameObject.GetComponent<TextMeshProUGUI>();
             _powerText = _powerObject.GetComponent<TextMeshProUGUI>();
             _energyText = _energyObject.GetComponent<TextMeshProUGUI>();
+            _originalColor = _powerText.color;
         }
         UpdateCardDisplay();
     }
@@ -49,5 +52,28 @@ public class CardDisplay : MonoBehaviour
         {
             _energyText.text = Energy.ToString();
         }
+    }
+
+    public void IncreasePower(int amount)
+    {
+        Power += amount;
+        if (_powerText != null)
+        {
+            _powerText.text = Power.ToString();
+            HighlightPowerChange();
+        }
+    }
+    public void HighlightPowerChange()
+    {
+        if (_powerText != null)
+        {
+            _powerText.color = Color.yellow;
+            StartCoroutine(ResetTextColor(_powerText, 0.5f));
+        }
+    }
+    private IEnumerator ResetTextColor(TextMeshProUGUI text, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        text.color = _originalColor;
     }
 }

@@ -84,7 +84,7 @@ public class BattlegroundManager : MonoBehaviour
     private void UnlockBattleground(int index)
     {
         //BattlegroundEffect randomEffect = GetRandomBattlegroundEffect();
-        BattlegroundEffect randomEffect = BattlegroundEffect.BeastLair;
+        BattlegroundEffect randomEffect = BattlegroundEffect.TheApexZone;
         Sprite sprite = GetSpriteForEffect(randomEffect);
         string description = GetStringForEffect(randomEffect);
         string name = FormatEnumName(randomEffect);
@@ -143,7 +143,6 @@ public class BattlegroundManager : MonoBehaviour
 
     public void ApplyBattlegroundEffects()
     {
-        int round = RoundManager.Instance.CurrentRound;
         foreach(Battleground battleground in _battlegrounds)
         {
             battleground.ApplyEffect();

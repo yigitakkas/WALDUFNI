@@ -6,6 +6,10 @@ public class PlayArea : MonoBehaviour
     [SerializeField]
     private List<SnapPoint> _snapPoints = new List<SnapPoint>();
     private List<Card> _placedCards = new List<Card>();
+    public List<Card> PlacedCards
+    {
+        get => _placedCards;
+    }
     public int Index;
     [SerializeField]
     private bool _playedHereThisRound=false;
@@ -171,6 +175,7 @@ public class PlayArea : MonoBehaviour
         else
             return true;
     }
+
 
     [System.Serializable]
     private class SnapPoint

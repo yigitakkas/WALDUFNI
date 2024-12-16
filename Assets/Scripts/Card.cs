@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour
 {
-    public ICardAbility CardAbility { get; private set; }
+    public IBattlegroundEffect CardAbility { get; private set; }
     public CardClass CardClassType;
 
     private Tween _hoverTween;
@@ -22,6 +22,7 @@ public class Card : MonoBehaviour
     private bool _isHovered = false;
     public GameObject Shadow;
     private Collider2D _collider;
+    public bool HasReceivedBoost { get; set; } = false;
 
     [Header("Hover Effect Settings")]
     public float hoverRotationAngleMin = -5f;
@@ -59,16 +60,6 @@ public class Card : MonoBehaviour
         InitializeCard();
         StartIdleMovement();
     }
-    public void SetAbility(ICardAbility ability)
-    {
-        CardAbility = ability;
-    }
-
-    public void ActivateAbility()
-    {
-        CardAbility?.ApplyEffect();
-    }
-
     private void InitializeCard()
     {
         _originalScale = transform.localScale;
