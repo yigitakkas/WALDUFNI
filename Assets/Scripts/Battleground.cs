@@ -12,8 +12,8 @@ public class Battleground : MonoBehaviour
         { BattlegroundEffect.BeastLair, new BeastLairEffect() },
         { BattlegroundEffect.TheApexZone, new ApexZoneEffect() },
         { BattlegroundEffect.FieldOfGrowth, new FieldOfGrowthEffect() },
-        { BattlegroundEffect.ForgeOfMight, new ForgeOfMightEffect() }
-        //{ BattlegroundEffect.ControlZone, new ControlZoneEffect() }
+        { BattlegroundEffect.ForgeOfMight, new ForgeOfMightEffect() },
+        { BattlegroundEffect.ControlZone, new ControlZoneEffect() }
     };
 
 
