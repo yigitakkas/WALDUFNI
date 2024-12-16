@@ -59,20 +59,15 @@ public class CardDisplay : MonoBehaviour
         Power += amount;
         if (_powerText != null)
         {
-            _powerText.text = Power.ToString();
-            HighlightPowerChange();
-        }
-    }
-    public void HighlightPowerChange()
-    {
-        if (_powerText != null)
-        {
-            _powerText.color = Color.yellow;
             StartCoroutine(ResetTextColor(_powerText, 0.5f));
         }
     }
     private IEnumerator ResetTextColor(TextMeshProUGUI text, float delay)
     {
+        yield return new WaitForSeconds(delay);
+        GetComponent<Card>().StartHoverEffect();
+        _powerText.text = Power.ToString();
+        _powerText.color = Color.yellow;
         yield return new WaitForSeconds(delay);
         text.color = _originalColor;
     }

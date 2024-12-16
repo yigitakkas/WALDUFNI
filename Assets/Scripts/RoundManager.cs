@@ -72,13 +72,7 @@ public class RoundManager : MonoBehaviour
         }
         if (_placedCardsAmount > 0)
         {
-            OnRoundStarted?.Invoke();
-
-            BattlegroundManager.Instance.ApplyBattlegroundEffects();
-            ScoreManager.Instance.CalculatePower(_playerPlayAreas, _opponentPlayAreas);
-
-            CurrentRound++;
-            OnRoundEnded?.Invoke();
+            StartCoroutine(HandleRoundFlow());
         }
         else
         {
@@ -86,6 +80,22 @@ public class RoundManager : MonoBehaviour
         }
         _placedCardsAmount = 0;
     }
+    private IEnumerator HandleRoundFlow()
+    {
+        OnRoundStarted?.Invoke();
+        yield return new WaitForSeconds(0.5f);//Opponent kart ekleme animasyon süresi
+
+        BattlegroundManager.Instance.ApplyBattlegroundEffects();
+        yield return null;
+
+        ScoreManager.Instance.CalculatePower(_playerPlayAreas, _opponentPlayAreas);
+        yield return null;
+
+        CurrentRound++;
+        yield return new WaitForSeconds(1f);
+        OnRoundEnded?.Invoke();
+    }
+
 
     public PlayArea GetAreaWithIndex(int index, bool player)
     {

@@ -10,10 +10,10 @@ public class Battleground : MonoBehaviour
     new Dictionary<BattlegroundEffect, IBattlegroundEffect>
     {
         { BattlegroundEffect.BeastLair, new BeastLairEffect() },
-        { BattlegroundEffect.TheApexZone, new ApexZoneEffect() }
-        /*{ BattlegroundEffect.FieldOfGrowth, new FieldOfGrowthEffect() },
-        { BattlegroundEffect.ForgeOfMight, new ForgeOfMightEffect() },
-        { BattlegroundEffect.ControlZone, new ControlZoneEffect() }*/
+        { BattlegroundEffect.TheApexZone, new ApexZoneEffect() },
+        { BattlegroundEffect.FieldOfGrowth, new FieldOfGrowthEffect() },
+        { BattlegroundEffect.ForgeOfMight, new ForgeOfMightEffect() }
+        //{ BattlegroundEffect.ControlZone, new ControlZoneEffect() }
     };
 
 
@@ -72,9 +72,14 @@ public class Battleground : MonoBehaviour
         }
     }
 
-    private void ApplyFieldOfGrowthEffect()
+    public void UpdateAllCards()
     {
-        //her tur eklenen kart(lar)a +1 power verecek, Daha önce power alan kart tekrar +1 almayacak.
+        PlayArea player = RoundManager.Instance.GetAreaWithIndex(Index, true);
+        PlayArea opponent = RoundManager.Instance.GetAreaWithIndex(Index, false);
+
+        AllCards.UnionWith(player.PlacedCards);
+        AllCards.UnionWith(opponent.PlacedCards);
+        AllCardsList = new List<Card>(AllCards); // Inspector'da görüntüleme
     }
     private void ApplyForgeOfMightEffect()
     {

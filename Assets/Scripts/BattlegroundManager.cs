@@ -83,8 +83,8 @@ public class BattlegroundManager : MonoBehaviour
     }
     private void UnlockBattleground(int index)
     {
-        //BattlegroundEffect randomEffect = GetRandomBattlegroundEffect();
-        BattlegroundEffect randomEffect = BattlegroundEffect.TheApexZone;
+        BattlegroundEffect randomEffect = GetRandomBattlegroundEffect();
+        //BattlegroundEffect randomEffect = BattlegroundEffect.FieldOfGrowth;
         Sprite sprite = GetSpriteForEffect(randomEffect);
         string description = GetStringForEffect(randomEffect);
         string name = FormatEnumName(randomEffect);
