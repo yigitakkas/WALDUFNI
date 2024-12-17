@@ -2,11 +2,15 @@ using UnityEngine;
 using DG.Tweening;
 using System.Collections;
 using UnityEngine.UI;
+using TMPro;
 
 public class Card : MonoBehaviour
 {
     public IBattlegroundEffect CardAbility { get; private set; }
     public CardClass CardClassType;
+    public GameObject CardTooltipPrefab;
+    private GameObject _currentTooltip;
+    private Vector3 _tooltipOffset = new Vector3(1f, 0, 0);
 
     private Tween _hoverTween;
     private Tween _scaleTween;
@@ -98,6 +102,29 @@ public class Card : MonoBehaviour
         _isDragging = true;
         KillTweens();
         transform.DOScale(_movingScale, scaleDuration).SetEase(Ease.OutSine);
+    }
+    private void ShowCardTooltip()
+    {
+        if (_currentTooltip != null) return;
+
+        _currentTooltip = Instantiate(CardTooltipPrefab, transform);
+        _currentTooltip.transform.localPosition = _tooltipOffset;
+
+        TextMeshProUGUI tooltipText = _currentTooltip.GetComponentInChildren<TextMeshProUGUI>();
+        if (tooltipText != null)
+        {
+            string cardName = GetComponent<CardDisplay>().CharacterName;
+            int energy = GetComponent<CardDisplay>().Energy; 
+            tooltipText.text = $"Name: {cardName}\nEnergy: {energy}\nType: {CardClassType}";
+        }
+    }
+    private void HideCardTooltip()
+    {
+        if (_currentTooltip != null)
+        {
+            Destroy(_currentTooltip);
+            _currentTooltip = null;
+        }
     }
 
     private void OnMouseDrag()
@@ -233,6 +260,10 @@ public class Card : MonoBehaviour
 
     private void OnMouseOver()
     {
+        if (!_isDragging)
+        {
+            ShowCardTooltip();
+        }
         if (!_isDragging && !_isHovered && EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this))
         {
             _isHovered = true;
@@ -242,6 +273,7 @@ public class Card : MonoBehaviour
 
     private void OnMouseExit()
     {
+        HideCardTooltip();
         if (!_isDragging && EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this))
         {
             _isHovered = false;

@@ -137,6 +137,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CardClassType: 2
+  CardTooltipPrefab: {fileID: 283386434221347318, guid: 7a8d10346f6d885488c460919fcbbb13, type: 3}
   Shadow: {fileID: 5838764800637720581}
   hoverRotationAngleMin: -6
   hoverRotationAngleMax: 6
