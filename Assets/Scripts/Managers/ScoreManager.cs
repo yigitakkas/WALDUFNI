@@ -18,7 +18,15 @@ public class ScoreManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         for (int i = 1; i <= 3; i++)
         {
             playerScores[i] = 0;

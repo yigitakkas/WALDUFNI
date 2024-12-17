@@ -34,7 +34,15 @@ public class BattlegroundManager : MonoBehaviour
     }
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         InitializeDictionaries();
         FindBattlegrounds();
         UnlockBattleground(0);
@@ -83,8 +91,8 @@ public class BattlegroundManager : MonoBehaviour
     }
     private void UnlockBattleground(int index)
     {
-        //BattlegroundEffect randomEffect = GetRandomBattlegroundEffect();
-        BattlegroundEffect randomEffect = BattlegroundEffect.ControlZone;
+        BattlegroundEffect randomEffect = GetRandomBattlegroundEffect();
+        //BattlegroundEffect randomEffect = BattlegroundEffect.ControlZone;
         Sprite sprite = GetSpriteForEffect(randomEffect);
         string description = GetStringForEffect(randomEffect);
         string name = FormatEnumName(randomEffect);

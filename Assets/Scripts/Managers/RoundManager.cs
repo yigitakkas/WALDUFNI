@@ -11,8 +11,6 @@ public class RoundManager : MonoBehaviour
     public static event Action OnRoundStarted;
     public static event Action OnRoundEnded;
 
-    private int MaxRound = 5;
-
     public int CurrentRound { get; private set; }
 
     [SerializeField]

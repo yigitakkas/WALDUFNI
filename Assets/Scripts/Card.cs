@@ -1,6 +1,7 @@
 using UnityEngine;
 using DG.Tweening;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
 
@@ -8,6 +9,11 @@ public class Card : MonoBehaviour
 {
     public IBattlegroundEffect CardAbility { get; private set; }
     public CardClass CardClassType;
+    public CardTrigger CardTriggerType;
+    public CardEffect CardEffectType;
+    private ICardEffect _cardEffect;
+    private Dictionary<CardEffect, ICardEffect> _cardEffectDictionary;
+
     public GameObject CardTooltipPrefab;
     private GameObject _currentTooltip;
     private Vector3 _tooltipOffset = new Vector3(1f, 0, 0);
@@ -77,6 +83,35 @@ public class Card : MonoBehaviour
         _movingScale = _originalScale * 1.05f * 1.10f;
         _mainCamera = Camera.main;
         _collider = GetComponent<BoxCollider2D>();
+        InitializeCardEffectDictionary();
+        AssignCardEffect(CardEffectType);
+    }
+
+    private void InitializeCardEffectDictionary()
+    {
+        _cardEffectDictionary = new Dictionary<CardEffect, ICardEffect>
+        {
+            { CardEffect.None, null },
+            { CardEffect.Pioneer, new PioneerEffect() },
+            { CardEffect.Echo, new EchoEffect() },
+            { CardEffect.Momentum, new MomentumEffect() },
+            { CardEffect.Catalyst, new CatalystEffect() },
+            { CardEffect.TriggerLeft, new TriggerLeftEffect() },
+            { CardEffect.TriggerMiddle, new TriggerMiddleEffect() },
+            { CardEffect.TriggerRight, new TriggerRightEffect() },
+            { CardEffect.Amplifier, new AmplifierEffect() }
+        };
+    }
+    private void AssignCardEffect(CardEffect cardEffect)
+    {
+        if (_cardEffectDictionary.TryGetValue(cardEffect, out _cardEffect))
+        {
+            Debug.Log($"Card effect assigned: {cardEffect}");
+        }
+        else
+        {
+            Debug.LogWarning("Effect not found in the dictionary.");
+        }
     }
 
     public void SetOpponentArea(PlayArea area)
@@ -377,5 +412,24 @@ public class Card : MonoBehaviour
         Basic,
         Power,
         Special
+    }
+
+    public enum CardTrigger
+    {
+        None,
+        OnReveal, //Apply on reveal
+        Ongoing //Apply every round
+    }
+    public enum CardEffect
+    {
+        None,
+        Pioneer, //Starts at hand
+        Echo, //Add another copy of this card to hand
+        Momentum, //Gain +3 power if you play a card here next turn
+        Catalyst, //Gain +2 power for every card placed here
+        TriggerLeft, //Gain +3 power if played in left area
+        TriggerMiddle, //Gain +3 power if played in middle area
+        TriggerRight, //Gain +3 power if played in right area
+        Amplifier //Doubles the total power of the area
     }
 }
