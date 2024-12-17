@@ -90,6 +90,7 @@ public class DeckManager : MonoBehaviour
         }
 
         ArrangeCards(); // Spawnlanan kartlarý sýralama
+        SetDarknessOfCards(EnergyManager.Instance.PlayerEnergy);
     }
 
     private void RemovePlayedCards()
@@ -195,6 +196,24 @@ public class DeckManager : MonoBehaviour
             Vector3 targetPosition = new Vector3(transform.position.x + (i * spacing) - centerOffset, transform.position.y, transform.position.z);
             _spawnedCards[i].GetComponent<Card>().SetOriginalPosition(targetPosition);
             _spawnedCards[i].transform.DOMove(targetPosition, 0.5f);
+        }
+    }
+
+    public void SetDarknessOfCards(int playerEnergy)
+    {
+        int cardCount = _spawnedCards.Count;
+        if (cardCount == 0)
+            return;
+        for (int i = 0; i < cardCount; i++)
+        {
+            CardDisplay cardDisplay = _spawnedCards[i].GetComponent<CardDisplay>();
+            if (cardDisplay.Energy <= playerEnergy)
+            {
+                cardDisplay.LightenObject();
+            } else
+            {
+                cardDisplay.DarkenObject();
+            }
         }
     }
 

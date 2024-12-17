@@ -13,6 +13,7 @@ public class CardDisplay : MonoBehaviour
     private GameObject _cardNameObject;
     private GameObject _powerObject;
     private GameObject _energyObject;
+    private GameObject _overlayObject;
 
     [Header("UI References")]
     private TextMeshProUGUI _cardNameText;
@@ -21,19 +22,26 @@ public class CardDisplay : MonoBehaviour
 
     private Color _originalColor;
 
-    private void Start()
+    private void Awake()
     {
         _cardNameObject = transform.Find("Canvas/CharacterNameText").gameObject;
         _powerObject = transform.Find("Canvas/Damage/DamageText").gameObject;
         _energyObject = transform.Find("Canvas/Energy/EnergyText").gameObject;
-        if(_cardNameObject != null && _powerObject != null && _energyObject != null)
+        _overlayObject = transform.Find("Overlay").gameObject;
+
+        if (_cardNameObject != null && _powerObject != null && _energyObject != null)
         {
             _cardNameText = _cardNameObject.GetComponent<TextMeshProUGUI>();
             _powerText = _powerObject.GetComponent<TextMeshProUGUI>();
             _energyText = _energyObject.GetComponent<TextMeshProUGUI>();
             _originalColor = _powerText.color;
         }
+
         UpdateCardDisplay();
+    }
+
+    private void Start()
+    {
     }
 
     public void UpdateCardDisplay()
@@ -70,5 +78,28 @@ public class CardDisplay : MonoBehaviour
         _powerText.color = Color.yellow;
         yield return new WaitForSeconds(delay);
         text.color = _originalColor;
+    }
+
+    public void DarkenObject()
+    {
+        if(!CheckIfPlaced())
+        {
+            _overlayObject.SetActive(true);
+        }
+    }
+
+    public void LightenObject()
+    {
+        if (!CheckIfPlaced())
+        {
+            _overlayObject.SetActive(false);
+        }
+    }
+
+    private bool CheckIfPlaced()
+    {
+        if (GetComponent<Card>().PlacedOnArea)
+            return true;
+        else return false;
     }
 }

@@ -46,6 +46,11 @@ public class Card : MonoBehaviour
     private PlayArea _currentPlayArea;
     private PlayArea _placedArea;
     private bool _placedOnArea = false;
+    public bool PlacedOnArea
+    {
+        get { return _placedOnArea; }
+        private set { _placedOnArea = value; }
+    }
     private PlayArea _placedOpponentArea;
     public PlayArea PlacedOpponentArea => _placedOpponentArea;
     public PlayArea PlacedArea => _placedArea;
@@ -87,7 +92,7 @@ public class Card : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (Played) return;
+        if (Played || !EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this)) return;
         AdjustChildSortingOrder(2);
         _offset = transform.position - GetMouseWorldPosition();
         _isDragging = true;
@@ -97,7 +102,7 @@ public class Card : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        if (!_isDragging || Played) return;
+        if (!_isDragging || Played || !EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this)) return;
 
         Vector3 targetPosition = GetMouseWorldPosition() + _offset;
         targetPosition.z = transform.position.z;
@@ -115,17 +120,27 @@ public class Card : MonoBehaviour
 
     private void OnMouseUp()
     {
-        if (Played) return;
+        if (Played || !EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this)) return;
         AdjustChildSortingOrder(-2);
         _isDragging = false;
         KillAndNullifyTween(ref _hoverTween);
 
         if (IsCardOnPlayArea())
         {
+            if (!_placedOnArea)
+            {
+                _placedOnArea = true;
+                EnergyManager.Instance.DecreaseEnergy(GetComponent<CardDisplay>().Energy);
+            }
             HandlePlayAreaPlacement();
         }
         else
         {
+            if (_placedOnArea)
+            {
+                _placedOnArea = false;
+                EnergyManager.Instance.IncreaseEnergy(GetComponent<CardDisplay>().Energy);
+            }
             ResetCardToOriginalPosition();
         }
     }
@@ -218,7 +233,7 @@ public class Card : MonoBehaviour
 
     private void OnMouseOver()
     {
-        if (!_isDragging && !_isHovered)
+        if (!_isDragging && !_isHovered && EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this))
         {
             _isHovered = true;
             StartHoverEffect();
@@ -227,7 +242,7 @@ public class Card : MonoBehaviour
 
     private void OnMouseExit()
     {
-        if (!_isDragging)
+        if (!_isDragging && EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this))
         {
             _isHovered = false;
             StopHoverEffect();
