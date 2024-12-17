@@ -157,7 +157,7 @@ public class Card : MonoBehaviour
             if (!_placedOnArea)
             {
                 _placedOnArea = true;
-                EnergyManager.Instance.DecreaseEnergy(GetComponent<CardDisplay>().Energy);
+                EnergyManager.Instance.DecreaseEnergy(GetComponent<CardDisplay>().Energy, player:true);
             }
             HandlePlayAreaPlacement();
         }
@@ -166,7 +166,7 @@ public class Card : MonoBehaviour
             if (_placedOnArea)
             {
                 _placedOnArea = false;
-                EnergyManager.Instance.IncreaseEnergy(GetComponent<CardDisplay>().Energy);
+                EnergyManager.Instance.IncreaseEnergy(GetComponent<CardDisplay>().Energy, player:true);
             }
             ResetCardToOriginalPosition();
         }

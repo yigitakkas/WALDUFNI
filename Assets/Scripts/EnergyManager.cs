@@ -58,13 +58,20 @@ public class EnergyManager : MonoBehaviour
         else return true;
     }
 
-    public void DecreaseEnergy(int energy)
+    public void DecreaseEnergy(int energy, bool player)
     {
-        PlayerEnergy -= energy;
-        SetText();
-        DeckManager.Instance.SetDarknessOfCards(PlayerEnergy);
+        if(player)
+        {
+            PlayerEnergy -= energy;
+            SetText();
+            DeckManager.Instance.SetDarknessOfCards(PlayerEnergy);
+        }
+        else
+        {
+            OpponentEnergy -= energy;
+        }
     }
-    public void IncreaseEnergy(int energy)
+    public void IncreaseEnergy(int energy, bool player)
     {
         PlayerEnergy += energy;
         SetText();

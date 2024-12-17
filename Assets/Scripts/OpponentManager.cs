@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System.Linq;
 
 public class OpponentManager : MonoBehaviour
 {
@@ -143,33 +144,68 @@ public class OpponentManager : MonoBehaviour
 
     private void AddSingleCardBasedOnChance(float randomValue, int basicChance, int powerChance, int specialChance)
     {
+        bool cardAdded = false;
+
         if (randomValue < basicChance && _basicCards.Count > 0)
         {
             AddCardToOpponentHand(_basicCards);
+            cardAdded = true;
         }
         else if (randomValue < basicChance + powerChance && _powerCards.Count > 0)
         {
             AddCardToOpponentHand(_powerCards);
+            cardAdded = true;
         }
         else if (_specialCards.Count > 0)
         {
             AddCardToOpponentHand(_specialCards);
+            cardAdded = true;
+        }
+
+        if(!cardAdded)
+        {
+            if (_basicCards.Count > 0)
+            {
+                AddCardToOpponentHand(_basicCards);
+            }
+            else if (_powerCards.Count > 0)
+            {
+                AddCardToOpponentHand(_powerCards);
+            }
+            else if (_specialCards.Count > 0)
+            {
+                AddCardToOpponentHand(_specialCards);
+            }
+            else
+            {
+                Debug.LogWarning("Tüm destelerde kart kalmadý!");
+            }
         }
     }
 
     public void PlayOpponentCard()
     {
-        if (_opponentHand.Count > 0)
+        List<GameObject> playableCards = _opponentHand
+        .Where(card => card.GetComponent<CardDisplay>().Energy <= EnergyManager.Instance.OpponentEnergy)
+        .ToList();
+
+
+        if (playableCards.Count > 0)
         {
-            GameObject cardToPlay = _opponentHand[Random.Range(0, _opponentHand.Count)];
+            GameObject cardToPlay = playableCards[Random.Range(0, playableCards.Count)];
             _opponentHand.Remove(cardToPlay);
+
+            int cardEnergy = cardToPlay.GetComponent<CardDisplay>().Energy;
+            EnergyManager.Instance.DecreaseEnergy(cardEnergy, player: false);
 
             Debug.Log("OpponentManager oynadý: " + cardToPlay.name);
             PlayCardToOpponentArea(cardToPlay);
         }
         else
         {
-            Debug.LogWarning("OpponentManager'ýn elinde kart kalmadý!");
+            AddCardToOpponentHand(_basicCards);
+            PlayOpponentCard();
+            Debug.LogWarning("OpponentManager'ýn enerjisi yeten kartý yok!");
         }
     }
 
