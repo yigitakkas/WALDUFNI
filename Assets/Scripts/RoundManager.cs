@@ -14,7 +14,6 @@ public class RoundManager : MonoBehaviour
     private int MaxRound = 5;
 
     public int CurrentRound { get; private set; }
-    private int _placedCardsAmount = 0;
 
     [SerializeField]
     private List<PlayArea> _playerPlayAreas = new List<PlayArea>();
@@ -66,19 +65,7 @@ public class RoundManager : MonoBehaviour
     }
     public void StartRound()
     {
-        foreach (PlayArea area in _playerPlayAreas)
-        {
-            _placedCardsAmount += area.PlacedAmount();
-        }
-        if (_placedCardsAmount > 0)
-        {
-            StartCoroutine(HandleRoundFlow());
-        }
-        else
-        {
-            Debug.LogError("No cards placed on any area");
-        }
-        _placedCardsAmount = 0;
+        StartCoroutine(HandleRoundFlow());
     }
     private IEnumerator HandleRoundFlow()
     {

@@ -164,22 +164,27 @@ public class OpponentManager : MonoBehaviour
 
         if(!cardAdded)
         {
-            if (_basicCards.Count > 0)
-            {
-                AddCardToOpponentHand(_basicCards);
-            }
-            else if (_powerCards.Count > 0)
-            {
-                AddCardToOpponentHand(_powerCards);
-            }
-            else if (_specialCards.Count > 0)
-            {
-                AddCardToOpponentHand(_specialCards);
-            }
-            else
-            {
-                Debug.LogWarning("Tüm destelerde kart kalmadý!");
-            }
+            AddFallbackCard();
+        }
+    }
+
+    private void AddFallbackCard()
+    {
+        if (_basicCards.Count > 0)
+        {
+            AddCardToOpponentHand(_basicCards);
+        }
+        else if (_powerCards.Count > 0)
+        {
+            AddCardToOpponentHand(_powerCards);
+        }
+        else if (_specialCards.Count > 0)
+        {
+            AddCardToOpponentHand(_specialCards);
+        }
+        else
+        {
+            Debug.LogWarning("Tüm destelerde kart kalmadý!");
         }
     }
 

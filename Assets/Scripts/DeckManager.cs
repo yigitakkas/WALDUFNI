@@ -114,60 +114,87 @@ public class DeckManager : MonoBehaviour
 
     private void RoundOne()
     {
-        int spawnIndex = 0;
+
 
         float randomValue = Random.value * 100;
         if (randomValue < 30) // %30: 3 Basic Cards
         {
             for (int i = 0; i < 3; i++)
-                AddCardToSpawn(_basicCards, ref spawnIndex);
+                AddCardToSpawn(_basicCards);
         }
         else if (randomValue < 70) // %40: 2 Basic, 1 Power
         {
             for (int i = 0; i < 2; i++)
-                AddCardToSpawn(_basicCards, ref spawnIndex);
-            AddCardToSpawn(_powerCards, ref spawnIndex);
+                AddCardToSpawn(_basicCards);
+            AddCardToSpawn(_powerCards);
         }
         else if (randomValue < 90) // %20: 1 Basic, 2 Power
         {
-            AddCardToSpawn(_basicCards, ref spawnIndex);
+            AddCardToSpawn(_basicCards);
             for (int i = 0; i < 2; i++)
-                AddCardToSpawn(_powerCards, ref spawnIndex);
+                AddCardToSpawn(_powerCards);
         }
         else if (randomValue < 99) // %9: 1 Basic, 1 Power, 1 Special
         {
-            AddCardToSpawn(_basicCards, ref spawnIndex);
-            AddCardToSpawn(_powerCards, ref spawnIndex);
-            AddCardToSpawn(_specialCards, ref spawnIndex);
+            AddCardToSpawn(_basicCards);
+            AddCardToSpawn(_powerCards);
+            AddCardToSpawn(_specialCards);
         }
         else // %1: 1 Basic, 2 Special
         {
-            AddCardToSpawn(_basicCards, ref spawnIndex);
+            AddCardToSpawn(_basicCards);
             for (int i = 0; i < 2; i++)
-                AddCardToSpawn(_specialCards, ref spawnIndex);
+                AddCardToSpawn(_specialCards);
         }
     }
 
     private void SpawnSingleCard(int basicChance, int powerChance)
     {
         float randomValue = Random.value * 100;
-        int spawnIndex = 0;
+        bool cardAdded = false;
 
         if (randomValue < basicChance && _basicCards.Count > 0)
         {
-            AddCardToSpawn(_basicCards, ref spawnIndex);
+            AddCardToSpawn(_basicCards);
+            cardAdded = true;
         }
         else if (randomValue < basicChance + powerChance && _powerCards.Count > 0)
         {
-            AddCardToSpawn(_powerCards, ref spawnIndex);
+            AddCardToSpawn(_powerCards);
+            cardAdded = true;
         }
         else if (_specialCards.Count > 0)
         {
-            AddCardToSpawn(_specialCards, ref spawnIndex);
+            AddCardToSpawn(_specialCards);
+            cardAdded = true;
+        }
+
+        if(!cardAdded)
+        {
+            AddFallbackCard();
+        }
+    }
+    private void AddFallbackCard()
+    {
+        if (_basicCards.Count > 0)
+        {
+            AddCardToSpawn(_basicCards);
+        }
+        else if (_powerCards.Count > 0)
+        {
+            AddCardToSpawn(_powerCards);
+        }
+        else if (_specialCards.Count > 0)
+        {
+            AddCardToSpawn(_specialCards);
+        }
+        else
+        {
+            Debug.LogWarning("Tüm destelerde kart kalmadý!");
         }
     }
 
-    private void AddCardToSpawn(List<GameObject> cardList, ref int spawnIndex)
+    private void AddCardToSpawn(List<GameObject> cardList)
     {
         if (cardList.Count == 0)
             return;
@@ -178,8 +205,6 @@ public class DeckManager : MonoBehaviour
         spawnedCard.transform.SetParent(transform);
         _spawnedCards.Add(spawnedCard);
         cardList.RemoveAt(randomIndex);
-
-        spawnIndex++;
     }
 
     private void ArrangeCards()
