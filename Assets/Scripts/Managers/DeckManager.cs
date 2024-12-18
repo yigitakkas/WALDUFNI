@@ -122,8 +122,6 @@ public class DeckManager : MonoBehaviour
 
     private void RoundOne()
     {
-
-
         float randomValue = Random.value * 100;
         if (randomValue < 30) // %30: 3 Basic Cards
         {
@@ -181,6 +179,14 @@ public class DeckManager : MonoBehaviour
         {
             AddFallbackCard();
         }
+    }
+
+    public void SpawnCard(Card card)
+    {
+        card.transform.position = SpawnPosition.position;
+        card.transform.SetParent(transform);
+        _spawnedCards.Add(card.gameObject);
+        //ArrangeCards();
     }
     private void AddFallbackCard()
     {

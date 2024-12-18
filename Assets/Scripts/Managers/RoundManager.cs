@@ -70,13 +70,16 @@ public class RoundManager : MonoBehaviour
         OnRoundStarted?.Invoke();
         yield return new WaitForSeconds(0.5f);//Opponent kart ekleme animasyon süresi
 
-        ApplyCardEffects();
+        ApplyCardEffects(); 
+        yield return new WaitForSeconds(0.5f); //Önce kart efektleri, sonra battleground efektleri
+
         BattlegroundManager.Instance.ApplyBattlegroundEffects();
         yield return null;
 
         ScoreManager.Instance.CalculatePower(_playerPlayAreas, _opponentPlayAreas);
-        yield return null;
+        yield return new WaitForSeconds(0.5f);
 
+        ScoreManager.Instance.UpdateUI();
         CurrentRound++;
         yield return new WaitForSeconds(1f);
         OnRoundEnded?.Invoke();
@@ -95,6 +98,24 @@ public class RoundManager : MonoBehaviour
         }
     }
 
+    private void PlayAreaCardEffects()
+    {
+        foreach (PlayArea area in PlayerPlayAreas)
+        {
+            if (area.PlacedAmount() > 0)
+            {
+                area.CheckCardEffects();
+            }
+        }
+        foreach (PlayArea area in OpponentPlayAreas)
+        {
+            if (area.PlacedAmount() > 0)
+            {
+                area.CheckCardEffects();
+            }
+        }
+    }
+
     public void ApplyCardEffects()
     {
         foreach(PlayArea playerPlayArea in _playerPlayAreas)
@@ -102,6 +123,13 @@ public class RoundManager : MonoBehaviour
             foreach(Card card in playerPlayArea.PlacedCardsThisRound)
             {
                 if (card.CardTriggerType == CardTrigger.OnReveal)
+                {
+                    card.TriggerCardEffect();
+                }
+            }
+            foreach(Card card in playerPlayArea.PlacedCards)
+            {
+                if(card.CardTriggerType == CardTrigger.Ongoing)
                 {
                     card.TriggerCardEffect();
                 }
@@ -116,6 +144,14 @@ public class RoundManager : MonoBehaviour
                     card.TriggerCardEffect();
                 }
             }
+            foreach (Card card in opponentPlayArea.PlacedCards)
+            {
+                if (card.CardTriggerType == CardTrigger.Ongoing)
+                {
+                    card.TriggerCardEffect();
+                }
+            }
         }
+        PlayAreaCardEffects();
     }
 }

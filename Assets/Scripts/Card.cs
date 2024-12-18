@@ -111,7 +111,6 @@ public class Card : MonoBehaviour
         {
             Played = true;
             _playedUpdated = true;
-            //_collider.enabled = false;
         }
     }
 
@@ -202,7 +201,6 @@ public class Card : MonoBehaviour
 
     private void OnMouseEnter()
     {
-        Debug.Log("OnMouseEnter");
         if (!_isDragging && !_isHovered)
         {
             _isHovered = true;
@@ -214,7 +212,6 @@ public class Card : MonoBehaviour
 
     private void OnMouseExit()
     {
-        Debug.Log("OnMouseExit" + "IsDragging:" + _isDragging + " IsHovered:" + _isHovered);
         if (!_isDragging && _isHovered)
         {
             _isHovered = false;
@@ -243,7 +240,7 @@ public class Card : MonoBehaviour
     }
     private void AdjustChildSortingOrder(int orderOffset)
     {
-        foreach (Transform child in transform)
+        foreach (Transform child in _cardVisual.transform)
         {
             SpriteRenderer spriteRenderer = child.GetComponent<SpriteRenderer>();
             if (spriteRenderer)
@@ -333,7 +330,6 @@ public class Card : MonoBehaviour
         if (CheckHoverConditions())
         {
             KillTweens();
-            Debug.Log("Start Hover Effect");
             StopIdleMovement();
             _hoverTween = _cardVisual.transform.DOLocalRotate(new Vector3(0, 0, Random.Range(hoverRotationAngleMin, hoverRotationAngleMax)), hoverDuration)
                 .SetLoops(2, LoopType.Yoyo)
@@ -359,7 +355,7 @@ public class Card : MonoBehaviour
 
     private void CheckMousePos()
     {
-        if (!_isHovered && !_isDragging)
+        if ((!_isHovered && !_isDragging) || Played)
         {
             StopHoverEffect();
         }
@@ -367,7 +363,6 @@ public class Card : MonoBehaviour
 
     public void StopHoverEffect()
     {
-        Debug.Log("Stop Hover Effect");
         KillTweens();
         _cardVisual.transform.rotation = Quaternion.identity;
         _scaleTween = _cardVisual.transform.DOScale(_originalScale, scaleDuration).SetEase(Ease.OutSine);
@@ -393,7 +388,6 @@ public class Card : MonoBehaviour
         KillAndNullifyTween(ref _idleTween);
         KillAndNullifyTween(ref _shadowMoveTween); 
         _playedUpdated = false;
-        //_collider.enabled = true;
     }
 
     private void KillAndNullifyTween(ref Tween tween)

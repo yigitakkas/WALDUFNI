@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System.Linq;
+using UnityEditor;
 
 public class OpponentManager : MonoBehaviour
 {
@@ -143,6 +144,11 @@ public class OpponentManager : MonoBehaviour
         GameObject randomCard = cardList[randomIndex];
         _opponentHand.Add(randomCard);
         cardList.RemoveAt(randomIndex);
+    }
+
+    public void SpawnCard(GameObject card)
+    {
+        _opponentHand.Add(card);
     }
 
     private void AddSingleCardBasedOnChance(float randomValue, int basicChance, int powerChance, int specialChance)

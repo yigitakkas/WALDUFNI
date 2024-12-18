@@ -25,6 +25,12 @@ public class PlayArea : MonoBehaviour
     }
     [SerializeField]
     private int _playedAmountThisRound = 0;
+    public class MomentumData
+    {
+        public Card MomentumCard { get; set; }
+        public int PlayedRound { get; set; }
+    }
+    private List<MomentumData> _momentumCards = new List<MomentumData>();
     private void OnEnable()
     {
         RoundManager.OnRoundEnded += ResetPlayedHere;
@@ -182,6 +188,41 @@ public class PlayArea : MonoBehaviour
             return false;
         else
             return true;
+    }
+
+    public void SaveMomentumEffect(Card momentumCard)
+    {
+        foreach(Card card in PlacedCardsThisRound)
+        {
+            if(card == momentumCard)
+            {
+                Debug.Log("Momentum Card Played");
+                SetMomentumPlayed(card);
+            }
+        }
+    }
+
+    private void SetMomentumPlayed(Card card)
+    {
+        var momentumData = new MomentumData
+        {
+            MomentumCard = card,
+            PlayedRound = RoundManager.Instance.CurrentRound
+        };
+
+        _momentumCards.Add(momentumData);
+    }
+
+    public void CheckCardEffects()
+    {
+        _momentumCards.RemoveAll(data => data.PlayedRound < RoundManager.Instance.CurrentRound - 1);
+        foreach(var momentumData in _momentumCards)
+        {
+            if(momentumData.PlayedRound==RoundManager.Instance.CurrentRound-1 && PlacedCardsThisRound.Count > 0)
+            {
+                momentumData.MomentumCard.CardDisplay.IncreasePower(3);
+            }
+        }
     }
 
 

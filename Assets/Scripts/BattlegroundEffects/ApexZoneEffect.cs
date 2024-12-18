@@ -6,13 +6,10 @@ public class ApexZoneEffect : IBattlegroundEffect
 {
     public void ApplyEffect(Battleground battleground)
     {
-        // Kartlarý güncelle
         UpdateAllCards(battleground);
 
-        // En güçlü kartlarý bul
         List<Card> strongestCards = GetStrongestCards(battleground);
 
-        // Güçlendirme uygula
         BoostStrongestCards(strongestCards, 3);
     }
 

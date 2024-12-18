@@ -32,6 +32,7 @@ public class ScoreManager : MonoBehaviour
             playerScores[i] = 0;
             opponentScores[i] = 0;
         }
+        UpdateUI();
     }
     public void CalculatePower(List<PlayArea> playerAreas, List<PlayArea> opponentAreas)
     {
@@ -52,12 +53,10 @@ public class ScoreManager : MonoBehaviour
                 opponentScores[area.Index] += area.PlacedCardsPower();
             }
         }
-
-        UpdateUI();
     }
 
 
-    private void UpdateUI()
+    public void UpdateUI()
     {
         AreaOnePlayerScore.text = playerScores[1].ToString();
         AreaTwoPlayerScore.text = playerScores[2].ToString();
