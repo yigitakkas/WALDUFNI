@@ -6,9 +6,14 @@ public class PlayArea : MonoBehaviour
     [SerializeField]
     private List<SnapPoint> _snapPoints = new List<SnapPoint>();
     private List<Card> _placedCards = new List<Card>();
+    private List<Card> _placedCardsThisRound = new List<Card>();
     public List<Card> PlacedCards
     {
         get => _placedCards;
+    }
+    public List<Card> PlacedCardsThisRound
+    {
+        get => _placedCardsThisRound;
     }
     public int Index;
     [SerializeField]
@@ -31,6 +36,7 @@ public class PlayArea : MonoBehaviour
     }
     private void ResetPlayedHere()
     {
+        _placedCardsThisRound.Clear();
         _playedHereThisRound = false;
         _playedAmountThisRound = 0;
     }
@@ -77,6 +83,7 @@ public class PlayArea : MonoBehaviour
     public void PlaceCard(Card card)
     {
         _placedCards.Add(card);
+        _placedCardsThisRound.Add(card);
         _playedHereThisRound = true;
         _playedAmountThisRound++;
     }
@@ -84,6 +91,7 @@ public class PlayArea : MonoBehaviour
     public void RemoveCard(Card card)
     {
         _placedCards.Remove(card);
+        _placedCardsThisRound.Remove(card);
         _playedAmountThisRound--;
         if(_playedAmountThisRound==0)
         {

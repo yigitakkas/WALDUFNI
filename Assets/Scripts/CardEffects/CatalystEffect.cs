@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class CatalystEffect : ICardEffect
 {
-    public void ApplyEffect()
+    public void ApplyEffect(Card card)
     {
-        //Gain +2 power for every card placed here
+        //Gain +2 power for every card placed here — Ongoing
     }
 }

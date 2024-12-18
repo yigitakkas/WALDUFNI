@@ -70,6 +70,7 @@ public class RoundManager : MonoBehaviour
         OnRoundStarted?.Invoke();
         yield return new WaitForSeconds(0.5f);//Opponent kart ekleme animasyon süresi
 
+        ApplyCardEffects();
         BattlegroundManager.Instance.ApplyBattlegroundEffects();
         yield return null;
 
@@ -91,6 +92,30 @@ public class RoundManager : MonoBehaviour
         else
         {
             return OpponentPlayAreas[index-1];
+        }
+    }
+
+    public void ApplyCardEffects()
+    {
+        foreach(PlayArea playerPlayArea in _playerPlayAreas)
+        {
+            foreach(Card card in playerPlayArea.PlacedCardsThisRound)
+            {
+                if (card.CardTriggerType == CardTrigger.OnReveal)
+                {
+                    card.TriggerCardEffect();
+                }
+            }
+        }
+        foreach (PlayArea opponentPlayArea in _opponentPlayAreas)
+        {
+            foreach (Card card in opponentPlayArea.PlacedCardsThisRound)
+            {
+                if (card.CardTriggerType == CardTrigger.OnReveal)
+                {
+                    card.TriggerCardEffect();
+                }
+            }
         }
     }
 }

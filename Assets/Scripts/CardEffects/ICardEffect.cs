@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ICardEffect
 {
-    void ApplyEffect();
+    void ApplyEffect(Card card);
 }

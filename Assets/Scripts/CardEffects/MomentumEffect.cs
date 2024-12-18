@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class MomentumEffect : ICardEffect
 {
-    public void ApplyEffect()
+    public void ApplyEffect(Card card)
     {
-        //Gain +3 power if you play a card here next turn
+        //Gain +3 power if you play a card here next turn — Ongoing
     }
 }

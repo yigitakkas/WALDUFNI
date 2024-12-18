@@ -74,12 +74,12 @@ public class OpponentManager : MonoBehaviour
 
     private void DefineCardClasses(GameObject card)
     {
-        Card.CardClass cardClass = card.GetComponent<Card>().CardClassType;
-        if (cardClass == Card.CardClass.Basic)
+        CardClass cardClass = card.GetComponent<Card>().CardClassType;
+        if (cardClass == CardClass.Basic)
             _basicCards.Add(card);
-        else if (cardClass == Card.CardClass.Power)
+        else if (cardClass == CardClass.Power)
             _powerCards.Add(card);
-        else if (cardClass == Card.CardClass.Special)
+        else if (cardClass == CardClass.Special)
             _specialCards.Add(card);
     }
 

@@ -60,12 +60,12 @@ public class DeckManager : MonoBehaviour
 
     private void DefineCardClasses(GameObject cardPrefab)
     {
-        Card.CardClass cardClass = cardPrefab.GetComponent<Card>().CardClassType;
-        if (cardClass == Card.CardClass.Basic)
+        CardClass cardClass = cardPrefab.GetComponent<Card>().CardClassType;
+        if (cardClass == CardClass.Basic)
             _basicCards.Add(cardPrefab);
-        else if (cardClass == Card.CardClass.Power)
+        else if (cardClass == CardClass.Power)
             _powerCards.Add(cardPrefab);
-        else if (cardClass == Card.CardClass.Special)
+        else if (cardClass == CardClass.Special)
             _specialCards.Add(cardPrefab);
     }
 
@@ -115,7 +115,7 @@ public class DeckManager : MonoBehaviour
 
         foreach (GameObject card in cardsToRemove)
         {
-            card.GetComponent<Card>().Played = true;
+            //card.GetComponent<Card>().Played = true;
             _spawnedCards.Remove(card);
         }
     }

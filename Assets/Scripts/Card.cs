@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using TMPro;
+using System.Text.RegularExpressions;
 
 public class Card : MonoBehaviour
 {
@@ -12,7 +13,9 @@ public class Card : MonoBehaviour
     public CardTrigger CardTriggerType;
     public CardEffect CardEffectType;
     private ICardEffect _cardEffect;
-    private Dictionary<CardEffect, ICardEffect> _cardEffectDictionary;
+    public CardDisplay CardDisplay { get; private set; }
+    private GameObject _cardVisual;
+    private bool _playedUpdated = false;
 
     public GameObject CardTooltipPrefab;
     private GameObject _currentTooltip;
@@ -70,6 +73,20 @@ public class Card : MonoBehaviour
         get { return _played; }
         set { _played = value; }
     }
+    private void OnEnable()
+    {
+        RoundManager.OnRoundStarted += UpdatePlayed;
+        RoundManager.OnRoundEnded += KillTweens;
+    }
+    private void OnDisable()
+    {
+        RoundManager.OnRoundStarted -= UpdatePlayed;
+        RoundManager.OnRoundEnded -= KillTweens;
+    }
+    private void Awake()
+    {
+        _cardVisual= transform.Find("CardVisual").gameObject;
+    }
     private void Start()
     {
         InitializeCard();
@@ -77,43 +94,31 @@ public class Card : MonoBehaviour
     }
     private void InitializeCard()
     {
-        _originalScale = transform.localScale;
+        _originalScale = _cardVisual.transform.localScale;
         _shadowOriginalLocalPosition = Shadow != null ? Shadow.transform.localPosition : Vector3.zero;
         _hoverScale = _originalScale * 1.05f;
         _movingScale = _originalScale * 1.05f * 1.10f;
         _mainCamera = Camera.main;
         _collider = GetComponent<BoxCollider2D>();
-        InitializeCardEffectDictionary();
-        AssignCardEffect(CardEffectType);
+        CardDisplay = GetComponent<CardDisplay>();
+        _cardEffect = CardEffectFactory.GetCardEffect(CardEffectType);
     }
 
-    private void InitializeCardEffectDictionary()
+    private void UpdatePlayed()
     {
-        _cardEffectDictionary = new Dictionary<CardEffect, ICardEffect>
+        if (_playedUpdated) return;
+        if (_placedOnArea && PlacedOpponentArea == null)
         {
-            { CardEffect.None, null },
-            { CardEffect.Pioneer, new PioneerEffect() },
-            { CardEffect.Echo, new EchoEffect() },
-            { CardEffect.Momentum, new MomentumEffect() },
-            { CardEffect.Catalyst, new CatalystEffect() },
-            { CardEffect.TriggerLeft, new TriggerLeftEffect() },
-            { CardEffect.TriggerMiddle, new TriggerMiddleEffect() },
-            { CardEffect.TriggerRight, new TriggerRightEffect() },
-            { CardEffect.Amplifier, new AmplifierEffect() }
-        };
-    }
-    private void AssignCardEffect(CardEffect cardEffect)
-    {
-        if (_cardEffectDictionary.TryGetValue(cardEffect, out _cardEffect))
-        {
-            Debug.Log($"Card effect assigned: {cardEffect}");
-        }
-        else
-        {
-            Debug.LogWarning("Effect not found in the dictionary.");
+            Played = true;
+            _playedUpdated = true;
+            //_collider.enabled = false;
         }
     }
 
+    public void TriggerCardEffect()
+    {
+        _cardEffect.ApplyEffect(this);
+    }
     public void SetOpponentArea(PlayArea area)
     {
         _placedOpponentArea = area;
@@ -129,28 +134,19 @@ public class Card : MonoBehaviour
         _originalPosition = position;
     }
 
-    private void OnMouseDown()
-    {
-        if (Played || !EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this)) return;
-        AdjustChildSortingOrder(2);
-        _offset = transform.position - GetMouseWorldPosition();
-        _isDragging = true;
-        KillTweens();
-        transform.DOScale(_movingScale, scaleDuration).SetEase(Ease.OutSine);
-    }
     private void ShowCardTooltip()
     {
         if (_currentTooltip != null) return;
 
-        _currentTooltip = Instantiate(CardTooltipPrefab, transform);
+        _currentTooltip = Instantiate(CardTooltipPrefab, _cardVisual.transform);
         _currentTooltip.transform.localPosition = _tooltipOffset;
 
         TextMeshProUGUI tooltipText = _currentTooltip.GetComponentInChildren<TextMeshProUGUI>();
         if (tooltipText != null)
         {
-            string cardName = GetComponent<CardDisplay>().CharacterName;
-            int energy = GetComponent<CardDisplay>().Energy; 
-            tooltipText.text = $"Name: {cardName}\nEnergy: {energy}\nType: {CardClassType}";
+            string description = CardEffectDescriptions.GetDescription(CardEffectType);
+            tooltipText.text = $"{AddSpacesToPascalCase(CardTriggerType.ToString())}\n\n" +
+                   $"{description}";
         }
     }
     private void HideCardTooltip()
@@ -161,23 +157,18 @@ public class Card : MonoBehaviour
             _currentTooltip = null;
         }
     }
-
-    private void OnMouseDrag()
+    public string AddSpacesToPascalCase(string text)
     {
-        if (!_isDragging || Played || !EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this)) return;
-
-        Vector3 targetPosition = GetMouseWorldPosition() + _offset;
-        targetPosition.z = transform.position.z;
-        transform.position = targetPosition;
-
-        if (Shadow != null)
-        {
-            Vector3 shadowTargetPosition = targetPosition;
-            shadowTargetPosition.x += (transform.position.x > 0 ? 1 : -1) * shadowOffsetXFactor;
-            shadowTargetPosition.y += shadowOffsetY;
-            shadowTargetPosition.z = transform.position.z + 0.1f;
-            Shadow.transform.position = shadowTargetPosition;
-        }
+        return Regex.Replace(text, "(\\B[A-Z])", " $1");
+    }
+    private void OnMouseDown()
+    {
+        if (Played || !EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this)) return;
+        AdjustChildSortingOrder(2);
+        _offset = transform.position - GetMouseWorldPosition();
+        _isDragging = true;
+        KillTweens();
+        _cardVisual.transform.DOScale(_movingScale, scaleDuration).SetEase(Ease.OutSine);
     }
 
     private void OnMouseUp()
@@ -192,7 +183,7 @@ public class Card : MonoBehaviour
             if (!_placedOnArea)
             {
                 _placedOnArea = true;
-                EnergyManager.Instance.DecreaseEnergy(GetComponent<CardDisplay>().Energy, player:true);
+                EnergyManager.Instance.DecreaseEnergy(GetComponent<CardDisplay>().Energy, player: true);
             }
             HandlePlayAreaPlacement();
         }
@@ -201,9 +192,53 @@ public class Card : MonoBehaviour
             if (_placedOnArea)
             {
                 _placedOnArea = false;
-                EnergyManager.Instance.IncreaseEnergy(GetComponent<CardDisplay>().Energy, player:true);
+                _placedArea.RemoveCard(this);
+                _placedArea = null;
+                EnergyManager.Instance.IncreaseEnergy(GetComponent<CardDisplay>().Energy, player: true);
             }
             ResetCardToOriginalPosition();
+        }
+    }
+
+    private void OnMouseEnter()
+    {
+        Debug.Log("OnMouseEnter");
+        if (!_isDragging && !_isHovered)
+        {
+            _isHovered = true;
+            ShowCardTooltip();
+            if (EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this) && !Played)
+                StartHoverEffect();
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        Debug.Log("OnMouseExit" + "IsDragging:" + _isDragging + " IsHovered:" + _isHovered);
+        if (!_isDragging && _isHovered)
+        {
+            _isHovered = false;
+            HideCardTooltip();
+            if (EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this) && !Played)
+                StopHoverEffect();
+        }
+    }
+
+    private void OnMouseDrag()
+    {
+        if (!_isDragging || Played || !EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this)) return;
+
+        Vector3 targetPosition = GetMouseWorldPosition() + _offset;
+        targetPosition.z = transform.position.z;
+        transform.position = targetPosition;
+
+        if (Shadow != null)
+        {
+            Vector3 shadowTargetPosition = targetPosition;
+            shadowTargetPosition.x += (_cardVisual.transform.position.x > 0 ? 1 : -1) * shadowOffsetXFactor;
+            shadowTargetPosition.y += shadowOffsetY;
+            shadowTargetPosition.z = _cardVisual.transform.position.z + 0.1f;
+            Shadow.transform.position = shadowTargetPosition;
         }
     }
     private void AdjustChildSortingOrder(int orderOffset)
@@ -282,46 +317,25 @@ public class Card : MonoBehaviour
         {
             if (_isHovered)
             {
-                transform.DOScale(_hoverScale, scaleDuration).SetEase(Ease.OutSine);
+                _cardVisual.transform.DOScale(_hoverScale, scaleDuration).SetEase(Ease.OutSine);
             }
             else
             {
-                transform.DOScale(_originalScale, scaleDuration).SetEase(Ease.OutSine);
+                _cardVisual.transform.DOScale(_originalScale, scaleDuration).SetEase(Ease.OutSine);
                 KillAndNullifyTween(ref _idleTween);
                 StartIdleMovement();
             }
         });
     }
 
-    private void OnMouseOver()
-    {
-        if (!_isDragging)
-        {
-            ShowCardTooltip();
-        }
-        if (!_isDragging && !_isHovered && EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this))
-        {
-            _isHovered = true;
-            StartHoverEffect();
-        }
-    }
-
-    private void OnMouseExit()
-    {
-        HideCardTooltip();
-        if (!_isDragging && EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this))
-        {
-            _isHovered = false;
-            StopHoverEffect();
-        }
-    }
-
     public void StartHoverEffect()
     {
         if (CheckHoverConditions())
         {
+            KillTweens();
+            Debug.Log("Start Hover Effect");
             StopIdleMovement();
-            _hoverTween = transform.DOLocalRotate(new Vector3(0, 0, Random.Range(hoverRotationAngleMin, hoverRotationAngleMax)), hoverDuration)
+            _hoverTween = _cardVisual.transform.DOLocalRotate(new Vector3(0, 0, Random.Range(hoverRotationAngleMin, hoverRotationAngleMax)), hoverDuration)
                 .SetLoops(2, LoopType.Yoyo)
                 .SetEase(Ease.InOutSine)
                 .OnComplete(() => StartScaleEffect());
@@ -336,8 +350,8 @@ public class Card : MonoBehaviour
     private void StartScaleEffect()
     {
         KillTweens();
-        transform.rotation = Quaternion.identity;
-        _scaleTween = transform.DOScale(_hoverScale, scaleDuration)
+        _cardVisual.transform.rotation = Quaternion.identity;
+        _scaleTween = _cardVisual.transform.DOScale(_hoverScale, scaleDuration)
             .SetEase(Ease.OutSine)
             .OnStart(() => _hoverTween = null)
             .OnComplete(() => CheckMousePos());
@@ -353,15 +367,16 @@ public class Card : MonoBehaviour
 
     public void StopHoverEffect()
     {
+        Debug.Log("Stop Hover Effect");
         KillTweens();
-        transform.rotation = Quaternion.identity;
-        _scaleTween = transform.DOScale(_originalScale, scaleDuration).SetEase(Ease.OutSine);
+        _cardVisual.transform.rotation = Quaternion.identity;
+        _scaleTween = _cardVisual.transform.DOScale(_originalScale, scaleDuration).SetEase(Ease.OutSine);
         StartIdleMovement();
     }
 
     private void StartIdleMovement()
     {
-        _idleTween = transform.DOLocalRotate(new Vector3(idleTiltAngle, idleTiltAngle, Random.Range(idleRotationAngleMin, idleRotationAngleMax)), idleMovementDuration)
+        _idleTween = _cardVisual.transform.DOLocalRotate(new Vector3(idleTiltAngle, idleTiltAngle, Random.Range(idleRotationAngleMin, idleRotationAngleMax)), idleMovementDuration)
             .SetLoops(-1, LoopType.Yoyo)
             .SetEase(Ease.InOutSine);
     }
@@ -376,7 +391,9 @@ public class Card : MonoBehaviour
         KillAndNullifyTween(ref _hoverTween);
         KillAndNullifyTween(ref _scaleTween);
         KillAndNullifyTween(ref _idleTween);
-        KillAndNullifyTween(ref _shadowMoveTween);
+        KillAndNullifyTween(ref _shadowMoveTween); 
+        _playedUpdated = false;
+        //_collider.enabled = true;
     }
 
     private void KillAndNullifyTween(ref Tween tween)
@@ -406,30 +423,5 @@ public class Card : MonoBehaviour
         {
             _currentPlayArea = null;
         }
-    }
-    public enum CardClass
-    {
-        Basic,
-        Power,
-        Special
-    }
-
-    public enum CardTrigger
-    {
-        None,
-        OnReveal, //Apply on reveal
-        Ongoing //Apply every round
-    }
-    public enum CardEffect
-    {
-        None,
-        Pioneer, //Starts at hand
-        Echo, //Add another copy of this card to hand
-        Momentum, //Gain +3 power if you play a card here next turn
-        Catalyst, //Gain +2 power for every card placed here
-        TriggerLeft, //Gain +3 power if played in left area
-        TriggerMiddle, //Gain +3 power if played in middle area
-        TriggerRight, //Gain +3 power if played in right area
-        Amplifier //Doubles the total power of the area
     }
 }

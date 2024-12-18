@@ -164,7 +164,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1892766445716119496}
+  m_Father: {fileID: 5511563935014955716}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1892766444963800536
@@ -330,7 +330,7 @@ RectTransform:
   - {fileID: 1892766445377724092}
   - {fileID: 1892766445855140355}
   - {fileID: 1892766444987440244}
-  m_Father: {fileID: 1892766445716119496}
+  m_Father: {fileID: 5511563935014955716}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -428,7 +428,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1892766445716119496}
+  m_Father: {fileID: 5511563935014955716}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1892766445224152521
@@ -650,11 +650,7 @@ Transform:
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2775210314498634319}
-  - {fileID: 1892766445132984787}
-  - {fileID: 1892766445224152522}
-  - {fileID: 1892766444963800537}
-  - {fileID: 1892766445793127212}
+  - {fileID: 5511563935014955716}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -671,6 +667,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CardClassType: 0
+  CardTriggerType: 0
+  CardEffectType: 0
   CardTooltipPrefab: {fileID: 283386434221347318, guid: 7a8d10346f6d885488c460919fcbbb13, type: 3}
   Shadow: {fileID: 1892766445793127214}
   hoverRotationAngleMin: -6
@@ -775,7 +773,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1892766445716119496}
+  m_Father: {fileID: 5511563935014955716}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1892766445793127213
@@ -1042,6 +1040,42 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &2156577275405760260
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5511563935014955716}
+  m_Layer: 0
+  m_Name: CardVisual
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5511563935014955716
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2156577275405760260}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2775210314498634319}
+  - {fileID: 1892766445132984787}
+  - {fileID: 1892766445224152522}
+  - {fileID: 1892766444963800537}
+  - {fileID: 1892766445793127212}
+  m_Father: {fileID: 1892766445716119496}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5587272221546948494
 GameObject:
   m_ObjectHideFlags: 0
@@ -1071,7 +1105,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1892766445716119496}
+  m_Father: {fileID: 5511563935014955716}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5685956711400855300

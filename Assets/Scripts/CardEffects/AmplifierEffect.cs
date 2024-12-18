@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class AmplifierEffect : ICardEffect
 {
-    public void ApplyEffect()
+    public void ApplyEffect(Card card)
     {
-        //Doubles the total power of the area
+        //Doubles the total power of the area — On reveal
     }
 }

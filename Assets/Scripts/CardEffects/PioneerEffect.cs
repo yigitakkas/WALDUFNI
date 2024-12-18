@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PioneerEffect : ICardEffect
 {
-    public void ApplyEffect()
+    public void ApplyEffect(Card card)
     {
-        //Starts at hand
+        //Starts at hand — None
     }
 }

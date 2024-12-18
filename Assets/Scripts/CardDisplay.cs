@@ -24,10 +24,10 @@ public class CardDisplay : MonoBehaviour
 
     private void Awake()
     {
-        _cardNameObject = transform.Find("Canvas/CharacterNameText").gameObject;
-        _powerObject = transform.Find("Canvas/Damage/DamageText").gameObject;
-        _energyObject = transform.Find("Canvas/Energy/EnergyText").gameObject;
-        _overlayObject = transform.Find("Overlay").gameObject;
+        _cardNameObject = transform.Find("CardVisual/Canvas/CharacterNameText").gameObject;
+        _powerObject = transform.Find("CardVisual/Canvas/Damage/DamageText").gameObject;
+        _energyObject = transform.Find("CardVisual/Canvas/Energy/EnergyText").gameObject;
+        _overlayObject = transform.Find("CardVisual/Overlay").gameObject;
 
         if (_cardNameObject != null && _powerObject != null && _energyObject != null)
         {

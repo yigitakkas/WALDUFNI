@@ -19,8 +19,6 @@ public abstract class BasePowerBoostEffect : IBattlegroundEffect
                 CardDisplay cardDisplay = card.GetComponent<CardDisplay>();
                 cardDisplay.IncreasePower(PowerBoostAmount);
                 boostedCards.Add(card);
-
-                Debug.Log($"{GetType().Name}: {card.name} gained +{PowerBoostAmount} Power. New Power: {cardDisplay.Power}");
             }
         }
     }
