@@ -9,6 +9,12 @@ public class DeckManager : MonoBehaviour
     public List<GameObject> CardPrefabs;
     public Transform SpawnPosition;
 
+    private GameObject _playerCardParent;
+    public GameObject PlayerCardParent
+    {
+        get => _playerCardParent;
+    }
+
     [SerializeField]
     private List<GameObject> _playerDeck = new List<GameObject>();
     [SerializeField]
@@ -19,6 +25,8 @@ public class DeckManager : MonoBehaviour
     private List<GameObject> _specialCards = new List<GameObject>();
 
     private List<GameObject> _spawnedCards = new List<GameObject>();
+
+
 
     private void Awake()
     {
@@ -31,7 +39,17 @@ public class DeckManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        CreatePlayerParent();
     }
+
+    private void CreatePlayerParent()
+    {
+        if (_playerCardParent == null)
+        {
+            _playerCardParent = new GameObject("PlayerCardsContainer");
+        }
+    }
+
     private void OnEnable()
     {
         RoundManager.OnRoundEnded += SpawnRandomCards;
@@ -184,7 +202,7 @@ public class DeckManager : MonoBehaviour
     public void SpawnCard(Card card)
     {
         card.transform.position = SpawnPosition.position;
-        card.transform.SetParent(transform);
+        card.transform.SetParent(_playerCardParent.transform);
         _spawnedCards.Add(card.gameObject);
         //ArrangeCards();
     }
@@ -215,8 +233,7 @@ public class DeckManager : MonoBehaviour
 
         int randomIndex = Random.Range(0, cardList.Count);
         GameObject randomCard = cardList[randomIndex];
-        GameObject spawnedCard = Instantiate(randomCard, SpawnPosition.position, Quaternion.identity);
-        spawnedCard.transform.SetParent(transform);
+        GameObject spawnedCard = Instantiate(randomCard, SpawnPosition.position, Quaternion.identity, _playerCardParent.transform);
         _spawnedCards.Add(spawnedCard);
         cardList.RemoveAt(randomIndex);
     }

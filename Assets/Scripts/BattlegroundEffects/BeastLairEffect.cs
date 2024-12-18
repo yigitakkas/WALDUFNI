@@ -38,10 +38,12 @@ public class BeastLairEffect : IBattlegroundEffect
             if (isPlayer)
             {
                 spawnedCard.SetPlayerArea(playArea);
+                spawnedCard.transform.SetParent(DeckManager.Instance.PlayerCardParent.transform);
             }
             else
             {
                 spawnedCard.SetOpponentArea(playArea);
+                spawnedCard.transform.SetParent(OpponentManager.Instance.OpponentCardParent.transform);
             }
         }
     }

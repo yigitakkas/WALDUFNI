@@ -13,6 +13,11 @@ public class OpponentManager : MonoBehaviour
     private List<PlayArea> _opponentAreas = new List<PlayArea>();
     private PlayArea _placedArea;
     public Transform SpawnPosition;
+    private GameObject _opponentCardParent;
+    public GameObject OpponentCardParent
+    {
+        get => _opponentCardParent;
+    }
 
     [SerializeField]
     private List<GameObject> _opponentHand = new List<GameObject>();
@@ -35,6 +40,15 @@ public class OpponentManager : MonoBehaviour
             Destroy(gameObject);
         }
         FindAreas();
+        CreateOpponentParent();
+    }
+
+    private void CreateOpponentParent()
+    {
+        if (_opponentCardParent == null)
+        {
+            _opponentCardParent = new GameObject("OpponentCardsContainer");
+        }
     }
 
     void Start()
@@ -225,7 +239,7 @@ public class OpponentManager : MonoBehaviour
 
     private void PlayCardToOpponentArea(GameObject card)
     {
-        GameObject newCardObject = Instantiate(card, SpawnPosition.position, Quaternion.identity);
+        GameObject newCardObject = Instantiate(card, SpawnPosition.position, Quaternion.identity, _opponentCardParent.transform);
         Card newCard = newCardObject.GetComponent<Card>();
 
         Vector3 targetPosition = GetRandomTargetPosition(newCard);
