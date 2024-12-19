@@ -26,6 +26,7 @@ public class DeckManager : MonoBehaviour
 
     private List<GameObject> _spawnedCards = new List<GameObject>();
 
+    private List<GameObject> _pioneerCards = new List<GameObject>();
 
 
     private void Awake()
@@ -63,6 +64,7 @@ public class DeckManager : MonoBehaviour
     void Start()
     {
         CreateDeck();
+        CheckPioneer();
         SpawnRandomCards();
     }
 
@@ -85,6 +87,27 @@ public class DeckManager : MonoBehaviour
             _powerCards.Add(cardPrefab);
         else if (cardClass == CardClass.Special)
             _specialCards.Add(cardPrefab);
+    }
+
+    private void CheckPioneer()
+    {
+        foreach(GameObject gameObject in _playerDeck)
+        {
+            CardEffect cardEffect = gameObject.GetComponent<Card>().CardEffectType;
+            if (cardEffect == CardEffect.Pioneer)
+                _pioneerCards.Add(gameObject);
+        }
+        foreach(GameObject gameObject in _pioneerCards)
+        {
+            GameObject spawnedCard = Instantiate(gameObject, SpawnPosition.position, Quaternion.identity, _playerCardParent.transform);
+            _spawnedCards.Add(spawnedCard);
+            if (_basicCards.Contains(gameObject))
+                _basicCards.Remove(gameObject);
+            else if (_powerCards.Contains(gameObject))
+                _basicCards.Remove(gameObject);
+            else if (_specialCards.Contains(gameObject))
+                _basicCards.Remove(gameObject);
+        }
     }
 
     private void SpawnRandomCards()
@@ -133,7 +156,6 @@ public class DeckManager : MonoBehaviour
 
         foreach (GameObject card in cardsToRemove)
         {
-            //card.GetComponent<Card>().Played = true;
             _spawnedCards.Remove(card);
         }
     }
@@ -144,31 +166,31 @@ public class DeckManager : MonoBehaviour
         if (randomValue < 30) // %30: 3 Basic Cards
         {
             for (int i = 0; i < 3; i++)
-                AddCardToSpawn(_basicCards);
+                AddRandomCardToSpawn(_basicCards);
         }
         else if (randomValue < 70) // %40: 2 Basic, 1 Power
         {
             for (int i = 0; i < 2; i++)
-                AddCardToSpawn(_basicCards);
-            AddCardToSpawn(_powerCards);
+                AddRandomCardToSpawn(_basicCards);
+            AddRandomCardToSpawn(_powerCards);
         }
         else if (randomValue < 90) // %20: 1 Basic, 2 Power
         {
-            AddCardToSpawn(_basicCards);
+            AddRandomCardToSpawn(_basicCards);
             for (int i = 0; i < 2; i++)
-                AddCardToSpawn(_powerCards);
+                AddRandomCardToSpawn(_powerCards);
         }
         else if (randomValue < 99) // %9: 1 Basic, 1 Power, 1 Special
         {
-            AddCardToSpawn(_basicCards);
-            AddCardToSpawn(_powerCards);
-            AddCardToSpawn(_specialCards);
+            AddRandomCardToSpawn(_basicCards);
+            AddRandomCardToSpawn(_powerCards);
+            AddRandomCardToSpawn(_specialCards);
         }
         else // %1: 1 Basic, 2 Special
         {
-            AddCardToSpawn(_basicCards);
+            AddRandomCardToSpawn(_basicCards);
             for (int i = 0; i < 2; i++)
-                AddCardToSpawn(_specialCards);
+                AddRandomCardToSpawn(_specialCards);
         }
     }
 
@@ -179,17 +201,17 @@ public class DeckManager : MonoBehaviour
 
         if (randomValue < basicChance && _basicCards.Count > 0)
         {
-            AddCardToSpawn(_basicCards);
+            AddRandomCardToSpawn(_basicCards);
             cardAdded = true;
         }
         else if (randomValue < basicChance + powerChance && _powerCards.Count > 0)
         {
-            AddCardToSpawn(_powerCards);
+            AddRandomCardToSpawn(_powerCards);
             cardAdded = true;
         }
         else if (_specialCards.Count > 0)
         {
-            AddCardToSpawn(_specialCards);
+            AddRandomCardToSpawn(_specialCards);
             cardAdded = true;
         }
 
@@ -204,21 +226,20 @@ public class DeckManager : MonoBehaviour
         card.transform.position = SpawnPosition.position;
         card.transform.SetParent(_playerCardParent.transform);
         _spawnedCards.Add(card.gameObject);
-        //ArrangeCards();
     }
     private void AddFallbackCard()
     {
         if (_basicCards.Count > 0)
         {
-            AddCardToSpawn(_basicCards);
+            AddRandomCardToSpawn(_basicCards);
         }
         else if (_powerCards.Count > 0)
         {
-            AddCardToSpawn(_powerCards);
+            AddRandomCardToSpawn(_powerCards);
         }
         else if (_specialCards.Count > 0)
         {
-            AddCardToSpawn(_specialCards);
+            AddRandomCardToSpawn(_specialCards);
         }
         else
         {
@@ -226,7 +247,7 @@ public class DeckManager : MonoBehaviour
         }
     }
 
-    private void AddCardToSpawn(List<GameObject> cardList)
+    private void AddRandomCardToSpawn(List<GameObject> cardList)
     {
         if (cardList.Count == 0)
             return;

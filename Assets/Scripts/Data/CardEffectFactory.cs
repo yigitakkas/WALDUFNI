@@ -5,7 +5,7 @@ public static class CardEffectFactory
     private static readonly Dictionary<CardEffect, ICardEffect> _cardEffectDictionary = new Dictionary<CardEffect, ICardEffect>
     {
         { CardEffect.None, null },
-        { CardEffect.Pioneer, new PioneerEffect() },
+        { CardEffect.Pioneer, null },
         { CardEffect.Echo, new EchoEffect() },
         { CardEffect.Momentum, new MomentumEffect() },
         { CardEffect.Catalyst, new CatalystEffect() },
