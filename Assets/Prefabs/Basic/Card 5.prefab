@@ -170,7 +170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardClassType: 0
   CardTriggerType: 1
-  CardEffectType: 2
+  CardEffectType: 10
   CardTooltipPrefab: {fileID: 283386434221347318, guid: 7a8d10346f6d885488c460919fcbbb13, type: 3}
   Shadow: {fileID: 4390012850084903940}
   hoverRotationAngleMin: -6
@@ -197,7 +197,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterName: CARD 5
-  Energy: 2
+  Energy: 1
   Power: 3
 --- !u!61 &4390012849993468128
 BoxCollider2D:

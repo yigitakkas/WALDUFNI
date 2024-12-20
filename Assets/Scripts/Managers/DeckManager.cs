@@ -28,6 +28,8 @@ public class DeckManager : MonoBehaviour
 
     private List<GameObject> _pioneerCards = new List<GameObject>();
 
+    public GameObject SpotterCard;
+    public GameObject PhantomCard;
 
     private void Awake()
     {

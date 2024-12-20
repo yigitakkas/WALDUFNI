@@ -12,7 +12,9 @@ public static class CardEffectFactory
         { CardEffect.TriggerLeft, new TriggerLeftEffect() },
         { CardEffect.TriggerMiddle, new TriggerMiddleEffect() },
         { CardEffect.TriggerRight, new TriggerRightEffect() },
-        { CardEffect.Amplifier, new AmplifierEffect() }
+        { CardEffect.Amplifier, new AmplifierEffect() },
+        { CardEffect.Scout, new ScoutEffect() },
+        { CardEffect.Proxy, new ProxyEffect() }
     };
     public static ICardEffect GetCardEffect(CardEffect cardEffect)
     {

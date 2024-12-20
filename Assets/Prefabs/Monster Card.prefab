@@ -694,7 +694,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d91cf7a7dea7414dba00a9031656fe5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterName: CARD 3
+  CharacterName: THE MONSTER
   Energy: 1
   Power: 10
 --- !u!61 &1892766445716119498

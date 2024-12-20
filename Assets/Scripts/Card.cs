@@ -33,6 +33,7 @@ public class Card : MonoBehaviour
     private Camera _mainCamera;
     private bool _isDragging = false;
     private bool _isHovered = false;
+    private bool _roundPlaying = false;
     public GameObject Shadow;
     private Collider2D _collider;
     public bool HasReceivedBoost { get; set; } = false;
@@ -62,7 +63,7 @@ public class Card : MonoBehaviour
     public bool PlacedOnArea
     {
         get { return _placedOnArea; }
-        private set { _placedOnArea = value; }
+        set { _placedOnArea = value; }
     }
     private PlayArea _placedOpponentArea;
     public PlayArea PlacedOpponentArea => _placedOpponentArea;
@@ -76,12 +77,12 @@ public class Card : MonoBehaviour
     private void OnEnable()
     {
         RoundManager.OnRoundStarted += UpdatePlayed;
-        RoundManager.OnRoundEnded += KillTweens;
+        RoundManager.OnRoundEnded += RoundEnd;
     }
     private void OnDisable()
     {
         RoundManager.OnRoundStarted -= UpdatePlayed;
-        RoundManager.OnRoundEnded -= KillTweens;
+        RoundManager.OnRoundEnded -= RoundEnd;
     }
     private void Awake()
     {
@@ -112,11 +113,13 @@ public class Card : MonoBehaviour
             Played = true;
             _playedUpdated = true;
         }
+        _roundPlaying = true;
     }
 
     public void TriggerCardEffect()
     {
-        _cardEffect.ApplyEffect(this);
+        if(CardEffectType!=CardEffect.None)
+            _cardEffect.ApplyEffect(this);
     }
     public void SetOpponentArea(PlayArea area)
     {
@@ -162,7 +165,7 @@ public class Card : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        if (Played || !EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this)) return;
+        if (Played || !EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this) || _roundPlaying) return;
         AdjustChildSortingOrder(2);
         _offset = transform.position - GetMouseWorldPosition();
         _isDragging = true;
@@ -172,12 +175,12 @@ public class Card : MonoBehaviour
 
     private void OnMouseUp()
     {
-        if (Played || !EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this)) return;
+        if (Played || !EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this) || _roundPlaying) return;
         AdjustChildSortingOrder(-2);
         _isDragging = false;
         KillAndNullifyTween(ref _hoverTween);
 
-        if (IsCardOnPlayArea())
+        if (IsCardOnPlayArea() && _currentPlayArea.CheckSnapPointsAvailability())
         {
             if (!_placedOnArea)
             {
@@ -205,7 +208,7 @@ public class Card : MonoBehaviour
         {
             _isHovered = true;
             ShowCardTooltip();
-            if (EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this) && !Played)
+            if (EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this) && !Played && !_roundPlaying)
                 StartHoverEffect();
         }
     }
@@ -216,14 +219,14 @@ public class Card : MonoBehaviour
         {
             _isHovered = false;
             HideCardTooltip();
-            if (EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this) && !Played)
+            if (EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this) && !Played && !_roundPlaying)
                 StopHoverEffect();
         }
     }
 
     private void OnMouseDrag()
     {
-        if (!_isDragging || Played || !EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this)) return;
+        if (!_isDragging || Played || !EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this) || _roundPlaying) return;
 
         Vector3 targetPosition = GetMouseWorldPosition() + _offset;
         targetPosition.z = transform.position.z;
@@ -379,6 +382,12 @@ public class Card : MonoBehaviour
     private void StopIdleMovement()
     {
         KillAndNullifyTween(ref _idleTween);
+    }
+
+    private void RoundEnd()
+    {
+        _roundPlaying = false;
+        KillTweens();
     }
 
     private void KillTweens()

@@ -31,6 +31,7 @@ public class PlayArea : MonoBehaviour
         public int PlayedRound { get; set; }
     }
     private List<MomentumData> _momentumCards = new List<MomentumData>();
+    private bool _amplifierEffect = false;
     private void OnEnable()
     {
         RoundManager.OnRoundEnded += ResetPlayedHere;
@@ -173,7 +174,18 @@ public class PlayArea : MonoBehaviour
         {
             sum += card.GetComponent<CardDisplay>().Power;
         }
+        if (_amplifierEffect)
+        {
+
+            _amplifierEffect = !_amplifierEffect;
+            return sum * 2;
+        }
         return sum;
+    }
+
+    public void SetAmplified()
+    {
+        _amplifierEffect = true;
     }
 
     public bool CheckSnapPointsAvailability()

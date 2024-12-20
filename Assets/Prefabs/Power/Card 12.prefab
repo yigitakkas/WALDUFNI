@@ -1048,7 +1048,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardClassType: 1
   CardTriggerType: 1
-  CardEffectType: 5
+  CardEffectType: 4
   CardTooltipPrefab: {fileID: 283386434221347318, guid: 7a8d10346f6d885488c460919fcbbb13, type: 3}
   Shadow: {fileID: 7565988736680415332}
   hoverRotationAngleMin: -6

@@ -18,14 +18,13 @@ public class BeastLairEffect : IBattlegroundEffect
     {
         PlayArea playArea = RoundManager.Instance.GetAreaWithIndex(battleground.Index, isPlayer);
 
-        if (playArea.PlayedHereThisRound)
+        if (playArea.PlayedHereThisRound && playArea.CheckSnapPointsAvailability())
         {
             GameObject monsterCard = battleground.MonsterCard;
             Transform spawnPoint = battleground.MonsterCardSpawnPoint;
 
             // Kart oluþtur ve pozisyonla
             GameObject cardObject = GameObject.Instantiate(monsterCard, spawnPoint.position, Quaternion.identity);
-            cardObject.transform.SetParent(playArea.transform);
             Card spawnedCard = cardObject.GetComponent<Card>();
 
             Vector3 targetPosition = playArea.GetSnapPosition(spawnedCard);
@@ -34,6 +33,7 @@ public class BeastLairEffect : IBattlegroundEffect
             // Kartý alana yerleþtir ve özelliklerini ayarla
             playArea.PlaceCard(spawnedCard);
             spawnedCard.Played = true;
+            spawnedCard.PlacedOnArea = true;
 
             if (isPlayer)
             {

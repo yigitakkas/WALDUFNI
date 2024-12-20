@@ -3686,6 +3686,8 @@ MonoBehaviour:
   _basicCards: []
   _powerCards: []
   _specialCards: []
+  SpotterCard: {fileID: 8848255253426761436, guid: 165c0b64ac49ac34baab8e8fe9fe3a3a, type: 3}
+  PhantomCard: {fileID: 542953868452885944, guid: 869a65491a8002f41a3e21e775017199, type: 3}
 --- !u!1 &1445937047
 GameObject:
   m_ObjectHideFlags: 0
