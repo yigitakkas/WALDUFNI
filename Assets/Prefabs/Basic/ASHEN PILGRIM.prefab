@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2212027089434125948}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CardVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8952736301099510473}
   - component: {fileID: 4679813426831733732}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Overlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -132,9 +132,9 @@ GameObject:
   - component: {fileID: 4390012849993468131}
   - component: {fileID: 4390012849993468128}
   - component: {fileID: -6671039826196281833}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ASHEN PILGRIM
-  m_TagString: Untagged
+  m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -186,6 +186,7 @@ MonoBehaviour:
   idleRotationAngleMax: 2
   idleTiltAngle: 1
   idleMovementDuration: 1
+  EchoPrefab: {fileID: 2429384022565889698, guid: 64a1bc190ce85af46a6ac63af17e865f, type: 3}
 --- !u!61 &4390012849993468128
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -243,7 +244,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4390012850084903942}
   - component: {fileID: 4390012850084903943}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -328,7 +329,7 @@ GameObject:
   - component: {fileID: 4390012850115342753}
   - component: {fileID: 4390012850115342755}
   - component: {fileID: 4390012850115342752}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: EnergyText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -463,7 +464,7 @@ GameObject:
   - component: {fileID: 4390012850124078377}
   - component: {fileID: 4390012850124078379}
   - component: {fileID: 4390012850124078376}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Energy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -540,7 +541,7 @@ GameObject:
   - component: {fileID: 4390012851157792679}
   - component: {fileID: 4390012851157792673}
   - component: {fileID: 4390012851157792678}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DamageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -676,7 +677,7 @@ GameObject:
   - component: {fileID: 4390012851551266554}
   - component: {fileID: 4390012851551266555}
   - component: {fileID: 4390012851551266552}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -777,7 +778,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4390012851795761888}
   - component: {fileID: 4390012851795761891}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -862,7 +863,7 @@ GameObject:
   - component: {fileID: 4390012851963792222}
   - component: {fileID: 4390012851963792216}
   - component: {fileID: 4390012851963792217}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Damage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -938,7 +939,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4390012852055470835}
   - component: {fileID: 4390012852055470834}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CardBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1023,7 +1024,7 @@ GameObject:
   - component: {fileID: 4067833181785336509}
   - component: {fileID: 3127557901017345218}
   - component: {fileID: 1011708443492058438}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CharacterNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}

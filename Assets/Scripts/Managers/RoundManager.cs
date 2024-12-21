@@ -10,6 +10,7 @@ public class RoundManager : MonoBehaviour
 
     public static event Action OnRoundStarted;
     public static event Action OnRoundEnded;
+    public static event Action GameEnded;
 
     public int CurrentRound { get; private set; }
 
@@ -29,6 +30,7 @@ public class RoundManager : MonoBehaviour
         get => _opponentPlayAreas;
         private set => _opponentPlayAreas = value;
     }
+
 
     private void Awake()
     {
@@ -67,22 +69,30 @@ public class RoundManager : MonoBehaviour
     }
     private IEnumerator HandleRoundFlow()
     {
-        OnRoundStarted?.Invoke();
-        yield return new WaitForSeconds(0.5f);//Opponent kart ekleme animasyon süresi
+        if (CurrentRound < 6)
+        {
+            OnRoundStarted?.Invoke();
+            yield return new WaitForSeconds(0.5f);//Opponent kart ekleme animasyon süresi
 
-        ApplyCardEffects(); 
-        yield return new WaitForSeconds(0.5f); //Önce kart efektleri, sonra battleground efektleri
+            ApplyCardEffects();
+            yield return new WaitForSeconds(0.5f); //Önce kart efektleri, sonra battleground efektleri
 
-        BattlegroundManager.Instance.ApplyBattlegroundEffects();
-        yield return null;
+            BattlegroundManager.Instance.ApplyBattlegroundEffects();
+            yield return null;
 
-        ScoreManager.Instance.CalculatePower(_playerPlayAreas, _opponentPlayAreas);
-        yield return new WaitForSeconds(0.5f);
+            ScoreManager.Instance.CalculatePower(_playerPlayAreas, _opponentPlayAreas);
+            yield return new WaitForSeconds(0.5f);
 
-        ScoreManager.Instance.UpdateUI();
-        CurrentRound++;
-        yield return new WaitForSeconds(1f);
-        OnRoundEnded?.Invoke();
+            ScoreManager.Instance.UpdateUI();
+            CurrentRound++;
+            yield return new WaitForSeconds(1f);
+            OnRoundEnded?.Invoke();
+        }
+        if (CurrentRound == 5)
+        {
+            //Kazananý Yazdýr.
+            GameEnded?.Invoke();
+        }
     }
 
 

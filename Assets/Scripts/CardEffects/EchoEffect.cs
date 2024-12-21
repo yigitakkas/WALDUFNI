@@ -10,8 +10,7 @@ public class EchoEffect : ICardEffect
         //Add another copy of this card to hand   — On reveal
         if (card.PlacedOpponentArea != null)
         {
-            GameObject cardPrefab = CharacterManager.Instance.GetCharacterPrefab(card.CharacterName);
-            OpponentManager.Instance.SpawnCard(cardPrefab);
+            OpponentManager.Instance.SpawnCard(OpponentManager.Instance.EchoCard);
             Debug.Log($"{card.name} has been duplicated and added to the opponent's hand.");
         }
         else if (card.PlacedOpponentArea == null && card.PlacedArea != null)

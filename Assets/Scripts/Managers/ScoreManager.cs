@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -12,16 +14,34 @@ public class ScoreManager : MonoBehaviour
     public TMP_Text AreaOneOpponentScore;
     public TMP_Text AreaTwoOpponentScore;
     public TMP_Text AreaThreeOpponentScore;
-    private Dictionary<int, int> playerScores = new Dictionary<int, int>();
-    private Dictionary<int, int> opponentScores = new Dictionary<int, int>();
+    private Dictionary<int, int> _playerScores = new Dictionary<int, int>();
+    private Dictionary<int, int> _opponentScores = new Dictionary<int, int>();
     private HashSet<int> manuallySetZones = new HashSet<int>();
+    public GameObject PopUpPanel;
+    public TMP_Text WonText;
+    public Button NextLevelButton;
+    public Button TryAgainButton;
+    public GameObject BlockerPanel;
+    public Button PlayButton;
 
+    private void OnEnable()
+    {
+        RoundManager.OnRoundStarted += DeactivateButton;
+        RoundManager.OnRoundEnded += ActivateButton;
+        RoundManager.GameEnded += DefineWinner;
+    }
+
+    private void OnDisable()
+    {
+        RoundManager.OnRoundStarted -= DeactivateButton;
+        RoundManager.OnRoundEnded -= ActivateButton;
+        RoundManager.GameEnded -= DefineWinner;
+    }
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -29,28 +49,28 @@ public class ScoreManager : MonoBehaviour
         }
         for (int i = 1; i <= 3; i++)
         {
-            playerScores[i] = 0;
-            opponentScores[i] = 0;
+            _playerScores[i] = 0;
+            _opponentScores[i] = 0;
         }
         UpdateUI();
     }
     public void CalculatePower(List<PlayArea> playerAreas, List<PlayArea> opponentAreas)
     {
-        ResetScores(playerScores);
-        ResetScores(opponentScores);
+        ResetScores(_playerScores);
+        ResetScores(_opponentScores);
 
         foreach (PlayArea area in playerAreas)
         {
             if (area.PlacedAmount() > 0)
             {
-                playerScores[area.Index] += area.PlacedCardsPower();
+                _playerScores[area.Index] += area.PlacedCardsPower();
             }
         }
         foreach (PlayArea area in opponentAreas)
         {
             if (area.PlacedAmount() > 0)
             {
-                opponentScores[area.Index] += area.PlacedCardsPower();
+                _opponentScores[area.Index] += area.PlacedCardsPower();
             }
         }
     }
@@ -58,17 +78,17 @@ public class ScoreManager : MonoBehaviour
 
     public void UpdateUI()
     {
-        AreaOnePlayerScore.text = playerScores[1].ToString();
-        AreaTwoPlayerScore.text = playerScores[2].ToString();
-        AreaThreePlayerScore.text = playerScores[3].ToString();
+        AreaOnePlayerScore.text = _playerScores[1].ToString();
+        AreaTwoPlayerScore.text = _playerScores[2].ToString();
+        AreaThreePlayerScore.text = _playerScores[3].ToString();
 
-        AreaOneOpponentScore.text = opponentScores[1].ToString();
-        AreaTwoOpponentScore.text = opponentScores[2].ToString();
-        AreaThreeOpponentScore.text = opponentScores[3].ToString();
+        AreaOneOpponentScore.text = _opponentScores[1].ToString();
+        AreaTwoOpponentScore.text = _opponentScores[2].ToString();
+        AreaThreeOpponentScore.text = _opponentScores[3].ToString();
 
-        CompareAndSetTextColor(AreaOnePlayerScore, AreaOneOpponentScore, playerScores[1], opponentScores[1]);
-        CompareAndSetTextColor(AreaTwoPlayerScore, AreaTwoOpponentScore, playerScores[2], opponentScores[2]);
-        CompareAndSetTextColor(AreaThreePlayerScore, AreaThreeOpponentScore, playerScores[3], opponentScores[3]);
+        CompareAndSetTextColor(AreaOnePlayerScore, AreaOneOpponentScore, _playerScores[1], _opponentScores[1]);
+        CompareAndSetTextColor(AreaTwoPlayerScore, AreaTwoOpponentScore, _playerScores[2], _opponentScores[2]);
+        CompareAndSetTextColor(AreaThreePlayerScore, AreaThreeOpponentScore, _playerScores[3], _opponentScores[3]);
     }
 
     private void ResetScores(Dictionary<int, int> scores)
@@ -106,13 +126,120 @@ public class ScoreManager : MonoBehaviour
     {
         if (player)
         {
-            playerScores[index] = amount;
+            _playerScores[index] = amount;
         }
         else
         {
-            opponentScores[index] = amount;
+            _opponentScores[index] = amount;
         }
         manuallySetZones.Add(index);
+    }
+
+    private void DefineWinner()
+    {
+        int playerWonAmount = 0;
+        int opponentWonAmount = 0;
+
+        CompareScores(_playerScores[1], _opponentScores[1], ref playerWonAmount, ref opponentWonAmount);
+        CompareScores(_playerScores[2], _opponentScores[2], ref playerWonAmount, ref opponentWonAmount);
+        CompareScores(_playerScores[3], _opponentScores[3], ref playerWonAmount, ref opponentWonAmount);
+
+        if (playerWonAmount > opponentWonAmount)
+            PlayerWon();
+        else if (playerWonAmount < opponentWonAmount)
+            OpponentWon();
+        else if (playerWonAmount == opponentWonAmount)
+            DefineWinnerInDraw();
+    }
+
+    private void CompareScores(int playerScore, int opponentScore, ref int playerWonAmount, ref int opponentWonAmount)
+    {
+        if (playerScore > opponentScore)
+        {
+            playerWonAmount++;
+        }
+        else if (playerScore < opponentScore)
+        {
+            opponentWonAmount++;
+        }
+    }
+
+    private void PlayerWon()
+    {
+        ShowPopup("PLAYER WON!");
+    }
+
+    private void OpponentWon()
+    {
+        ShowPopup("OPPONENT WON!");
+    }
+
+    private void DefineWinnerInDraw()
+    {
+        int playerTotalCardPower = 0;
+
+        foreach (var score in _playerScores.Values)
+        {
+            playerTotalCardPower += score;
+        }
+
+        int opponentTotalCardPower = 0;
+
+        foreach (var score in _playerScores.Values)
+        {
+            opponentTotalCardPower += score;
+        }
+
+        if (playerTotalCardPower > opponentTotalCardPower)
+            PlayerWon();
+        else if (playerTotalCardPower <= opponentTotalCardPower)
+            OpponentWon();
+    }
+
+    private void ShowPopup(string Message)
+    {
+        BlockerPanel.SetActive(true);
+        PopUpPanel.SetActive(true);
+        if (Message == "PLAYER WON!")
+        {
+            WonText.color = Color.blue;
+            NextLevelButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            WonText.color = Color.red;
+            TryAgainButton.gameObject.SetActive(true);
+        }
+        WonText.text = Message;
+    }
+
+    private void HidePopup()
+    {
+        WonText.text = "";
+        WonText.color = Color.white;
+        BlockerPanel.SetActive(false);
+        PopUpPanel.SetActive(false);
+        NextLevelButton.gameObject.SetActive(false);
+        TryAgainButton.gameObject.SetActive(false);
+    }
+
+    public void NextLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void TryAgain()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void ActivateButton()
+    {
+        PlayButton.interactable = true;
+    }
+    private void DeactivateButton()
+    {
+        PlayButton.interactable = false;
     }
 }
 

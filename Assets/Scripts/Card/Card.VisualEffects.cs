@@ -3,6 +3,7 @@ using DG.Tweening;
 
 public partial class Card
 {
+
     private void UpdatePlayed()
     {
         if (_playedUpdated) return;
@@ -12,12 +13,6 @@ public partial class Card
             _playedUpdated = true;
         }
         _roundPlaying = true;
-    }
-
-    public void TriggerCardEffect()
-    {
-        if (CardEffectType != CardEffect.None && CardEffectType != CardEffect.Pioneer)
-            _cardEffect.ApplyEffect(this);
     }
 
     public void SetOpponentArea(PlayArea area)

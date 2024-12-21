@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3134515693348400854}
   - component: {fileID: 2155722552363726027}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Overlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 1596111400040807259}
   - component: {fileID: 1596111400040807261}
   - component: {fileID: 1596111400040807258}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DamageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -229,7 +229,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1596111400283979279}
   - component: {fileID: 1596111400283979278}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CardBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -314,7 +314,7 @@ GameObject:
   - component: {fileID: 1596111400310753186}
   - component: {fileID: 1596111400310753188}
   - component: {fileID: 1596111400310753189}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Damage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -392,7 +392,7 @@ GameObject:
   - component: {fileID: 1596111400451058182}
   - component: {fileID: 1596111400451058183}
   - component: {fileID: 1596111400451058180}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -493,7 +493,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1596111400544327196}
   - component: {fileID: 1596111400544327199}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -579,9 +579,9 @@ GameObject:
   - component: {fileID: 1596111400999584799}
   - component: {fileID: 1596111400999584796}
   - component: {fileID: -6997300919517258275}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: THE WARDEN
-  m_TagString: Untagged
+  m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -633,6 +633,7 @@ MonoBehaviour:
   idleRotationAngleMax: 2
   idleTiltAngle: 1
   idleMovementDuration: 1
+  EchoPrefab: {fileID: 2429384022565889698, guid: 64a1bc190ce85af46a6ac63af17e865f, type: 3}
 --- !u!61 &1596111400999584796
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -690,7 +691,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1596111401116446970}
   - component: {fileID: 1596111401116446971}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -775,7 +776,7 @@ GameObject:
   - component: {fileID: 1596111401137566165}
   - component: {fileID: 1596111401137566167}
   - component: {fileID: 1596111401137566164}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Energy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -852,7 +853,7 @@ GameObject:
   - component: {fileID: 1596111401146695005}
   - component: {fileID: 1596111401146695007}
   - component: {fileID: 1596111401146695004}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: EnergyText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -987,7 +988,7 @@ GameObject:
   - component: {fileID: 6102812954148788337}
   - component: {fileID: 4452559211843869722}
   - component: {fileID: 7769245445822532042}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CharacterNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1120,7 +1121,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 182257127221925546}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CardVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}

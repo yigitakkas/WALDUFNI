@@ -28,12 +28,13 @@ public class OpponentManager : MonoBehaviour
     [SerializeField]
     private List<GameObject> _specialCards = new List<GameObject>();
 
+    public GameObject EchoCard;
+
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {

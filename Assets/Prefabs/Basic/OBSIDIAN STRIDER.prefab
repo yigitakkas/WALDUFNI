@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6358675368911792854}
   - component: {fileID: 1705170306425126233}
   - component: {fileID: 5836046824944519353}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CharacterNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -145,7 +145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 299186163956651134}
   - component: {fileID: 299186163956651135}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -230,7 +230,7 @@ GameObject:
   - component: {fileID: 299186163991353817}
   - component: {fileID: 299186163991353819}
   - component: {fileID: 299186163991353816}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: EnergyText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -365,7 +365,7 @@ GameObject:
   - component: {fileID: 299186164016305489}
   - component: {fileID: 299186164016305491}
   - component: {fileID: 299186164016305488}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Energy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -443,9 +443,9 @@ GameObject:
   - component: {fileID: 299186164146774171}
   - component: {fileID: 299186164146774168}
   - component: {fileID: -259347365457161592}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: OBSIDIAN STRIDER
-  m_TagString: Untagged
+  m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -497,6 +497,7 @@ MonoBehaviour:
   idleRotationAngleMax: 2
   idleTiltAngle: 1
   idleMovementDuration: 1
+  EchoPrefab: {fileID: 2429384022565889698, guid: 64a1bc190ce85af46a6ac63af17e865f, type: 3}
 --- !u!61 &299186164146774168
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -554,7 +555,7 @@ GameObject:
   m_Component:
   - component: {fileID: 299186164592767640}
   - component: {fileID: 299186164592767643}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -640,7 +641,7 @@ GameObject:
   - component: {fileID: 299186164637634178}
   - component: {fileID: 299186164637634179}
   - component: {fileID: 299186164637634176}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -742,7 +743,7 @@ GameObject:
   - component: {fileID: 299186164762370854}
   - component: {fileID: 299186164762370848}
   - component: {fileID: 299186164762370849}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Damage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -818,7 +819,7 @@ GameObject:
   m_Component:
   - component: {fileID: 299186164869798539}
   - component: {fileID: 299186164869798538}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CardBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -903,7 +904,7 @@ GameObject:
   - component: {fileID: 299186165029019615}
   - component: {fileID: 299186165029019609}
   - component: {fileID: 299186165029019614}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DamageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1036,7 +1037,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5711322715684182750}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CardVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1073,7 +1074,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3048967545126884323}
   - component: {fileID: 4336886660548901159}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Overlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}

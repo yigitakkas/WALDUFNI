@@ -44,6 +44,8 @@ public class Battleground : MonoBehaviour
     public HashSet<Card> AllCards = new HashSet<Card>();
     public List<Card> AllCardsList = new List<Card>();
 
+    private Color _targetColor = new Color32(255, 255, 255, 255);
+    private float _colorChangeDuration = 0.5f;
 
     private void Start()
     {
@@ -51,15 +53,13 @@ public class Battleground : MonoBehaviour
     }
     public void ActivateBattleground(BattlegroundEffect battlegroundEffect, Sprite sprite, string description, string name)
     {
-        BgImage.enabled = true;
         BgImage.sprite = sprite;
+        BgImage.DOColor(_targetColor, _colorChangeDuration);
         BattlegroundEffect = battlegroundEffect;
         _activated = true;
 
         Name.text = name;
-        Name.gameObject.SetActive(true);
         Description.text = description;
-        Description.gameObject.SetActive(true);
     }
 
     public void ApplyEffect()

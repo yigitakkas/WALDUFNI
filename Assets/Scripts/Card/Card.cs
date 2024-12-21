@@ -15,6 +15,7 @@ public partial class Card : MonoBehaviour
     public CardEffect CardEffectType;
     private ICardEffect _cardEffect;
     private Color _originalColor;
+    private BoxCollider2D _collider;
 
     // Kart Durumlarý
     private bool _playedUpdated = false;
@@ -96,18 +97,18 @@ public partial class Card : MonoBehaviour
     private Vector3 _hoverScale;
     private Vector3 _movingScale;
 
-
-
     private void OnEnable()
     {
         RoundManager.OnRoundStarted += UpdatePlayed;
         RoundManager.OnRoundEnded += RoundEnd;
+        RoundManager.GameEnded += DisableCollider;
     }
 
     private void OnDisable()
     {
         RoundManager.OnRoundStarted -= UpdatePlayed;
         RoundManager.OnRoundEnded -= RoundEnd;
+        RoundManager.GameEnded -= DisableCollider;
     }
 
     private void Awake()
@@ -129,6 +130,18 @@ public partial class Card : MonoBehaviour
         _hoverScale = _originalScale * 1.05f;
         _movingScale = _originalScale * 1.05f * 1.10f;
         _mainCamera = Camera.main;
+        _collider = GetComponent<BoxCollider2D>();
         _cardEffect = CardEffectFactory.GetCardEffect(CardEffectType);
+    }
+
+    public void TriggerCardEffect()
+    {
+        if (CardEffectType != CardEffect.None && CardEffectType != CardEffect.Pioneer)
+            _cardEffect.ApplyEffect(this);
+    }
+
+    private void DisableCollider()
+    {
+        _collider.enabled = false;
     }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 980373296212102192}
   - component: {fileID: 980373296212102198}
   - component: {fileID: 980373296212102193}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DamageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -145,7 +145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 980373296455534948}
   - component: {fileID: 980373296455534949}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CardBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -230,7 +230,7 @@ GameObject:
   - component: {fileID: 980373296482300105}
   - component: {fileID: 980373296482300111}
   - component: {fileID: 980373296482300110}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Damage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -306,7 +306,7 @@ GameObject:
   m_Component:
   - component: {fileID: 980373296715866487}
   - component: {fileID: 980373296715866484}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -392,7 +392,7 @@ GameObject:
   - component: {fileID: 980373296894991725}
   - component: {fileID: 980373296894991724}
   - component: {fileID: 980373296894991727}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -493,7 +493,7 @@ GameObject:
   m_Component:
   - component: {fileID: 980373297287743377}
   - component: {fileID: 980373297287743376}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -578,7 +578,7 @@ GameObject:
   - component: {fileID: 980373297322445366}
   - component: {fileID: 980373297322445364}
   - component: {fileID: 980373297322445367}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: EnergyText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -713,7 +713,7 @@ GameObject:
   - component: {fileID: 980373297346840254}
   - component: {fileID: 980373297346840252}
   - component: {fileID: 980373297346840255}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Energy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -791,9 +791,9 @@ GameObject:
   - component: {fileID: 980373297485738868}
   - component: {fileID: 980373297485738871}
   - component: {fileID: -2129537122210621805}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CINDERFOOT ROVER
-  m_TagString: Untagged
+  m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -845,6 +845,7 @@ MonoBehaviour:
   idleRotationAngleMax: 2
   idleTiltAngle: 1
   idleMovementDuration: 1
+  EchoPrefab: {fileID: 2429384022565889698, guid: 64a1bc190ce85af46a6ac63af17e865f, type: 3}
 --- !u!61 &980373297485738871
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -902,7 +903,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6857339845468701960}
   - component: {fileID: 2523634620234751833}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Overlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -987,7 +988,7 @@ GameObject:
   - component: {fileID: 7283987676317963005}
   - component: {fileID: 6563139809596722058}
   - component: {fileID: 613267499052809949}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CharacterNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1120,7 +1121,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1538144045555412555}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CardVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}

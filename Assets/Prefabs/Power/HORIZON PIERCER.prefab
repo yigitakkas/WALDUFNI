@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5501084798584846031}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CardVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1217000898677462404}
   - component: {fileID: 1217000898677462405}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 1217000898706674859}
   - component: {fileID: 1217000898706674857}
   - component: {fileID: 1217000898706674858}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Energy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 1217000898714392611}
   - component: {fileID: 1217000898714392609}
   - component: {fileID: 1217000898714392610}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: EnergyText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -344,9 +344,9 @@ GameObject:
   - component: {fileID: 1217000898844647777}
   - component: {fileID: 1217000898844647778}
   - component: {fileID: -2104857252347848153}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HORIZON PIERCER
-  m_TagString: Untagged
+  m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -398,6 +398,7 @@ MonoBehaviour:
   idleRotationAngleMax: 2
   idleTiltAngle: 1
   idleMovementDuration: 1
+  EchoPrefab: {fileID: 2429384022565889698, guid: 64a1bc190ce85af46a6ac63af17e865f, type: 3}
 --- !u!61 &1217000898844647778
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -456,7 +457,7 @@ GameObject:
   - component: {fileID: 1217000899753106981}
   - component: {fileID: 1217000899753106979}
   - component: {fileID: 1217000899753106980}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DamageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -591,7 +592,7 @@ GameObject:
   - component: {fileID: 1217000900020019932}
   - component: {fileID: 1217000900020019930}
   - component: {fileID: 1217000900020019931}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Damage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -667,7 +668,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1217000900130757489}
   - component: {fileID: 1217000900130757488}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CardBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -751,7 +752,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1217000900390433634}
   - component: {fileID: 1217000900390433633}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -837,7 +838,7 @@ GameObject:
   - component: {fileID: 1217000900433366904}
   - component: {fileID: 1217000900433366905}
   - component: {fileID: 1217000900433366906}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -939,7 +940,7 @@ GameObject:
   - component: {fileID: 5494531088796692436}
   - component: {fileID: 1641154108532764233}
   - component: {fileID: 2538941734816171570}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CharacterNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1073,7 +1074,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6836643657592039110}
   - component: {fileID: 7258991395485688044}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Overlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}

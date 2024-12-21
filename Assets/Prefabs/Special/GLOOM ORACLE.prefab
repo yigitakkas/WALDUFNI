@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8309107900339879094}
   - component: {fileID: 3602311164902496557}
   - component: {fileID: 2747370585203971395}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CharacterNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -145,7 +145,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3712071269798105738}
   - component: {fileID: 3582226303875263384}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Overlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -228,7 +228,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6207207191641163553}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CardVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -266,7 +266,7 @@ GameObject:
   - component: {fileID: 8782319863223251229}
   - component: {fileID: 8782319863223251227}
   - component: {fileID: 8782319863223251228}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DamageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -400,7 +400,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8782319863658978394}
   - component: {fileID: 8782319863658978393}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -486,7 +486,7 @@ GameObject:
   - component: {fileID: 8782319863905607744}
   - component: {fileID: 8782319863905607745}
   - component: {fileID: 8782319863905607746}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -587,7 +587,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8782319863936185417}
   - component: {fileID: 8782319863936185416}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CardBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -672,7 +672,7 @@ GameObject:
   - component: {fileID: 8782319864029908452}
   - component: {fileID: 8782319864029908450}
   - component: {fileID: 8782319864029908451}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Damage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -749,7 +749,7 @@ GameObject:
   - component: {fileID: 8782319864256936851}
   - component: {fileID: 8782319864256936849}
   - component: {fileID: 8782319864256936850}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Energy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -826,7 +826,7 @@ GameObject:
   - component: {fileID: 8782319864265701147}
   - component: {fileID: 8782319864265701145}
   - component: {fileID: 8782319864265701146}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: EnergyText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -960,7 +960,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8782319864298240700}
   - component: {fileID: 8782319864298240701}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1046,9 +1046,9 @@ GameObject:
   - component: {fileID: 8782319864387554905}
   - component: {fileID: 8782319864387554906}
   - component: {fileID: -8392893633745692893}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: GLOOM ORACLE
-  m_TagString: Untagged
+  m_TagString: Card
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1100,6 +1100,7 @@ MonoBehaviour:
   idleRotationAngleMax: 2
   idleTiltAngle: 1
   idleMovementDuration: 1
+  EchoPrefab: {fileID: 2429384022565889698, guid: 64a1bc190ce85af46a6ac63af17e865f, type: 3}
 --- !u!61 &8782319864387554906
 BoxCollider2D:
   m_ObjectHideFlags: 0
