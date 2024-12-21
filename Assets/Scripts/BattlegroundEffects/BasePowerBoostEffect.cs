@@ -16,8 +16,7 @@ public abstract class BasePowerBoostEffect : IBattlegroundEffect
         {
             if (!boostedCards.Contains(card))
             {
-                CardDisplay cardDisplay = card.GetComponent<CardDisplay>();
-                cardDisplay.IncreasePower(PowerBoostAmount);
+                card.IncreasePower(PowerBoostAmount);
                 boostedCards.Add(card);
             }
         }

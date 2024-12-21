@@ -16,7 +16,7 @@ public partial class Card
         if (tooltipText != null)
         {
             string description = CardEffectDescriptions.GetDescription(CardEffectType);
-            tooltipText.text = $"{AddSpacesToPascalCase(CardTriggerType.ToString())}\n\n" +
+            tooltipText.text = $"{AddSpacesToPascalCase(CardEffectType.ToString())}\n\n" +
                    $"{description}";
         }
     }

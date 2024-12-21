@@ -5,8 +5,7 @@ public partial class Card
 {
     private void OnMouseDown()
     {
-        Debug.Log("OnMouseDown" + name);
-        if (Played || !EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this) || _roundPlaying) return;
+        if (Played || !EnergyManager.Instance.CheckIfMovable(Energy, this) || _roundPlaying) return;
         AdjustChildSortingOrder(2);
         _offset = transform.position - GetMouseWorldPosition();
         _isDragging = true;
@@ -16,8 +15,7 @@ public partial class Card
 
     private void OnMouseUp()
     {
-        Debug.Log("OnMouseUp" + name);
-        if (Played || !EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this) || _roundPlaying) return;
+        if (Played || !EnergyManager.Instance.CheckIfMovable(Energy, this) || _roundPlaying) return;
         AdjustChildSortingOrder(-2);
         _isDragging = false;
         KillAndNullifyTween(ref _hoverTween);
@@ -27,7 +25,7 @@ public partial class Card
             if (!_placedOnArea)
             {
                 _placedOnArea = true;
-                EnergyManager.Instance.DecreaseEnergy(GetComponent<CardDisplay>().Energy, player: true);
+                EnergyManager.Instance.DecreaseEnergy(Energy, player: true);
             }
             HandlePlayAreaPlacement();
         }
@@ -38,7 +36,7 @@ public partial class Card
                 _placedOnArea = false;
                 _placedArea.RemoveCard(this);
                 _placedArea = null;
-                EnergyManager.Instance.IncreaseEnergy(GetComponent<CardDisplay>().Energy, player: true);
+                EnergyManager.Instance.IncreaseEnergy(Energy, player: true);
             }
             ResetCardToOriginalPosition();
         }
@@ -46,32 +44,29 @@ public partial class Card
 
     private void OnMouseEnter()
     {
-        Debug.Log("OnMouseEnter" + name);
         if (!_isDragging && !_isHovered)
         {
             _isHovered = true;
             ShowCardTooltip();
-            if (EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this) && !Played && !_roundPlaying)
+            if (EnergyManager.Instance.CheckIfMovable(Energy, this) && !Played && !_roundPlaying)
                 StartHoverEffect();
         }
     }
 
     private void OnMouseExit()
     {
-        Debug.Log("OnMouseExit" + name);
         if (!_isDragging && _isHovered)
         {
             _isHovered = false;
             HideCardTooltip();
-            if (EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this) && !Played && !_roundPlaying)
+            if (EnergyManager.Instance.CheckIfMovable(Energy, this) && !Played && !_roundPlaying)
                 StopHoverEffect();
         }
     }
 
     private void OnMouseDrag()
     {
-        Debug.Log("OnMouseDrag" + name);
-        if (!_isDragging || Played || !EnergyManager.Instance.CheckIfMovable(GetComponent<CardDisplay>().Energy, this) || _roundPlaying) return;
+        if (!_isDragging || Played || !EnergyManager.Instance.CheckIfMovable(Energy, this) || _roundPlaying) return;
 
         Vector3 targetPosition = GetMouseWorldPosition() + _offset;
         targetPosition.z = transform.position.z;

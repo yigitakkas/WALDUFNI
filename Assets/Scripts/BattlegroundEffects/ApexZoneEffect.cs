@@ -36,7 +36,7 @@ public class ApexZoneEffect : IBattlegroundEffect
 
         foreach (Card card in battleground.AllCards)
         {
-            int cardStrength = card.GetComponent<CardDisplay>().Power;
+            int cardStrength = card.Power;
 
             if (cardStrength > maxPower)
             {
@@ -59,8 +59,7 @@ public class ApexZoneEffect : IBattlegroundEffect
         {
             if (!card.HasReceivedBoost)
             {
-                CardDisplay cardDisplay = card.GetComponent<CardDisplay>();
-                cardDisplay.IncreasePower(boostAmount);
+                card.IncreasePower(boostAmount);
                 card.HasReceivedBoost = true;
             }
         }

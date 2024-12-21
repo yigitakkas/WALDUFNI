@@ -172,7 +172,7 @@ public class PlayArea : MonoBehaviour
         int sum = 0;
         foreach (Card card in _placedCards)
         {
-            sum += card.GetComponent<CardDisplay>().Power;
+            sum += card.Power;
         }
         if (_amplifierEffect)
         {
@@ -232,7 +232,7 @@ public class PlayArea : MonoBehaviour
         {
             if(momentumData.PlayedRound==RoundManager.Instance.CurrentRound-1 && PlacedCardsThisRound.Count > 0)
             {
-                momentumData.MomentumCard.CardDisplay.IncreasePower(3);
+                momentumData.MomentumCard.IncreasePower(3);
             }
         }
     }

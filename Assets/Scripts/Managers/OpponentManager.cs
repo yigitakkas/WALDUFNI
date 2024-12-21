@@ -214,7 +214,7 @@ public class OpponentManager : MonoBehaviour
     public void PlayOpponentCard()
     {
         List<GameObject> playableCards = _opponentHand
-        .Where(card => card.GetComponent<CardDisplay>().Energy <= EnergyManager.Instance.OpponentEnergy)
+        .Where(card => card.GetComponent<Card>().Energy <= EnergyManager.Instance.OpponentEnergy)
         .ToList();
 
 
@@ -223,7 +223,7 @@ public class OpponentManager : MonoBehaviour
             GameObject cardToPlay = playableCards[Random.Range(0, playableCards.Count)];
             _opponentHand.Remove(cardToPlay);
 
-            int cardEnergy = cardToPlay.GetComponent<CardDisplay>().Energy;
+            int cardEnergy = cardToPlay.GetComponent<Card>().Energy;
             EnergyManager.Instance.DecreaseEnergy(cardEnergy, player: false);
 
             Debug.Log("OpponentManager oynadý: " + cardToPlay.name);

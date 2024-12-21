@@ -9,9 +9,8 @@ public static class CardEffectDescriptions
         { CardEffect.Echo, "Adds another copy of this card to your hand" },
         { CardEffect.Momentum, "Gain +3 Power if you play a card here next turn" },
         { CardEffect.Catalyst, "Gain +2 Power for every card already placed here" },
-        { CardEffect.TriggerLeft, "Gain +3 Power if played in the left area" },
-        { CardEffect.TriggerMiddle, "Gain +3 Power if played in the middle area" },
-        { CardEffect.TriggerRight, "Gain +3 Power if played in the right area" },
+        { CardEffect.Anchor, "Gain +3 Power if played in the middle area." },
+        { CardEffect.Winger, "Gain +2 Power if played in the side areas." },
         { CardEffect.Amplifier, "Doubles the total Power of the area" },
         { CardEffect.Scout, "Sends 1-Power cards to other areas" },
         { CardEffect.Proxy, "Sends a 6-Power card to a random other area" }

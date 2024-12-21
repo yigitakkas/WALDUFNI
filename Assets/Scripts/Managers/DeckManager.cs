@@ -285,13 +285,13 @@ public class DeckManager : MonoBehaviour
             return;
         for (int i = 0; i < cardCount; i++)
         {
-            CardDisplay cardDisplay = _spawnedCards[i].GetComponent<CardDisplay>();
-            if (cardDisplay.Energy <= playerEnergy)
+            Card card = _spawnedCards[i].GetComponent<Card>();
+            if (card.Energy <= playerEnergy)
             {
-                cardDisplay.LightenObject();
+                card.LightenObject();
             } else
             {
-                cardDisplay.DarkenObject();
+                card.DarkenObject();
             }
         }
     }

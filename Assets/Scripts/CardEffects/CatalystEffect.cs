@@ -17,6 +17,6 @@ public class CatalystEffect : ICardEffect
             area = card.PlacedArea;
         }
         int amount = area.PlacedAmount() - 1;
-        card.CardDisplay.IncreasePower(2 * amount);
+        card.IncreasePower(2 * amount);
     }
 }

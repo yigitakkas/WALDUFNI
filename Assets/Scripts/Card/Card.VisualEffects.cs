@@ -16,7 +16,7 @@ public partial class Card
 
     public void TriggerCardEffect()
     {
-        if (CardEffectType != CardEffect.None)
+        if (CardEffectType != CardEffect.None && CardEffectType != CardEffect.Pioneer)
             _cardEffect.ApplyEffect(this);
     }
 
