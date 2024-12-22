@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class ScoreManager : MonoBehaviour
 {
@@ -17,24 +16,14 @@ public class ScoreManager : MonoBehaviour
     private Dictionary<int, int> _playerScores = new Dictionary<int, int>();
     private Dictionary<int, int> _opponentScores = new Dictionary<int, int>();
     private HashSet<int> manuallySetZones = new HashSet<int>();
-    public GameObject PopUpPanel;
-    public TMP_Text WonText;
-    public Button NextLevelButton;
-    public Button TryAgainButton;
-    public GameObject BlockerPanel;
-    public Button PlayButton;
 
     private void OnEnable()
     {
-        RoundManager.OnRoundStarted += DeactivateButton;
-        RoundManager.OnRoundEnded += ActivateButton;
         RoundManager.GameEnded += DefineWinner;
     }
 
     private void OnDisable()
     {
-        RoundManager.OnRoundStarted -= DeactivateButton;
-        RoundManager.OnRoundEnded -= ActivateButton;
         RoundManager.GameEnded -= DefineWinner;
     }
     private void Awake()
@@ -166,12 +155,12 @@ public class ScoreManager : MonoBehaviour
 
     private void PlayerWon()
     {
-        ShowPopup("PLAYER WON!");
+        UIManager.Instance.ShowPopup("PLAYER WON!", isPlayerWinner:true);
     }
 
     private void OpponentWon()
     {
-        ShowPopup("OPPONENT WON!");
+        UIManager.Instance.ShowPopup("OPPONENT WON!", isPlayerWinner: false);
     }
 
     private void DefineWinnerInDraw()
@@ -194,52 +183,6 @@ public class ScoreManager : MonoBehaviour
             PlayerWon();
         else if (playerTotalCardPower <= opponentTotalCardPower)
             OpponentWon();
-    }
-
-    private void ShowPopup(string Message)
-    {
-        BlockerPanel.SetActive(true);
-        PopUpPanel.SetActive(true);
-        if (Message == "PLAYER WON!")
-        {
-            WonText.color = Color.blue;
-            NextLevelButton.gameObject.SetActive(true);
-        }
-        else
-        {
-            WonText.color = Color.red;
-            TryAgainButton.gameObject.SetActive(true);
-        }
-        WonText.text = Message;
-    }
-
-    private void HidePopup()
-    {
-        WonText.text = "";
-        WonText.color = Color.white;
-        BlockerPanel.SetActive(false);
-        PopUpPanel.SetActive(false);
-        NextLevelButton.gameObject.SetActive(false);
-        TryAgainButton.gameObject.SetActive(false);
-    }
-
-    public void NextLevel()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    public void TryAgain()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-    }
-
-    private void ActivateButton()
-    {
-        PlayButton.interactable = true;
-    }
-    private void DeactivateButton()
-    {
-        PlayButton.interactable = false;
     }
 }
 

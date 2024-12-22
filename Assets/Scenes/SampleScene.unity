@@ -1486,12 +1486,6 @@ MonoBehaviour:
   AreaOneOpponentScore: {fileID: 1647789247}
   AreaTwoOpponentScore: {fileID: 198429931}
   AreaThreeOpponentScore: {fileID: 1991494776}
-  PopUpPanel: {fileID: 956893453}
-  WonText: {fileID: 1881412586}
-  NextLevelButton: {fileID: 783204101}
-  TryAgainButton: {fileID: 1158961971}
-  BlockerPanel: {fileID: 1150792784}
-  PlayButton: {fileID: 1310966316}
 --- !u!4 &570865521
 Transform:
   m_ObjectHideFlags: 0
@@ -2212,8 +2206,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 570865520}
-        m_TargetAssemblyTypeName: ScoreManager, Assembly-CSharp
+      - m_Target: {fileID: 1884003916}
+        m_TargetAssemblyTypeName: RoundManager, Assembly-CSharp
         m_MethodName: NextLevel
         m_Mode: 1
         m_Arguments:
@@ -3514,8 +3508,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 570865520}
-        m_TargetAssemblyTypeName: ScoreManager, Assembly-CSharp
+      - m_Target: {fileID: 1884003916}
+        m_TargetAssemblyTypeName: RoundManager, Assembly-CSharp
         m_MethodName: TryAgain
         m_Mode: 1
         m_Arguments:
@@ -4263,6 +4257,7 @@ MonoBehaviour:
   _specialCards: []
   SpotterCard: {fileID: 8848255253426761436, guid: 165c0b64ac49ac34baab8e8fe9fe3a3a, type: 3}
   PhantomCard: {fileID: 542953868452885944, guid: 869a65491a8002f41a3e21e775017199, type: 3}
+  DeckData: {fileID: 11400000, guid: 2bda2c126af26aa4789f3b9c7af5fdf7, type: 2}
 --- !u!1 &1445937047
 GameObject:
   m_ObjectHideFlags: 0
@@ -4544,6 +4539,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1588931426}
   m_CullTransparentMesh: 1
+--- !u!1 &1590843000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1590843002}
+  - component: {fileID: 1590843001}
+  m_Layer: 0
+  m_Name: UIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1590843001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1590843000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42e9b872925c4524792765c68b00832f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PopUpPanel: {fileID: 956893453}
+  WonText: {fileID: 1881412586}
+  NextLevelButton: {fileID: 783204101}
+  TryAgainButton: {fileID: 1158961971}
+  BlockerPanel: {fileID: 1150792784}
+  PlayButton: {fileID: 1310966316}
+--- !u!4 &1590843002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1590843000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.68485415, y: 0.26912412, z: -0.087791756}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1647789245
 GameObject:
   m_ObjectHideFlags: 0

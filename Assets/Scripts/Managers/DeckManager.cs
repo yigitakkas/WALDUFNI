@@ -30,7 +30,7 @@ public class DeckManager : MonoBehaviour
 
     public GameObject SpotterCard;
     public GameObject PhantomCard;
-
+    public PlayerDeckData DeckData;
     private void Awake()
     {
         if (Instance == null)
@@ -75,6 +75,7 @@ public class DeckManager : MonoBehaviour
         {
             _playerDeck.Add(cardPrefab);
             DefineCardClasses(cardPrefab);
+            DeckData.PlayerDeck.Add(cardPrefab);
         }
         OpponentManager.Instance.AssignDeck(new List<GameObject>(_playerDeck));
     }
