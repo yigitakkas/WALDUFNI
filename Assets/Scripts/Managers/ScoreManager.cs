@@ -7,15 +7,17 @@ using UnityEngine.UI;
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance;
-    public TMP_Text AreaOnePlayerScore;
-    public TMP_Text AreaTwoPlayerScore;
-    public TMP_Text AreaThreePlayerScore;
-    public TMP_Text AreaOneOpponentScore;
-    public TMP_Text AreaTwoOpponentScore;
-    public TMP_Text AreaThreeOpponentScore;
     private Dictionary<int, int> _playerScores = new Dictionary<int, int>();
     private Dictionary<int, int> _opponentScores = new Dictionary<int, int>();
     private HashSet<int> manuallySetZones = new HashSet<int>();
+    public Dictionary<int, int> PlayerScores
+    {
+        get => _playerScores;
+    }
+    public Dictionary<int, int> OpponentScores
+    {
+        get => _opponentScores;
+    }
 
     private void OnEnable()
     {
@@ -41,7 +43,7 @@ public class ScoreManager : MonoBehaviour
             _playerScores[i] = 0;
             _opponentScores[i] = 0;
         }
-        UpdateUI();
+        UIManager.Instance.UpdateUI();
     }
     public void CalculatePower(List<PlayArea> playerAreas, List<PlayArea> opponentAreas)
     {
@@ -65,20 +67,6 @@ public class ScoreManager : MonoBehaviour
     }
 
 
-    public void UpdateUI()
-    {
-        AreaOnePlayerScore.text = _playerScores[1].ToString();
-        AreaTwoPlayerScore.text = _playerScores[2].ToString();
-        AreaThreePlayerScore.text = _playerScores[3].ToString();
-
-        AreaOneOpponentScore.text = _opponentScores[1].ToString();
-        AreaTwoOpponentScore.text = _opponentScores[2].ToString();
-        AreaThreeOpponentScore.text = _opponentScores[3].ToString();
-
-        CompareAndSetTextColor(AreaOnePlayerScore, AreaOneOpponentScore, _playerScores[1], _opponentScores[1]);
-        CompareAndSetTextColor(AreaTwoPlayerScore, AreaTwoOpponentScore, _playerScores[2], _opponentScores[2]);
-        CompareAndSetTextColor(AreaThreePlayerScore, AreaThreeOpponentScore, _playerScores[3], _opponentScores[3]);
-    }
 
     private void ResetScores(Dictionary<int, int> scores)
     {
@@ -88,26 +76,6 @@ public class ScoreManager : MonoBehaviour
             {
                 scores[index] = 0;
             }
-        }
-    }
-
-
-    private void CompareAndSetTextColor(TMP_Text playerText, TMP_Text opponentText, int playerScore, int opponentScore)
-    {
-        if (playerScore > opponentScore)
-        {
-            playerText.color = Color.green; 
-            opponentText.color = Color.red;
-        }
-        else if (playerScore < opponentScore)
-        {
-            playerText.color = Color.red;
-            opponentText.color = Color.green;
-        }
-        else
-        {
-            playerText.color = Color.yellow;
-            opponentText.color = Color.yellow;
         }
     }
 

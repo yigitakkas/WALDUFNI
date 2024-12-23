@@ -84,7 +84,7 @@ public class RoundManager : MonoBehaviour
             ScoreManager.Instance.CalculatePower(_playerPlayAreas, _opponentPlayAreas);
             yield return new WaitForSeconds(0.5f);
 
-            ScoreManager.Instance.UpdateUI();
+            UIManager.Instance.UpdateUI();
             CurrentRound++;
             yield return new WaitForSeconds(1f);
             OnRoundEnded?.Invoke();
@@ -166,13 +166,14 @@ public class RoundManager : MonoBehaviour
         PlayAreaCardEffects();
     }
 
-    public void NextLevel()
+    public void MainMenu()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        //Main Menuyu yükle
+        SceneManager.LoadScene(0);
     }
 
-    public void TryAgain()
+    public void PlayAgain()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(1);
     }
 }
