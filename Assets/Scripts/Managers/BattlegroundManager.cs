@@ -71,11 +71,11 @@ public class BattlegroundManager : MonoBehaviour
 
         _effectDescriptionDictionary = new Dictionary<BattlegroundEffect, string>
         {
-            { BattlegroundEffect.BeastLair, "Get a 10-Power monster card if you play a card here this turn." },
-            { BattlegroundEffect.TheApexZone, "The strongest card(s) in this area gains +3 power." },
-            { BattlegroundEffect.FieldOfGrowth, "All cards gain +1 Power in this magical zone." },
-            { BattlegroundEffect.ForgeOfMight, "Each card played here gains +2 Power." },
-            { BattlegroundEffect.ControlZone, "Player with most cards here gains +100 Power." }
+            { BattlegroundEffect.BeastLair, "Get a 10-Power Umbra\n if you play a card here this turn." },
+            { BattlegroundEffect.TheApexZone, "The strongest card(s) in this area\n gains 3 Power." },
+            { BattlegroundEffect.FieldOfGrowth, "Each card played here\n gains 1 Power." },
+            { BattlegroundEffect.ForgeOfMight, "Each card played here\n gains 2 Power." },
+            { BattlegroundEffect.ControlZone, "Player with most cards here\n gains 100 Power." }
         };
     }
 

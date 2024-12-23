@@ -21,7 +21,10 @@ public class BeastLairEffect : IBattlegroundEffect
         if (playArea.PlayedHereThisRound && playArea.CheckSnapPointsAvailability())
         {
             GameObject monsterCard = battleground.MonsterCard;
-            Transform spawnPoint = battleground.MonsterCardSpawnPoint;
+            Transform spawnPoint;
+            if (isPlayer)
+                spawnPoint = battleground.MonsterCardPlayerSpawnPoint;
+            else spawnPoint = battleground.MonsterCardOpponentSpawnPoint;
 
             // Kart oluþtur ve pozisyonla
             GameObject cardObject = GameObject.Instantiate(monsterCard, spawnPoint.position, Quaternion.identity);

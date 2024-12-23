@@ -21,6 +21,10 @@ public class UIManager : MonoBehaviour
     public TMP_Text AreaTwoOpponentScore;
     public TMP_Text AreaThreeOpponentScore;
 
+    public ParticleSystem explosionEffect;
+    public Canvas canvas;
+
+
     private void Awake()
     {
         if (Instance == null)
@@ -43,9 +47,9 @@ public class UIManager : MonoBehaviour
         RoundManager.OnRoundStarted -= DeactivateButton;
         RoundManager.OnRoundEnded -= ActivateButton;
     }
-    public void ShowPopup(string message, bool isPlayerWinner)
+    public IEnumerator ShowPopup(string message, bool isPlayerWinner)
     {
-        StartCoroutine(GiveEffectToScores());
+        yield return StartCoroutine(GiveEffectToScores());
 
         BlockerPanel.SetActive(true);
         PopUpPanel.SetActive(true);
@@ -98,26 +102,34 @@ public class UIManager : MonoBehaviour
 
     private void CompareAndSetTextColor(TMP_Text playerText, TMP_Text opponentText, int playerScore, int opponentScore)
     {
-        if (playerScore > opponentScore)
-        {
-            playerText.color = Color.green;
-            opponentText.color = Color.red;
-        }
-        else if (playerScore < opponentScore)
-        {
-            playerText.color = Color.red;
-            opponentText.color = Color.green;
-        }
-        else
-        {
-            playerText.color = Color.yellow;
-            opponentText.color = Color.yellow;
-        }
+        playerText.color = playerScore > opponentScore ? Color.green : playerScore < opponentScore ? Color.red : Color.yellow;
+        opponentText.color = playerScore > opponentScore ? Color.red : playerScore < opponentScore ? Color.green : Color.yellow;
     }
 
     IEnumerator GiveEffectToScores()
     {
-        //effect code
+        yield return new WaitForSeconds(0.5f);
+
+        SpawnExplosionEffect(1, AreaOnePlayerScore.rectTransform, AreaOneOpponentScore.rectTransform);
+        SpawnExplosionEffect(2, AreaTwoPlayerScore.rectTransform, AreaTwoOpponentScore.rectTransform);
+        SpawnExplosionEffect(3, AreaThreePlayerScore.rectTransform, AreaThreeOpponentScore.rectTransform);
+
         yield return new WaitForSeconds(2f);
     }
+
+    private void SpawnExplosionEffect(int zoneIndex, RectTransform playerScore, RectTransform opponentScore)
+    {
+        int winner = ScoreManager.Instance.IsPlayerWinningZone(zoneIndex);
+        if (winner == 0)
+            return;
+
+        Vector3 worldPosition = winner == 1
+        ? playerScore.position
+        : opponentScore.position;
+
+        ParticleSystem effect = Instantiate(explosionEffect, worldPosition, Quaternion.identity);
+        effect.Play();
+        Destroy(effect.gameObject, effect.main.duration + effect.main.startLifetime.constantMax);
+    }
+
 }

@@ -106,9 +106,9 @@ public class DeckManager : MonoBehaviour
             if (_basicCards.Contains(gameObject))
                 _basicCards.Remove(gameObject);
             else if (_powerCards.Contains(gameObject))
-                _basicCards.Remove(gameObject);
+                _powerCards.Remove(gameObject);
             else if (_specialCards.Contains(gameObject))
-                _basicCards.Remove(gameObject);
+                _specialCards.Remove(gameObject);
         }
     }
 
@@ -120,7 +120,7 @@ public class DeckManager : MonoBehaviour
         RemovePlayedCards();
 
         int currentRound = RoundManager.Instance.CurrentRound;
-
+        Debug.Log("Spawning Cards for Round:" + currentRound);
         switch (currentRound)
         {
             case 1:
@@ -130,17 +130,20 @@ public class DeckManager : MonoBehaviour
                 SpawnSingleCard(60, 35);
                 break;
             case 3:
-                SpawnSingleCard(30, 45);
+                SpawnSingleCard(25, 40);
                 break;
             case 4:
-                SpawnSingleCard(5, 35);
+                SpawnSingleCard(10, 30);
+                break;
+            case 5:
+                SpawnSingleCard(5, 10);
                 break;
             default:
                 Debug.LogWarning("Geçersiz round numarasý!");
                 break;
         }
 
-        ArrangeCards(); // Spawnlanan kartlarý sýralama
+        ArrangeCards();
         SetDarknessOfCards(EnergyManager.Instance.PlayerEnergy);
     }
 
@@ -165,33 +168,30 @@ public class DeckManager : MonoBehaviour
     private void RoundOne()
     {
         float randomValue = Random.value * 100;
-        if (randomValue < 30) // %30: 3 Basic Cards
-        {
-            for (int i = 0; i < 3; i++)
-                AddRandomCardToSpawn(_basicCards);
-        }
-        else if (randomValue < 70) // %40: 2 Basic, 1 Power
+        if (randomValue < 30) // %30: 2 Basic Cards
         {
             for (int i = 0; i < 2; i++)
                 AddRandomCardToSpawn(_basicCards);
-            AddRandomCardToSpawn(_powerCards);
         }
-        else if (randomValue < 90) // %20: 1 Basic, 2 Power
+        else if (randomValue < 70) // %40: 1 Basic, 1 Power
         {
             AddRandomCardToSpawn(_basicCards);
+            AddRandomCardToSpawn(_powerCards);
+        }
+        else if (randomValue < 90) // %20: 1 Basic, 1 Special
+        {
+            AddRandomCardToSpawn(_basicCards);
+            AddRandomCardToSpawn(_specialCards);
+        }
+        else if (randomValue < 99) // %9: 2 Power
+        {
             for (int i = 0; i < 2; i++)
                 AddRandomCardToSpawn(_powerCards);
         }
-        else if (randomValue < 99) // %9: 1 Basic, 1 Power, 1 Special
+        else // %1: 1 Power, 1 Special
         {
-            AddRandomCardToSpawn(_basicCards);
             AddRandomCardToSpawn(_powerCards);
-            AddRandomCardToSpawn(_specialCards);
-        }
-        else // %1: 1 Basic, 2 Special
-        {
-            AddRandomCardToSpawn(_basicCards);
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 1; i++)
                 AddRandomCardToSpawn(_specialCards);
         }
     }

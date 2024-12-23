@@ -32,12 +32,19 @@ public class Battleground : MonoBehaviour
         get => _battlegroundEffect;
         private set => _battlegroundEffect = value;
     }
-    private Transform _monsterCardSpawnPoint;
-    public Transform MonsterCardSpawnPoint
+    private Transform _monsterCardPlayerSpawnPoint;
+    public Transform MonsterCardPlayerSpawnPoint
     {
-        get => _monsterCardSpawnPoint;
-        private set => _monsterCardSpawnPoint = value;
+        get => _monsterCardPlayerSpawnPoint;
+        private set => _monsterCardPlayerSpawnPoint = value;
     }
+    private Transform _monsterCardOpponentSpawnPoint;
+    public Transform MonsterCardOpponentSpawnPoint
+    {
+        get => _monsterCardOpponentSpawnPoint;
+        private set => _monsterCardOpponentSpawnPoint = value;
+    }
+
     public GameObject MonsterCard;
 
 
@@ -49,7 +56,8 @@ public class Battleground : MonoBehaviour
 
     private void Start()
     {
-        _monsterCardSpawnPoint = DeckManager.Instance.SpawnPosition.transform;
+        _monsterCardPlayerSpawnPoint = DeckManager.Instance.SpawnPosition.transform;
+        _monsterCardOpponentSpawnPoint = OpponentManager.Instance.SpawnPosition.transform;
     }
     public void ActivateBattleground(BattlegroundEffect battlegroundEffect, Sprite sprite, string description, string name)
     {

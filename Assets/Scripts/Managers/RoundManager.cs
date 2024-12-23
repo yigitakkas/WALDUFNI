@@ -32,6 +32,8 @@ public class RoundManager : MonoBehaviour
         private set => _opponentPlayAreas = value;
     }
 
+    public UnityEngine.UI.Button Round4;
+
 
     private void Awake()
     {
@@ -85,14 +87,14 @@ public class RoundManager : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
 
             UIManager.Instance.UpdateUI();
+            if (CurrentRound == 5)
+            {
+                GameEnded?.Invoke();
+                yield break;
+            }
             CurrentRound++;
             yield return new WaitForSeconds(1f);
             OnRoundEnded?.Invoke();
-        }
-        if (CurrentRound == 5)
-        {
-            //Kazananý Yazdýr.
-            GameEnded?.Invoke();
         }
     }
 
@@ -175,5 +177,10 @@ public class RoundManager : MonoBehaviour
     public void PlayAgain()
     {
         SceneManager.LoadScene(1);
+    }
+
+    public void MakeRound4()
+    {
+        CurrentRound = 4;
     }
 }

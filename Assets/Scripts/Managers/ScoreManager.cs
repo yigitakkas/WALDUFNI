@@ -123,12 +123,12 @@ public class ScoreManager : MonoBehaviour
 
     private void PlayerWon()
     {
-        UIManager.Instance.ShowPopup("PLAYER WON!", isPlayerWinner:true);
+        StartCoroutine(UIManager.Instance.ShowPopup("PLAYER WON!", isPlayerWinner: true));
     }
 
     private void OpponentWon()
     {
-        UIManager.Instance.ShowPopup("OPPONENT WON!", isPlayerWinner: false);
+        StartCoroutine(UIManager.Instance.ShowPopup("OPPONENT WON!", isPlayerWinner: false));
     }
 
     private void DefineWinnerInDraw()
@@ -151,6 +151,15 @@ public class ScoreManager : MonoBehaviour
             PlayerWon();
         else if (playerTotalCardPower <= opponentTotalCardPower)
             OpponentWon();
+    }
+
+    public int IsPlayerWinningZone(int index)
+    {
+        if (_playerScores[index] > _opponentScores[index])
+            return 1;
+        else if (_playerScores[index] < _opponentScores[index])
+            return 2;
+        else return 0;
     }
 }
 
