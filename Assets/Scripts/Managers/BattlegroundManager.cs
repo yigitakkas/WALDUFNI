@@ -91,7 +91,7 @@ public class BattlegroundManager : MonoBehaviour
     private void UnlockBattleground(int index)
     {
         BattlegroundEffect randomEffect = GetRandomBattlegroundEffect();
-        //BattlegroundEffect randomEffect = BattlegroundEffect.FieldOfGrowth;
+        //BattlegroundEffect randomEffect = BattlegroundEffect.BeastLair;
         Sprite sprite = GetSpriteForEffect(randomEffect);
         string description = GetStringForEffect(randomEffect);
         string name = FormatEnumName(randomEffect);
@@ -154,6 +154,11 @@ public class BattlegroundManager : MonoBehaviour
         {
             battleground.ApplyEffect();
         }
+    }
+
+    public Battleground GetCorrespondingBattleground(int index)
+    {
+        return _battlegrounds[index];
     }
 }
 

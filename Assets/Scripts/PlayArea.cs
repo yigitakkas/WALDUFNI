@@ -32,6 +32,7 @@ public class PlayArea : MonoBehaviour
     }
     private List<MomentumData> _momentumCards = new List<MomentumData>();
     private bool _amplifierEffect = false;
+    public Battleground _correspondingBattleground;
     private void OnEnable()
     {
         RoundManager.OnRoundEnded += ResetPlayedHere;
@@ -50,6 +51,7 @@ public class PlayArea : MonoBehaviour
     private void Start()
     {
         FillSnapPoints();
+        _correspondingBattleground = BattlegroundManager.Instance.GetCorrespondingBattleground(Index - 1);
     }
     public bool IsPointInPlayArea(Vector3 point)
     {

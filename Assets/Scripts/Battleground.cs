@@ -62,7 +62,7 @@ public class Battleground : MonoBehaviour
     public void ActivateBattleground(BattlegroundEffect battlegroundEffect, Sprite sprite, string description, string name)
     {
         BgImage.sprite = sprite;
-        BgImage.DOColor(_targetColor, _colorChangeDuration);
+        ChangeColorOverTime(_targetColor, _colorChangeDuration);
         BattlegroundEffect = battlegroundEffect;
         _activated = true;
 
@@ -89,12 +89,9 @@ public class Battleground : MonoBehaviour
         AllCards.UnionWith(opponent.PlacedCards);
         AllCardsList = new List<Card>(AllCards); // Inspector'da görüntüleme
     }
-    private void ApplyForgeOfMightEffect()
+
+    public void ChangeColorOverTime(Color targetColor, float duration)
     {
-        //her tur eklenen kart(lar)a +2 power verecek, Daha önce power alan kart tekrar +1 almayacak.
-    }
-    private void ApplyControlZoneEffect()
-    {
-        //her tur tüm kartlarý kontrol edip en fazla kartý olan tarafýn skoruna +100 ekleyecek. +100 tek bir tarafa olmalý ve tek bir defa eklenmeli, eþitse iki tarafa da eklenmeli
+        BgImage.DOColor(targetColor, duration);
     }
 }

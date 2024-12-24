@@ -26,7 +26,7 @@ public class DeckManager : MonoBehaviour
 
     private List<GameObject> _spawnedCards = new List<GameObject>();
 
-    private List<GameObject> _pioneerCards = new List<GameObject>();
+    private GameObject _pioneerCard;
 
     public GameObject SpotterCard;
     public GameObject PhantomCard;
@@ -97,19 +97,17 @@ public class DeckManager : MonoBehaviour
         {
             CardEffect cardEffect = gameObject.GetComponent<Card>().CardEffectType;
             if (cardEffect == CardEffect.Pioneer)
-                _pioneerCards.Add(gameObject);
+                _pioneerCard = gameObject;
         }
-        foreach(GameObject gameObject in _pioneerCards)
-        {
-            GameObject spawnedCard = Instantiate(gameObject, SpawnPosition.position, Quaternion.identity, _playerCardParent.transform);
-            _spawnedCards.Add(spawnedCard);
-            if (_basicCards.Contains(gameObject))
-                _basicCards.Remove(gameObject);
-            else if (_powerCards.Contains(gameObject))
-                _powerCards.Remove(gameObject);
-            else if (_specialCards.Contains(gameObject))
-                _specialCards.Remove(gameObject);
-        }
+        if (_pioneerCard == null) return;
+        GameObject spawnedCard = Instantiate(_pioneerCard, SpawnPosition.position, Quaternion.identity, _playerCardParent.transform);
+        _spawnedCards.Add(spawnedCard);
+        if (_basicCards.Contains(_pioneerCard))
+            _basicCards.Remove(_pioneerCard);
+        else if (_powerCards.Contains(_pioneerCard))
+            _powerCards.Remove(_pioneerCard);
+        else if (_specialCards.Contains(_pioneerCard))
+            _specialCards.Remove(_pioneerCard);
     }
 
     private void SpawnRandomCards()
@@ -129,10 +127,10 @@ public class DeckManager : MonoBehaviour
                 SpawnSingleCard(60, 35);
                 break;
             case 3:
-                SpawnSingleCard(25, 40);
+                SpawnSingleCard(30, 50);
                 break;
             case 4:
-                SpawnSingleCard(10, 30);
+                SpawnSingleCard(15, 35);
                 break;
             case 5:
                 SpawnSingleCard(5, 10);
@@ -190,8 +188,7 @@ public class DeckManager : MonoBehaviour
         else // %1: 1 Power, 1 Special
         {
             AddRandomCardToSpawn(_powerCards);
-            for (int i = 0; i < 1; i++)
-                AddRandomCardToSpawn(_specialCards);
+            AddRandomCardToSpawn(_specialCards);
         }
     }
 

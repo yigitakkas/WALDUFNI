@@ -29,6 +29,7 @@ public class OpponentManager : MonoBehaviour
     private List<GameObject> _specialCards = new List<GameObject>();
 
     public GameObject EchoCard;
+    private GameObject _pioneerCard;
 
     private void Awake()
     {
@@ -54,6 +55,7 @@ public class OpponentManager : MonoBehaviour
 
     void Start()
     {
+        CheckPioneer();
         DrawOpponentCards();
     }
 
@@ -101,35 +103,36 @@ public class OpponentManager : MonoBehaviour
 
     public void DrawOpponentCards()
     {
+
         int currentRound = RoundManager.Instance.CurrentRound;
 
         if (currentRound == 1)
         {
             float randomValue = Random.value * 100;
-            if (randomValue < 30) // %30: 3 Basic Cards
+            if (randomValue < 30) // %30: 2 Basic Cards
             {
-                for (int i = 0; i < 3; i++) AddCardToOpponentHand(_basicCards);
+                for (int i = 0; i < 2; i++) 
+                    AddCardToOpponentHand(_basicCards);
             }
-            else if (randomValue < 70) // %40: 2 Basic, 1 Power
-            {
-                for (int i = 0; i < 2; i++) AddCardToOpponentHand(_basicCards);
-                AddCardToOpponentHand(_powerCards);
-            }
-            else if (randomValue < 90) // %20: 1 Basic, 2 Power
-            {
-                AddCardToOpponentHand(_basicCards);
-                for (int i = 0; i < 2; i++) AddCardToOpponentHand(_powerCards);
-            }
-            else if (randomValue < 99) // %9: 1 Basic, 1 Power, 1 Special
+            else if (randomValue < 70) // %40: 1 Basic, 1 Power
             {
                 AddCardToOpponentHand(_basicCards);
                 AddCardToOpponentHand(_powerCards);
+            }
+            else if (randomValue < 90) // %20: 1 Basic, 1 Special
+            {
+                AddCardToOpponentHand(_basicCards);
                 AddCardToOpponentHand(_specialCards);
             }
-            else // %1: 1 Basic, 2 Special
+            else if (randomValue < 99) // %9: 2 Power
             {
-                AddCardToOpponentHand(_basicCards);
-                for (int i = 0; i < 2; i++) AddCardToOpponentHand(_specialCards);
+                for (int i = 0; i < 2; i++)
+                    AddCardToOpponentHand(_powerCards);
+            }
+            else // %1: 1 Power, 1 Special
+            {
+                AddCardToOpponentHand(_powerCards);
+                AddCardToOpponentHand(_specialCards);
             }
         }
         else
@@ -140,15 +143,37 @@ public class OpponentManager : MonoBehaviour
             {
                 AddSingleCardBasedOnChance(randomValue, 60, 35, 5);
             }
-            else if (currentRound == 3) // Round 3: %30 Basic, %45 Power, %25 Special
+            else if (currentRound == 3) // Round 3: %25 Basic, %45 Power, %25 Special
             {
-                AddSingleCardBasedOnChance(randomValue, 30, 45, 25);
+                AddSingleCardBasedOnChance(randomValue, 30, 50, 20);
             }
             else if (currentRound == 4) // Round 4: %5 Basic, %35 Power, %60 Special
             {
-                AddSingleCardBasedOnChance(randomValue, 5, 35, 60);
+                AddSingleCardBasedOnChance(randomValue, 15, 35, 50);
+            }
+            else if (currentRound == 5)
+            {
+                AddSingleCardBasedOnChance(randomValue, 5, 10, 85);
             }
         }
+    }
+
+    private void CheckPioneer()
+    {
+        foreach (GameObject gameObject in _opponentDeck)
+        {
+            CardEffect cardEffect = gameObject.GetComponent<Card>().CardEffectType;
+            if (cardEffect == CardEffect.Pioneer)
+                _pioneerCard = gameObject;
+        }
+        if (_pioneerCard == null) return;
+        _opponentHand.Add(_pioneerCard);
+        if (_basicCards.Contains(_pioneerCard))
+            _basicCards.Remove(_pioneerCard);
+        else if (_powerCards.Contains(_pioneerCard))
+            _powerCards.Remove(_pioneerCard);
+        else if (_specialCards.Contains(_pioneerCard))
+            _specialCards.Remove(_pioneerCard);
     }
 
     private void AddCardToOpponentHand(List<GameObject> cardList)
@@ -214,29 +239,43 @@ public class OpponentManager : MonoBehaviour
 
     public void PlayOpponentCard()
     {
-        List<GameObject> playableCards = _opponentHand
-        .Where(card => card.GetComponent<Card>().Energy <= EnergyManager.Instance.OpponentEnergy)
-        .ToList();
-
-
-        if (playableCards.Count > 0)
+        while (true)
         {
-            GameObject cardToPlay = playableCards[Random.Range(0, playableCards.Count)];
+            List<GameObject> playableCards = _opponentHand
+                .Where(card => card.GetComponent<Card>().Energy <= EnergyManager.Instance.OpponentEnergy)
+                .ToList();
+
+            if (playableCards.Count == 0)
+            {
+                Debug.LogWarning("OpponentManager'ýn enerjisi yeten kartý yok!");
+                break;
+            }
+
+            GameObject cardToPlay = playableCards
+            .GroupBy(card => card.GetComponent<Card>().Power)  // Power deðerine göre gruplama
+            .OrderByDescending(group => group.Key)             // En yüksek Power grubunu seç
+            .First()                                           // Ýlk (en yüksek Power) grubu al
+            .OrderBy(_ => Random.value)                        // Grup içinden rastgele bir kart seç
+            .First();
+
+
             _opponentHand.Remove(cardToPlay);
 
             int cardEnergy = cardToPlay.GetComponent<Card>().Energy;
             EnergyManager.Instance.DecreaseEnergy(cardEnergy, player: false);
 
             Debug.Log("OpponentManager oynadý: " + cardToPlay.name);
+
             PlayCardToOpponentArea(cardToPlay);
-        }
-        else
-        {
-            AddCardToOpponentHand(_basicCards);
-            PlayOpponentCard();
-            Debug.LogWarning("OpponentManager'ýn enerjisi yeten kartý yok!");
+
+            if (EnergyManager.Instance.OpponentEnergy <= 0)
+            {
+                break;
+            }
         }
     }
+
+
 
     private void PlayCardToOpponentArea(GameObject card)
     {
@@ -244,6 +283,7 @@ public class OpponentManager : MonoBehaviour
         Card newCard = newCardObject.GetComponent<Card>();
 
         Vector3 targetPosition = GetRandomTargetPosition(newCard);
+        if (targetPosition == Vector3.zero) return;
         newCardObject.transform.DOMove(targetPosition, 0.5f);
 
         _placedArea.PlaceCard(newCard);
@@ -253,27 +293,33 @@ public class OpponentManager : MonoBehaviour
 
     private Vector3 GetRandomTargetPosition(Card card)
     {
-        List<PlayArea> availableOpponentAreas = new List<PlayArea>();
-        foreach (PlayArea area in _opponentAreas)
+        List<PlayArea> availableOpponentAreas = _opponentAreas
+            .Where(area => area.CheckSnapPointsAvailability())
+            .ToList();
+
+        List<PlayArea> activeOpponentAreas = availableOpponentAreas
+        .Where(area => area._correspondingBattleground.BattlegroundEffect != BattlegroundEffect.None)
+        .ToList();
+
+        PlayArea beastLairsArea = availableOpponentAreas
+            .FirstOrDefault(area =>
+                area._correspondingBattleground.BattlegroundEffect == BattlegroundEffect.BeastLair &&
+                area.Index == RoundManager.Instance.CurrentRound);
+
+        List<PlayArea> targetAreas = activeOpponentAreas.Count > 0 ? activeOpponentAreas : availableOpponentAreas;
+
+        if (targetAreas.Count > 0)
         {
-            if (area.CheckSnapPointsAvailability())
-            {
-                availableOpponentAreas.Add(area);
-            }
+            PlayArea selectedArea = beastLairsArea ?? targetAreas[Random.Range(0, targetAreas.Count)];
+            _placedArea = selectedArea;
+
+            return CheckSnapPoints(selectedArea, card);
         }
-        if (availableOpponentAreas.Count != 0)
-        {
-            int randomIndex = Random.Range(0, availableOpponentAreas.Count);
-            PlayArea randomArea = availableOpponentAreas[randomIndex];
-            _placedArea = randomArea;
-            return CheckSnapPoints(randomArea, card);
-        }
-        else
-        {
-            Debug.LogWarning("Hiçbir opponent alaný uygun deðil!");
-            return Vector3.zero;
-        }
+
+        Debug.LogWarning("Hiçbir opponent alaný uygun deðil!");
+        return Vector3.zero;
     }
+
 
     private Vector3 CheckSnapPoints(PlayArea area, Card card)
     {

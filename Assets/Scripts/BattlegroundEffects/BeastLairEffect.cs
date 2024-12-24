@@ -11,7 +11,7 @@ public class BeastLairEffect : IBattlegroundEffect
         {
             CreateAndPlaceMonsterCard(battleground,isPlayer: true);
             CreateAndPlaceMonsterCard(battleground,isPlayer: false);
-            battleground.BgImage.color = new Color(25f / 255f, 25f / 255f, 25f / 255f, battleground.BgImage.color.a);
+            battleground.ChangeColorOverTime(new Color(25f / 255f, 25f / 255f, 25f / 255f, battleground.BgImage.color.a), 1f);
         }
     }
     private void CreateAndPlaceMonsterCard(Battleground battleground, bool isPlayer)
