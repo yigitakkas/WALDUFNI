@@ -21,9 +21,7 @@ public class UIManager : MonoBehaviour
     public TMP_Text AreaTwoOpponentScore;
     public TMP_Text AreaThreeOpponentScore;
 
-    public ParticleSystem explosionEffect;
     public Canvas canvas;
-
 
     private void Awake()
     {
@@ -127,9 +125,8 @@ public class UIManager : MonoBehaviour
         ? playerScore.position
         : opponentScore.position;
 
-        ParticleSystem effect = Instantiate(explosionEffect, worldPosition, Quaternion.identity);
-        effect.Play();
-        Destroy(effect.gameObject, effect.main.duration + effect.main.startLifetime.constantMax);
+        EffectManager.Instance.PlayExplosionEffect(worldPosition, 2f);
     }
+
 
 }

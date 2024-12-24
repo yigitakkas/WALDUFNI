@@ -16,9 +16,18 @@ public abstract class BasePowerBoostEffect : IBattlegroundEffect
         {
             if (!boostedCards.Contains(card))
             {
-                card.IncreasePower(PowerBoostAmount);
-                boostedCards.Add(card);
+                EffectManager.Instance.PlayBoostEffect(
+                    battleground.transform.position,
+                    card.transform.position,
+                    0.5f,
+                    () =>
+                    {
+                        card.IncreasePower(PowerBoostAmount);
+                        boostedCards.Add(card);
+                    }
+                );
             }
         }
+
     }
 }

@@ -91,7 +91,7 @@ public class BattlegroundManager : MonoBehaviour
     private void UnlockBattleground(int index)
     {
         BattlegroundEffect randomEffect = GetRandomBattlegroundEffect();
-        //BattlegroundEffect randomEffect = BattlegroundEffect.ControlZone;
+        //BattlegroundEffect randomEffect = BattlegroundEffect.FieldOfGrowth;
         Sprite sprite = GetSpriteForEffect(randomEffect);
         string description = GetStringForEffect(randomEffect);
         string name = FormatEnumName(randomEffect);

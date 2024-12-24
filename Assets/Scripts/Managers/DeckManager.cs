@@ -120,7 +120,6 @@ public class DeckManager : MonoBehaviour
         RemovePlayedCards();
 
         int currentRound = RoundManager.Instance.CurrentRound;
-        Debug.Log("Spawning Cards for Round:" + currentRound);
         switch (currentRound)
         {
             case 1:

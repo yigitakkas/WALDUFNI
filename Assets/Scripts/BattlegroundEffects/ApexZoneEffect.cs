@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class ApexZoneEffect : IBattlegroundEffect
 {
@@ -10,7 +11,7 @@ public class ApexZoneEffect : IBattlegroundEffect
 
         List<Card> strongestCards = GetStrongestCards(battleground);
 
-        BoostStrongestCards(strongestCards, 3);
+        BoostStrongestCards(strongestCards, 3,battleground);
     }
 
     private void UpdateAllCards(Battleground battleground)
@@ -53,14 +54,22 @@ public class ApexZoneEffect : IBattlegroundEffect
         return strongestCards;
     }
 
-    private void BoostStrongestCards(List<Card> cards, int boostAmount)
+    private void BoostStrongestCards(List<Card> cards, int boostAmount, Battleground battleground)
     {
         foreach (Card card in cards)
         {
             if (!card.HasReceivedBoost)
             {
-                card.IncreasePower(boostAmount);
-                card.HasReceivedBoost = true;
+                EffectManager.Instance.PlayBoostEffect(
+                    battleground.transform.position,
+                    card.transform.position,
+                    0.5f,
+                    () =>
+                    {
+                        card.IncreasePower(boostAmount);
+                        card.HasReceivedBoost = true;
+                    }
+                );
             }
         }
     }
