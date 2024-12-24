@@ -6,7 +6,7 @@ public partial class Card
     private void OnMouseDown()
     {
         if (Played || !EnergyManager.Instance.CheckIfMovable(Energy, this) || _roundPlaying) return;
-        AdjustChildSortingOrder(2);
+        AdjustChildSortingOrder(3);
         _offset = transform.position - GetMouseWorldPosition();
         _isDragging = true;
         KillTweens();
@@ -16,7 +16,7 @@ public partial class Card
     private void OnMouseUp()
     {
         if (Played || !EnergyManager.Instance.CheckIfMovable(Energy, this) || _roundPlaying) return;
-        AdjustChildSortingOrder(-2);
+        AdjustChildSortingOrder(-3);
         _isDragging = false;
         KillAndNullifyTween(ref _hoverTween);
 

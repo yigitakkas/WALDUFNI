@@ -19,9 +19,15 @@ public class UIManager : MonoBehaviour
     public TMP_Text AreaThreePlayerScore;
     public TMP_Text AreaOneOpponentScore;
     public TMP_Text AreaTwoOpponentScore;
-    public TMP_Text AreaThreeOpponentScore;
+    public TMP_Text AreaThreeOpponentScore; 
+    public TMP_Text PlayerEnergyText;
+    public TMP_Text RoundText;
 
     public Canvas canvas;
+
+    private GameObject _playAgainButton;
+    private GameObject _mainMenuButton;
+
 
     private void Awake()
     {
@@ -33,6 +39,8 @@ public class UIManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        _playAgainButton = PopUpPanel.transform.Find("PlayAgainButton").gameObject;
+        _mainMenuButton = PopUpPanel.transform.Find("MainMenuButton").gameObject;
     }
     private void OnEnable()
     {
@@ -49,6 +57,10 @@ public class UIManager : MonoBehaviour
     {
         yield return StartCoroutine(GiveEffectToScores());
 
+        WonText.gameObject.SetActive(true);
+        _playAgainButton.SetActive(false);
+        _mainMenuButton.SetActive(false);
+
         BlockerPanel.SetActive(true);
         PopUpPanel.SetActive(true);
 
@@ -62,6 +74,11 @@ public class UIManager : MonoBehaviour
         }
 
         WonText.text = message;
+
+        yield return new WaitForSeconds(2f);
+        WonText.gameObject.SetActive(false);
+        _playAgainButton.SetActive(true);
+        _mainMenuButton.SetActive(true);
     }
 
     public void HidePopup()
@@ -75,6 +92,8 @@ public class UIManager : MonoBehaviour
     private void ActivateButton()
     {
         PlayButton.interactable = true;
+        UpdateRound();
+
     }
     private void DeactivateButton()
     {
@@ -96,6 +115,11 @@ public class UIManager : MonoBehaviour
         CompareAndSetTextColor(AreaOnePlayerScore, AreaOneOpponentScore, playerScores[1], opponentScores[1]);
         CompareAndSetTextColor(AreaTwoPlayerScore, AreaTwoOpponentScore, playerScores[2], opponentScores[2]);
         CompareAndSetTextColor(AreaThreePlayerScore, AreaThreeOpponentScore, playerScores[3], opponentScores[3]);
+    }
+
+    private void UpdateRound()
+    {
+        RoundText.text = RoundManager.Instance.CurrentRound + " / " + RoundManager.Instance.MaxRound;
     }
 
     private void CompareAndSetTextColor(TMP_Text playerText, TMP_Text opponentText, int playerScore, int opponentScore)
@@ -128,5 +152,9 @@ public class UIManager : MonoBehaviour
         EffectManager.Instance.PlayExplosionEffect(worldPosition, 2f);
     }
 
+    public void SetPlayerEnergyText(int playerEnergy)
+    {
+        PlayerEnergyText.text = playerEnergy.ToString();
+    }
 
 }

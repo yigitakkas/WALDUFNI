@@ -12,10 +12,10 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Area
   - Water
   - UI
-  - Area
+  - 
   - Card
   - Blocker
   - 

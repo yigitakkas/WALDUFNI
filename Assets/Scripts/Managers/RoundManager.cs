@@ -12,7 +12,7 @@ public class RoundManager : MonoBehaviour
     public static event Action OnRoundStarted;
     public static event Action OnRoundEnded;
     public static event Action GameEnded;
-
+    public int MaxRound { get; private set; } = 5;
     public int CurrentRound { get; private set; }
 
     [SerializeField]
@@ -87,7 +87,7 @@ public class RoundManager : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
 
             UIManager.Instance.UpdateUI();
-            if (CurrentRound == 5)
+            if (CurrentRound == MaxRound)
             {
                 GameEnded?.Invoke();
                 yield break;
@@ -170,7 +170,6 @@ public class RoundManager : MonoBehaviour
 
     public void MainMenu()
     {
-        //Main Menuyu yükle
         SceneManager.LoadScene(0);
     }
 

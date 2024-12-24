@@ -6,7 +6,6 @@ using TMPro;
 public class EnergyManager : MonoBehaviour
 {
     public static EnergyManager Instance;
-    public TMP_Text PlayerEnergyText;
 
     public int PlayerEnergy { get; private set; }
     public int OpponentEnergy { get; private set; }
@@ -54,7 +53,8 @@ public class EnergyManager : MonoBehaviour
 
     private void SetText()
     {
-        PlayerEnergyText.text = PlayerEnergy.ToString();
+        UIManager.Instance.SetPlayerEnergyText(PlayerEnergy);
+        //PlayerEnergyText.text = PlayerEnergy.ToString();
     }
 
     public bool CheckIfMovable(int energy, Card card)
