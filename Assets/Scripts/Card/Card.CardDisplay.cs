@@ -45,6 +45,7 @@ public partial class Card
         Power += amount;
         if (_powerText != null)
         {
+            SoundManager.Instance.PlaySFX(SoundManager.Instance.CardUpgradeSound);
             StartCoroutine(ResetTextColor(_powerText, 0.5f));
         }
     }

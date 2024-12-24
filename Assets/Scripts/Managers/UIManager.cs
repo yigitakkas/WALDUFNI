@@ -67,10 +67,12 @@ public class UIManager : MonoBehaviour
         if (isPlayerWinner)
         {
             WonText.color = Color.blue;
+            SoundManager.Instance.PlaySFX(SoundManager.Instance.PlayerWonSound);
         }
         else
         {
             WonText.color = Color.red;
+            SoundManager.Instance.PlaySFX(SoundManager.Instance.OpponentWonSound);
         }
 
         WonText.text = message;

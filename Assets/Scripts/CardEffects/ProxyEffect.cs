@@ -83,6 +83,7 @@ public class ProxyEffect : ICardEffect
                 spawnedCard.Played = true;
                 spawnedCard.SetPlayerArea(selectedPlayArea);
                 spawnedCard.PlacedOnArea = true;
+                SoundManager.Instance.PlaySFX(SoundManager.Instance.CardPlayedSound);
             }
         }
 

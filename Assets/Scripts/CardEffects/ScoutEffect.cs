@@ -53,6 +53,7 @@ public class ScoutEffect : ICardEffect
                     spawnedCard.Played = true;
                     spawnedCard.SetPlayerArea(_playAreas[i - 1]);
                     spawnedCard.PlacedOnArea = true;
+                    SoundManager.Instance.PlaySFX(SoundManager.Instance.CardPlayedSound);
                 }
             }
         }

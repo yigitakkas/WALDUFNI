@@ -12,9 +12,11 @@ public class MainMenuManager : MonoBehaviour
     public GameObject MenuPanel;
     public GameObject CreditsPanel;
 
+
     public void Play()
     {
         SceneManager.LoadScene(1);
+        SoundManager.Instance.PlayRandomGameMusic();
     }
 
     public void Credits()

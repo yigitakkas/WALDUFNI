@@ -42,6 +42,7 @@ public class BeastLairEffect : IBattlegroundEffect
             {
                 spawnedCard.SetPlayerArea(playArea);
                 spawnedCard.transform.SetParent(DeckManager.Instance.PlayerCardParent.transform);
+                SoundManager.Instance.PlaySFX(SoundManager.Instance.CardPlayedSound);
             }
             else
             {

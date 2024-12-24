@@ -32,8 +32,6 @@ public class RoundManager : MonoBehaviour
         private set => _opponentPlayAreas = value;
     }
 
-    public UnityEngine.UI.Button Round4;
-
 
     private void Awake()
     {
@@ -68,6 +66,7 @@ public class RoundManager : MonoBehaviour
     }
     public void StartRound()
     {
+        SoundManager.Instance.ButtonClick();
         StartCoroutine(HandleRoundFlow());
     }
     private IEnumerator HandleRoundFlow()
@@ -81,7 +80,7 @@ public class RoundManager : MonoBehaviour
             yield return new WaitForSeconds(0.5f); //Önce kart efektleri, sonra battleground efektleri
 
             BattlegroundManager.Instance.ApplyBattlegroundEffects();
-            yield return null;
+            yield return new WaitForSeconds(0.5f); ;
 
             ScoreManager.Instance.CalculatePower(_playerPlayAreas, _opponentPlayAreas);
             yield return new WaitForSeconds(0.5f);
@@ -90,6 +89,7 @@ public class RoundManager : MonoBehaviour
             if (CurrentRound == MaxRound)
             {
                 GameEnded?.Invoke();
+                SoundManager.Instance.StopMusic(1f);
                 yield break;
             }
             CurrentRound++;
@@ -171,15 +171,14 @@ public class RoundManager : MonoBehaviour
     public void MainMenu()
     {
         SceneManager.LoadScene(0);
+        SoundManager.Instance.CrossfadeMusic(SoundManager.Instance.MainMenuMusic);
+        SoundManager.Instance.ButtonClick();
     }
 
     public void PlayAgain()
     {
         SceneManager.LoadScene(1);
-    }
-
-    public void MakeRound4()
-    {
-        CurrentRound = 4;
+        SoundManager.Instance.PlayRandomGameMusic();
+        SoundManager.Instance.ButtonClick();
     }
 }

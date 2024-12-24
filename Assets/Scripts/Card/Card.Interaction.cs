@@ -9,6 +9,7 @@ public partial class Card
         AdjustChildSortingOrder(3);
         _offset = transform.position - GetMouseWorldPosition();
         _isDragging = true;
+        SoundManager.Instance.PlaySFX(SoundManager.Instance.CardPickupSound);
         KillTweens();
         _cardVisual.transform.DOScale(_movingScale, scaleDuration).SetEase(Ease.OutSine);
     }
@@ -27,6 +28,7 @@ public partial class Card
                 _placedOnArea = true;
                 EnergyManager.Instance.DecreaseEnergy(Energy, player: true);
             }
+            SoundManager.Instance.PlaySFX(SoundManager.Instance.CardPlayedSound);
             HandlePlayAreaPlacement();
         }
         else
@@ -38,6 +40,7 @@ public partial class Card
                 _placedArea = null;
                 EnergyManager.Instance.IncreaseEnergy(Energy, player: true);
             }
+            SoundManager.Instance.PlaySFX(SoundManager.Instance.CardErrorSound);
             ResetCardToOriginalPosition();
         }
     }

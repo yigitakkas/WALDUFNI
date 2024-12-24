@@ -271,6 +271,7 @@ public class DeckManager : MonoBehaviour
             Vector3 targetPosition = new Vector3(transform.position.x + (i * spacing) - centerOffset, transform.position.y, transform.position.z);
             _spawnedCards[i].GetComponent<Card>().SetOriginalPosition(targetPosition);
             _spawnedCards[i].transform.DOMove(targetPosition, 0.5f);
+            SoundManager.Instance.PlaySFX(SoundManager.Instance.CardDrawSound);
         }
     }
 
