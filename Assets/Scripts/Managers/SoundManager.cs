@@ -109,14 +109,12 @@ public class SoundManager : MonoBehaviour
 
     public void CrossfadeMusic(AudioClip newClip, float fadeDuration = 0.5f)
     {
-        Debug.Log("Crossfade Music");
         if (_isMusicMuted) ToggleMusic();
         StartCoroutine(FadeOutAndIn(newClip, fadeDuration));
     }
 
     private IEnumerator FadeOutAndIn(AudioClip newClip, float duration)
     {
-        Debug.Log("Start of Fade Out");
         float startVolume = AudioSource.volume;
 
         while (AudioSource.volume > 0)
@@ -126,10 +124,8 @@ public class SoundManager : MonoBehaviour
         }
 
         AudioSource.Stop();
-        Debug.Log("Faded Out");
         AudioSource.clip = newClip;
         AudioSource.Play();
-        Debug.Log("New Clip");
 
         while (AudioSource.volume < startVolume)
         {

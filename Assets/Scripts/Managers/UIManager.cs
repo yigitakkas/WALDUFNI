@@ -66,9 +66,6 @@ public class UIManager : MonoBehaviour
     {
         yield return StartCoroutine(GiveEffectToScores());
 
-        WonText.gameObject.SetActive(true);
-        _playAgainButton.SetActive(false);
-        _mainMenuButton.SetActive(false);
 
         BlockerPanel.SetActive(true);
         PopUpPanel.SetActive(true);
@@ -85,11 +82,6 @@ public class UIManager : MonoBehaviour
         }
 
         WonText.text = message;
-
-        yield return new WaitForSeconds(2f);
-        WonText.gameObject.SetActive(false);
-        _playAgainButton.SetActive(true);
-        _mainMenuButton.SetActive(true);
     }
 
     public void HidePopup()
