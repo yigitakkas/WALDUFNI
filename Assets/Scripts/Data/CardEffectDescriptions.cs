@@ -12,8 +12,8 @@ public static class CardEffectDescriptions
         { CardEffect.Anchor, "Gain +3 Power if played in the middle area." },
         { CardEffect.Winger, "Gain +2 Power if played in the side areas." },
         { CardEffect.Amplifier, "Doubles the total Power of the area" },
-        { CardEffect.Scout, "Sends 1-Power cards to other areas" },
-        { CardEffect.Proxy, "Sends a 6-Power card to a random other area" }
+        { CardEffect.Scout, "Sends 1-Power 'Iris' to other areas" },
+        { CardEffect.Proxy, "Sends a 6-Power 'Zalor' to a random other area" }
     };
     public static string GetDescription(CardEffect effect)
     {

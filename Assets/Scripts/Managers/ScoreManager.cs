@@ -142,14 +142,14 @@ public class ScoreManager : MonoBehaviour
 
         int opponentTotalCardPower = 0;
 
-        foreach (var score in _playerScores.Values)
+        foreach (var score in _opponentScores.Values)
         {
             opponentTotalCardPower += score;
         }
 
-        if (playerTotalCardPower > opponentTotalCardPower)
+        if (playerTotalCardPower >= opponentTotalCardPower)
             PlayerWon();
-        else if (playerTotalCardPower <= opponentTotalCardPower)
+        else if (playerTotalCardPower < opponentTotalCardPower)
             OpponentWon();
     }
 

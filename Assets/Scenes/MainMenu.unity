@@ -961,24 +961,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'CREDITS
-
-    Background Images - blank-canvas.itch.io
-
-    Character and
-    Card Visuals - penusbmic.itch.io
-
-    Music - FarBeyond Studio - farbeyond-studio.itch.io/
-
-    Card
-    Sound Effects - Olex Mazur - olexmazur.itch.io/
-
-    Fonts - Kenney - kenney.itch.io/
-
-    Win
-    Sound - Fupi - opengameart.org/users/fupi
-
-    Star Effect - nyknck - nyknck.itch.io/'
+  m_text: "ART AND VISUALS\nBackground Images: blank-canvas \u2013 blank-canvas.itch.io\nCharacter
+    and Card Visuals: penusbmic \u2013 penusbmic.itch.io\nMUSIC AND SOUND EFFECTS\nMusic:
+    FarBeyond Studio \u2013 farbeyond-studio.itch.io\nCard Sound Effects: Olex Mazur
+    \u2013 olexmazur.itch.io\nWin Sound Effect: Fupi \u2013 opengameart.org/users/fupi\nFONTS\nFonts:
+    Kenney \u2013 kenney.itch.io\nEFFECTS\nStar Effect: nyknck \u2013 nyknck.itch.io"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1005,7 +992,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 52
+  m_fontSize: 40.4
   m_fontSizeBase: 72
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2014,7 +2001,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.05
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2110,7 +2097,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 4066928f429f64b418a5d5b625657525, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.03
+  m_Volume: 0.06
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2251,7 +2238,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.05
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0

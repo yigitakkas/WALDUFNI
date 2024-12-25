@@ -29,8 +29,8 @@ public class SoundManager : MonoBehaviour
 
 
     private int _lastPlayedIndex = -1;
-    private float _originalVolume=0.03f;
-    private float _loweredVolume = 0.015f;
+    private float _originalVolume=0.06f;
+    private float _loweredVolume = 0.03f;
 
     private void Awake()
     {
