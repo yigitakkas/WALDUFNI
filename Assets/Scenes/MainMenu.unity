@@ -1878,7 +1878,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.1
+  m_Volume: 0.05
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2085,6 +2085,7 @@ MonoBehaviour:
   CardErrorSound: {fileID: 8300000, guid: c77d5c988666eb8499ba3a15f7925026, type: 3}
   CardDrawSound: {fileID: 8300000, guid: 3163e241793c9f943a73e8e5fa3309fe, type: 3}
   CardUpgradeSound: {fileID: 8300000, guid: 570968f0cff89344a94f5b0d4eff97c0, type: 3}
+  CardUnselectableSound: {fileID: 8300000, guid: 38f6cbcc95b6c734687582aedd60806c, type: 3}
   PlayerWonSound: {fileID: 8300000, guid: b284be3eec4eb734397874b8d0e65806, type: 3}
   OpponentWonSound: {fileID: 8300000, guid: 100b3182a039871419d815518552e440, type: 3}
 --- !u!4 &1803353582

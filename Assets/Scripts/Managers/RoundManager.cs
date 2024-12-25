@@ -170,15 +170,31 @@ public class RoundManager : MonoBehaviour
 
     public void MainMenu()
     {
-        SceneManager.LoadScene(0);
-        SoundManager.Instance.CrossfadeMusic(SoundManager.Instance.MainMenuMusic);
         SoundManager.Instance.ButtonClick();
+        SoundManager.Instance.CrossfadeMusic(SoundManager.Instance.MainMenuMusic);
+        SceneManager.LoadScene(0);
+    }
+
+    public void MainMenuFromPause()
+    {
+        TogglePause();
+        SoundManager.Instance.RestoreOriginalVolume();
+        SoundManager.Instance.ButtonClick();
+        SoundManager.Instance.CrossfadeMusic(SoundManager.Instance.MainMenuMusic);
+        SceneManager.LoadScene(0);
     }
 
     public void PlayAgain()
     {
-        SceneManager.LoadScene(1);
         SoundManager.Instance.PlayRandomGameMusic();
         SoundManager.Instance.ButtonClick();
+        SceneManager.LoadScene(1);
+    }
+
+    public void TogglePause()
+    {
+        if (Time.timeScale == 0f)
+            Time.timeScale = 1f;
+        else Time.timeScale = 0f;
     }
 }

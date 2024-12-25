@@ -5,7 +5,8 @@ public partial class Card
 {
     private void OnMouseDown()
     {
-        if (Played || !EnergyManager.Instance.CheckIfMovable(Energy, this) || _roundPlaying) return;
+        if (!EnergyManager.Instance.CheckIfMovable(Energy, this) || Played) SoundManager.Instance.PlaySFX(SoundManager.Instance.CardUnselectableSound);
+        if (Played || !EnergyManager.Instance.CheckIfMovable(Energy, this) || _roundPlaying || Time.timeScale==0) return;
         AdjustChildSortingOrder(3);
         _offset = transform.position - GetMouseWorldPosition();
         _isDragging = true;
@@ -16,7 +17,7 @@ public partial class Card
 
     private void OnMouseUp()
     {
-        if (Played || !EnergyManager.Instance.CheckIfMovable(Energy, this) || _roundPlaying) return;
+        if (Played || !EnergyManager.Instance.CheckIfMovable(Energy, this) || _roundPlaying || Time.timeScale == 0) return;
         AdjustChildSortingOrder(-3);
         _isDragging = false;
         KillAndNullifyTween(ref _hoverTween);
@@ -47,6 +48,7 @@ public partial class Card
 
     private void OnMouseEnter()
     {
+        if (Time.timeScale == 0) return;
         if (!_isDragging && !_isHovered)
         {
             _isHovered = true;
@@ -58,6 +60,7 @@ public partial class Card
 
     private void OnMouseExit()
     {
+        if (Time.timeScale == 0) return;
         if (!_isDragging && _isHovered)
         {
             _isHovered = false;
@@ -69,7 +72,7 @@ public partial class Card
 
     private void OnMouseDrag()
     {
-        if (!_isDragging || Played || !EnergyManager.Instance.CheckIfMovable(Energy, this) || _roundPlaying) return;
+        if (!_isDragging || Played || !EnergyManager.Instance.CheckIfMovable(Energy, this) || _roundPlaying || Time.timeScale == 0) return;
 
         Vector3 targetPosition = GetMouseWorldPosition() + _offset;
         targetPosition.z = transform.position.z;

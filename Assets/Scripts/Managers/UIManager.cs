@@ -28,6 +28,14 @@ public class UIManager : MonoBehaviour
     private GameObject _playAgainButton;
     private GameObject _mainMenuButton;
 
+    public Button MusicButton;
+    public Sprite MusicOnSprite;
+    public Sprite MusicOffSprite;
+    private Image _buttonImage;
+
+    public GameObject MainMenuPopupPanel;
+    public Button MainMenuShortcutButton;
+
 
     private void Awake()
     {
@@ -41,6 +49,7 @@ public class UIManager : MonoBehaviour
         }
         _playAgainButton = PopUpPanel.transform.Find("PlayAgainButton").gameObject;
         _mainMenuButton = PopUpPanel.transform.Find("MainMenuButton").gameObject;
+        _buttonImage = MusicButton.GetComponent<Image>();
     }
     private void OnEnable()
     {
@@ -159,4 +168,38 @@ public class UIManager : MonoBehaviour
         PlayerEnergyText.text = playerEnergy.ToString();
     }
 
+    public void ToggleMusicAndUpdate()
+    {
+        SoundManager.Instance.ToggleMusic();
+        UpdateButtonImage();
+    }
+    private void UpdateButtonImage()
+    {
+        if (_buttonImage.sprite == MusicOnSprite)
+            _buttonImage.sprite = MusicOffSprite;
+        else _buttonImage.sprite = MusicOnSprite;
+    }
+
+    public void BackToMenuPopup()
+    {
+        MainMenuPopupPanel.SetActive(true);
+        AlterButtons(activate: false);
+        RoundManager.Instance.TogglePause();
+        SoundManager.Instance.LowerMusicVolume();
+    }
+
+    public void HideBackToMenuPopup()
+    {
+        MainMenuPopupPanel.SetActive(false);
+        AlterButtons(activate: true);
+        RoundManager.Instance.TogglePause();
+        SoundManager.Instance.RestoreOriginalVolume();
+    }
+
+    private void AlterButtons(bool activate)
+    {
+        MainMenuShortcutButton.interactable = activate;
+        MusicButton.interactable = activate;
+        PlayButton.interactable = activate;
+    }
 }
